@@ -42,7 +42,9 @@ Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecu
 3. Ejecutar el pipeline y revisar Tests: 37 casos API y 23 automatizados.
 4. Descargar el artefacto `resultados-pruebas` para conservar evidencia.
 
-Si la organización no dispone de capacidad en agentes Microsoft-hosted, se requiere habilitar esa capacidad o configurar un agente propio; el YAML por sí solo no proporciona un agente. No se ha contratado capacidad de pago.
+La ejecución 8 falló antes de ejecutar pruebas porque la organización no tiene capacidad Microsoft-hosted habilitada. El pipeline utiliza ahora el agente propio existente **rikeli-local**, del pool **Default**, con Docker y Node.js 22. Este agente debe permanecer conectado y Docker Desktop debe estar activo. Azure DevOps coordina la ejecución y publica los resultados; el procesamiento ocurre en el equipo del agente. No se ha contratado capacidad de pago.
+
+El pipeline se ejecuta al actualizar `main` o mediante **Run pipeline**. Las ejecuciones automáticas de pull requests están deshabilitadas para evitar que contribuciones externas al repositorio público ejecuten código en el agente propio.
 
 Los documentos de `docs/entrega/` corresponden a la validación local original del 8 de octubre de 2026. Los resultados nuevos de CI se consultan en Azure DevOps. No se copian credenciales, cookies ni tokens a los reportes.
 
