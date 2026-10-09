@@ -1,0 +1,367 @@
+{
+  "organization": "victoreflorian",
+  "project": "XRE Docs Lealtad",
+  "planId": 64,
+  "cases": [
+    {
+      "id": "T01",
+      "workItemId": 67,
+      "suiteId": 66,
+      "automatedName": "T01 API y dependencias disponibles"
+    },
+    {
+      "id": "T02",
+      "workItemId": 68,
+      "suiteId": 66,
+      "automatedName": "T02 Ruta interna sin sesion rechazada"
+    },
+    {
+      "id": "T03",
+      "workItemId": 69,
+      "suiteId": 66,
+      "automatedName": "T03 Login invalido rechazado"
+    },
+    {
+      "id": "T04",
+      "workItemId": 70,
+      "suiteId": 66,
+      "automatedName": "T04 Login interno y cookies de sesion"
+    },
+    {
+      "id": "T05",
+      "workItemId": 71,
+      "suiteId": 66,
+      "automatedName": "T05 Creacion de tienda de demostracion"
+    },
+    {
+      "id": "T06",
+      "workItemId": 72,
+      "suiteId": 66,
+      "automatedName": "T06 Login del operador con permisos limitados"
+    },
+    {
+      "id": "T07",
+      "workItemId": 73,
+      "suiteId": 66,
+      "automatedName": "T07 Acceso a auditoria sin permiso rechazado"
+    },
+    {
+      "id": "T08",
+      "workItemId": 74,
+      "suiteId": 66,
+      "automatedName": "T08 Seleccion de tienda sin CSRF rechazada"
+    },
+    {
+      "id": "T09",
+      "workItemId": 75,
+      "suiteId": 66,
+      "automatedName": "T09 Tienda no asignada rechazada"
+    },
+    {
+      "id": "T10",
+      "workItemId": 76,
+      "suiteId": 66,
+      "automatedName": "T10 Seleccion de tienda asignada"
+    },
+    {
+      "id": "T11",
+      "workItemId": 77,
+      "suiteId": 66,
+      "automatedName": "T11 Registro de cliente y codigo generado"
+    },
+    {
+      "id": "T12",
+      "workItemId": 78,
+      "suiteId": 66,
+      "automatedName": "T12 Campos no permitidos en factura rechazados"
+    },
+    {
+      "id": "T13",
+      "workItemId": 79,
+      "suiteId": 66,
+      "automatedName": "T13 Monto negativo rechazado"
+    },
+    {
+      "id": "T14",
+      "workItemId": 80,
+      "suiteId": 66,
+      "automatedName": "T14 Calculo de puntos en servidor"
+    },
+    {
+      "id": "T15",
+      "workItemId": 81,
+      "suiteId": 66,
+      "automatedName": "T15 Factura genera movimiento de puntos"
+    },
+    {
+      "id": "T16",
+      "workItemId": 82,
+      "suiteId": 66,
+      "automatedName": "T16 Factura duplicada rechazada"
+    },
+    {
+      "id": "T17",
+      "workItemId": 83,
+      "suiteId": 66,
+      "automatedName": "T17 Cliente consulta puntos propios"
+    },
+    {
+      "id": "T18",
+      "workItemId": 84,
+      "suiteId": 66,
+      "automatedName": "T18 Identidad del cliente procede de su sesion"
+    },
+    {
+      "id": "T19",
+      "workItemId": 85,
+      "suiteId": 66,
+      "automatedName": "T19 Sesion de cliente rechazada en API interna"
+    },
+    {
+      "id": "T20",
+      "workItemId": 86,
+      "suiteId": 66,
+      "automatedName": "T20 Creacion de premio con permiso"
+    },
+    {
+      "id": "T21",
+      "workItemId": 87,
+      "suiteId": 66,
+      "automatedName": "T21 Canje sin puntos suficientes rechazado"
+    },
+    {
+      "id": "T22",
+      "workItemId": 88,
+      "suiteId": 66,
+      "automatedName": "T22 Solicitud reserva puntos y stock"
+    },
+    {
+      "id": "T23",
+      "workItemId": 89,
+      "suiteId": 66,
+      "automatedName": "T23 Operador sin permiso no aprueba canje"
+    },
+    {
+      "id": "T24",
+      "workItemId": 90,
+      "suiteId": 66,
+      "automatedName": "T24 Aprobacion administrativa del canje"
+    },
+    {
+      "id": "T25",
+      "workItemId": 91,
+      "suiteId": 66,
+      "automatedName": "T25 Envio del premio a tienda"
+    },
+    {
+      "id": "T26",
+      "workItemId": 92,
+      "suiteId": 66,
+      "automatedName": "T26 Premio listo en tienda"
+    },
+    {
+      "id": "T27",
+      "workItemId": 93,
+      "suiteId": 66,
+      "automatedName": "T27 Entrega del premio con trazabilidad"
+    },
+    {
+      "id": "T28",
+      "workItemId": 94,
+      "suiteId": 66,
+      "automatedName": "T28 Segunda entrega rechazada"
+    },
+    {
+      "id": "T29",
+      "workItemId": 95,
+      "suiteId": 66,
+      "automatedName": "T29 Cancelacion devuelve puntos y reserva de stock"
+    },
+    {
+      "id": "T30",
+      "workItemId": 96,
+      "suiteId": 66,
+      "automatedName": "T30 Reversa autorizada conserva historial"
+    },
+    {
+      "id": "T31",
+      "workItemId": 97,
+      "suiteId": 66,
+      "automatedName": "T31 Saldo final consistente"
+    },
+    {
+      "id": "T32",
+      "workItemId": 98,
+      "suiteId": 66,
+      "automatedName": "T32 Renovacion de sesion valida"
+    },
+    {
+      "id": "T33",
+      "workItemId": 99,
+      "suiteId": 66,
+      "automatedName": "T33 Reutilizacion de refresh antiguo detectada"
+    },
+    {
+      "id": "T34",
+      "workItemId": 100,
+      "suiteId": 66,
+      "automatedName": "T34 Sesion revocada rechaza token de acceso"
+    },
+    {
+      "id": "T35",
+      "workItemId": 101,
+      "suiteId": 66,
+      "automatedName": "T35 Cierre de sesion autorizado"
+    },
+    {
+      "id": "T36",
+      "workItemId": 102,
+      "suiteId": 66,
+      "automatedName": "T36 Cookie antigua falla despues del cierre"
+    },
+    {
+      "id": "T37",
+      "workItemId": 103,
+      "suiteId": 66,
+      "automatedName": "T37 Limite de solicitudes de login aplicado"
+    },
+    {
+      "id": "U01",
+      "workItemId": 105,
+      "suiteId": 104,
+      "automatedName": "cookie session requires its matching CSRF token"
+    },
+    {
+      "id": "U02",
+      "workItemId": 106,
+      "suiteId": 104,
+      "automatedName": "admin and client CSRF cookies do not authorize each other"
+    },
+    {
+      "id": "U03",
+      "workItemId": 107,
+      "suiteId": 104,
+      "automatedName": "Bearer authentication does not require CSRF"
+    },
+    {
+      "id": "U04",
+      "workItemId": 108,
+      "suiteId": 104,
+      "automatedName": "customer without brand only receives global rewards"
+    },
+    {
+      "id": "U05",
+      "workItemId": 109,
+      "suiteId": 104,
+      "automatedName": "customer with brand receives global and matching brand rewards"
+    },
+    {
+      "id": "U06",
+      "workItemId": 110,
+      "suiteId": 104,
+      "automatedName": "customer registration accepts catalog and store identifiers"
+    },
+    {
+      "id": "U07",
+      "workItemId": 111,
+      "suiteId": 104,
+      "automatedName": "customer registration rejects malformed identifiers"
+    },
+    {
+      "id": "U08",
+      "workItemId": 112,
+      "suiteId": 104,
+      "automatedName": "brand-targeted banner requires at least one brand"
+    },
+    {
+      "id": "U09",
+      "workItemId": 113,
+      "suiteId": 104,
+      "automatedName": "global banner does not require brand targets"
+    },
+    {
+      "id": "U10",
+      "workItemId": 114,
+      "suiteId": 104,
+      "automatedName": "redemption workflow no longer accepts pending approval status"
+    },
+    {
+      "id": "U11",
+      "workItemId": 115,
+      "suiteId": 104,
+      "automatedName": "store order accepts only official online store payment methods"
+    },
+    {
+      "id": "U12",
+      "workItemId": 116,
+      "suiteId": 104,
+      "automatedName": "store order payment methods start with the official payment status"
+    },
+    {
+      "id": "U13",
+      "workItemId": 117,
+      "suiteId": 104,
+      "automatedName": "mensajero no puede entregar VISA_LINK_MANUAL con pago pendiente"
+    },
+    {
+      "id": "U14",
+      "workItemId": 118,
+      "suiteId": 104,
+      "automatedName": "mensajero no puede entregar TRANSFERENCIA_BANCARIA con pago pendiente"
+    },
+    {
+      "id": "U15",
+      "workItemId": 119,
+      "suiteId": 104,
+      "automatedName": "mensajero no puede entregar DEPOSITO_BANCARIO con pago pendiente"
+    },
+    {
+      "id": "U16",
+      "workItemId": 120,
+      "suiteId": 104,
+      "automatedName": "mensajero puede completar efectivo si el monto coincide exactamente y dispara puntos al entregar"
+    },
+    {
+      "id": "U17",
+      "workItemId": 121,
+      "suiteId": 104,
+      "automatedName": "puntos de compra online se acreditan solo al entregar y por productos marcados"
+    },
+    {
+      "id": "U18",
+      "workItemId": 122,
+      "suiteId": 104,
+      "automatedName": "mensajero no puede completar efectivo con monto parcial"
+    },
+    {
+      "id": "U19",
+      "workItemId": 123,
+      "suiteId": 104,
+      "automatedName": "crear liquidacion exige pagos confirmados y pendientes de liquidar"
+    },
+    {
+      "id": "U20",
+      "workItemId": 124,
+      "suiteId": 104,
+      "automatedName": "pago con incidencia no aparece como elegible para liquidacion"
+    },
+    {
+      "id": "U21",
+      "workItemId": 125,
+      "suiteId": 104,
+      "automatedName": "anular liquidacion devuelve pagos a pendiente de liquidar"
+    },
+    {
+      "id": "U22",
+      "workItemId": 126,
+      "suiteId": 104,
+      "automatedName": "exportes CSV de liquidaciones incluyen encabezados esperados"
+    },
+    {
+      "id": "U23",
+      "workItemId": 127,
+      "suiteId": 104,
+      "automatedName": "export CSV de reportes responde encabezados correctos"
+    }
+  ]
+}

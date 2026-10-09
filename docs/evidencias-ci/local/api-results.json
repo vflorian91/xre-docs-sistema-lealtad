@@ -1,0 +1,309 @@
+{
+  "executedAt": "2026-10-09T05:46:29.062Z",
+  "environment": "Docker CI aislado",
+  "total": 37,
+  "passed": 37,
+  "failed": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "T01",
+      "name": "API y dependencias disponibles",
+      "expected": 200,
+      "status": 200,
+      "result": "APROBADA",
+      "milliseconds": 57
+    },
+    {
+      "id": "T02",
+      "name": "Ruta interna sin sesion rechazada",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 7
+    },
+    {
+      "id": "T03",
+      "name": "Login invalido rechazado",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 174
+    },
+    {
+      "id": "T04",
+      "name": "Login interno y cookies de sesion",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 261
+    },
+    {
+      "id": "T05",
+      "name": "Creacion de tienda de demostracion",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 81
+    },
+    {
+      "id": "T06",
+      "name": "Login del operador con permisos limitados",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 254
+    },
+    {
+      "id": "T07",
+      "name": "Acceso a auditoria sin permiso rechazado",
+      "expected": 403,
+      "status": 403,
+      "result": "APROBADA",
+      "milliseconds": 11
+    },
+    {
+      "id": "T08",
+      "name": "Seleccion de tienda sin CSRF rechazada",
+      "expected": 403,
+      "status": 403,
+      "result": "APROBADA",
+      "milliseconds": 4
+    },
+    {
+      "id": "T09",
+      "name": "Tienda no asignada rechazada",
+      "expected": 403,
+      "status": 403,
+      "result": "APROBADA",
+      "milliseconds": 13
+    },
+    {
+      "id": "T10",
+      "name": "Seleccion de tienda asignada",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 25
+    },
+    {
+      "id": "T11",
+      "name": "Registro de cliente y codigo generado",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 247
+    },
+    {
+      "id": "T12",
+      "name": "Campos no permitidos en factura rechazados",
+      "expected": 400,
+      "status": 400,
+      "result": "APROBADA",
+      "milliseconds": 25
+    },
+    {
+      "id": "T13",
+      "name": "Monto negativo rechazado",
+      "expected": 400,
+      "status": 400,
+      "result": "APROBADA",
+      "milliseconds": 16
+    },
+    {
+      "id": "T14",
+      "name": "Calculo de puntos en servidor",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 73
+    },
+    {
+      "id": "T15",
+      "name": "Factura genera movimiento de puntos",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 152
+    },
+    {
+      "id": "T16",
+      "name": "Factura duplicada rechazada",
+      "expected": 409,
+      "status": 409,
+      "result": "APROBADA",
+      "milliseconds": 63
+    },
+    {
+      "id": "T17",
+      "name": "Cliente consulta puntos propios",
+      "expected": 200,
+      "status": 200,
+      "result": "APROBADA",
+      "milliseconds": 75
+    },
+    {
+      "id": "T18",
+      "name": "Identidad del cliente procede de su sesion",
+      "expected": 200,
+      "status": 200,
+      "result": "APROBADA",
+      "milliseconds": 45
+    },
+    {
+      "id": "T19",
+      "name": "Sesion de cliente rechazada en API interna",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 5
+    },
+    {
+      "id": "T20",
+      "name": "Creacion de premio con permiso",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 55
+    },
+    {
+      "id": "T21",
+      "name": "Canje sin puntos suficientes rechazado",
+      "expected": 400,
+      "status": 400,
+      "result": "APROBADA",
+      "milliseconds": 64
+    },
+    {
+      "id": "T22",
+      "name": "Solicitud reserva puntos y stock",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 94
+    },
+    {
+      "id": "T23",
+      "name": "Operador sin permiso no aprueba canje",
+      "expected": 403,
+      "status": 403,
+      "result": "APROBADA",
+      "milliseconds": 25
+    },
+    {
+      "id": "T24",
+      "name": "Aprobacion administrativa del canje",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 52
+    },
+    {
+      "id": "T25",
+      "name": "Envio del premio a tienda",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 49
+    },
+    {
+      "id": "T26",
+      "name": "Premio listo en tienda",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 49
+    },
+    {
+      "id": "T27",
+      "name": "Entrega del premio con trazabilidad",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 67
+    },
+    {
+      "id": "T28",
+      "name": "Segunda entrega rechazada",
+      "expected": [
+        400,
+        409
+      ],
+      "status": 400,
+      "result": "APROBADA",
+      "milliseconds": 22
+    },
+    {
+      "id": "T29",
+      "name": "Cancelacion devuelve puntos y reserva de stock",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 52
+    },
+    {
+      "id": "T30",
+      "name": "Reversa autorizada conserva historial",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 58
+    },
+    {
+      "id": "T31",
+      "name": "Saldo final consistente",
+      "expected": 200,
+      "status": 200,
+      "result": "APROBADA",
+      "milliseconds": 18
+    },
+    {
+      "id": "T32",
+      "name": "Renovacion de sesion valida",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 249
+    },
+    {
+      "id": "T33",
+      "name": "Reutilizacion de refresh antiguo detectada",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 119
+    },
+    {
+      "id": "T34",
+      "name": "Sesion revocada rechaza token de acceso",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 9
+    },
+    {
+      "id": "T35",
+      "name": "Cierre de sesion autorizado",
+      "expected": 201,
+      "status": 201,
+      "result": "APROBADA",
+      "milliseconds": 20
+    },
+    {
+      "id": "T36",
+      "name": "Cookie antigua falla despues del cierre",
+      "expected": 401,
+      "status": 401,
+      "result": "APROBADA",
+      "milliseconds": 10
+    },
+    {
+      "id": "T37",
+      "name": "Limite de solicitudes de login aplicado",
+      "expected": 429,
+      "status": 429,
+      "result": "APROBADA",
+      "milliseconds": 0
+    }
+  ]
+}

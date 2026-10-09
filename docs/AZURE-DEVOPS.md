@@ -18,6 +18,23 @@ Las comprobaciones API forman un flujo secuencial: compras, saldo, solicitudes, 
 
 `tests/test-cases.json` conserva los 60 casos, identificadores, nombres y resultados esperados. Los archivos `tests/azure-test-cases-api.csv` y `tests/azure-test-cases-unit.csv` permiten importarlos en dos suites de Azure Test Plans. Los nombres automatizados coinciden con JUnit; los U01–U23 son identificadores de catálogo.
 
+Los 60 casos ya se importaron en el proyecto **XRE Docs Lealtad**, organización **victoreflorian**:
+
+| Suite | Casos | Identificadores de Azure |
+| --- | ---: | --- |
+| [API — 37 comprobaciones](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_testPlans/define?planId=64&suiteId=66) | 37 | 67–103 |
+| [Reglas — 23 pruebas automatizadas](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_testPlans/define?planId=64&suiteId=104) | 23 | 105–127 |
+
+El plan es **Validación XRE Docs — API y reglas automatizadas**, ID 64. `tests/azure-work-items.json` relaciona cada caso con su identificador real. No volver a importar los CSV con la columna ID vacía: eso crearía casos duplicados.
+
+Los casos de Test Plans conservan el estado de diseño. Importar un caso no equivale a ejecutar su prueba ni a asociarlo automáticamente a un resultado. La ejecución automatizada y su resultado se verifican en la pestaña **Tests** del pipeline; la correspondencia por nombre está documentada en el catálogo.
+
+## Evidencia local del mismo ejecutor de CI
+
+La ejecución del 9 de octubre de 2026 a las 05:46 UTC (8 de octubre a las 23:46 en Guatemala) terminó con **37/37 comprobaciones API y 23/23 pruebas automatizadas aprobadas**, sin fallas ni casos omitidos. La comprobación de tipos de la API también pasó. Los archivos JUnit y JSON saneados están en `docs/evidencias-ci/local/`. Las capturas de las dos suites importadas y del repositorio público están en `docs/evidencias-ci/`.
+
+Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecución en Azure se registran separadamente en el pipeline.
+
 ## Pipeline
 
 1. Crear un pipeline desde el repositorio GitHub y seleccionar el archivo existente `azure-pipelines.yml` de `main`.
