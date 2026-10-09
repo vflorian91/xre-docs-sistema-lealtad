@@ -15,13 +15,17 @@ jobs:
       - checkout: self
         clean: true
         persistCredentials: false
-      - task: NodeTool@0
+      - task: UseNode@1
         inputs:
-          versionSpec: '22.x'
+          version: '22.x'
         displayName: 'Node.js 22'
       - script: node scripts/ci/run.cjs
         displayName: 'Ejecutar las 60 verificaciones en Docker aislado'
+      - powershell: '& ./scripts/ci/normalize-junit.ps1 -ReportPath ./test-results/unitarios.xml'
+        condition: succeededOrFailed()
+        displayName: 'Preparar JUnit de los 23 casos para Azure'
       - task: PublishTestResults@2
+        displayName: 'Publicar las 37 comprobaciones API'
         condition: succeededOrFailed()
         inputs:
           testResultsFormat: JUnit
@@ -31,6 +35,7 @@ jobs:
           failTaskOnMissingResultsFile: true
           failTaskOnFailureToPublishResults: true
       - task: PublishTestResults@2
+        displayName: 'Publicar las 23 pruebas automatizadas'
         condition: succeededOrFailed()
         inputs:
           testResultsFormat: JUnit

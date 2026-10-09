@@ -46,6 +46,8 @@ La ejecución 8 falló antes de ejecutar pruebas porque la organización no tien
 
 El pipeline se ejecuta al actualizar `main` o mediante **Run pipeline**. Las ejecuciones automáticas de pull requests están deshabilitadas para evitar que contribuciones externas al repositorio público ejecuten código en el agente propio.
 
+La ejecución 9 completó las 60 verificaciones, pero Azure rechazó el JUnit nativo de Node.js porque sus `testcase` estaban directamente bajo `testsuites`. El paso `scripts/ci/normalize-junit.ps1` coloca los nodos originales dentro de `testsuite` y calcula sus totales para el importador de Azure. Conserva nombres, duraciones, fallas, errores y pruebas omitidas; además exige que el reporte contenga los 23 casos. Esta adaptación del formato no cambia las aserciones ni sus resultados. Se utiliza `UseNode@1` en lugar de la tarea obsoleta `NodeTool@0`.
+
 Los documentos de `docs/entrega/` corresponden a la validación local original del 8 de octubre de 2026. Los resultados nuevos de CI se consultan en Azure DevOps. No se copian credenciales, cookies ni tokens a los reportes.
 
 Referencias: [PublishTestResults](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-test-results-v2?view=azure-pipelines), [importación de Test Plans](https://learn.microsoft.com/en-us/azure/devops/test/bulk-import-export-test-cases?view=azure-devops).
