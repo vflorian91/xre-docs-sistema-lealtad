@@ -1,0 +1,7 @@
+import CatalogItemPage from '../../../CatalogItemPage';
+import { catalogConfigs } from '../../../catalogConfigs';
+
+export default async function TipoCalzadoDetallePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <CatalogItemPage config={catalogConfigs.tiposCalzado} itemId={id} mode="view" />;
+}

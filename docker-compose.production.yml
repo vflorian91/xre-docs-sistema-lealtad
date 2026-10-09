@@ -1,0 +1,100 @@
+name: lealtad-production
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Define POSTGRES_DB en .env.production}
+      POSTGRES_USER: ${POSTGRES_USER:?Define POSTGRES_USER en .env.production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env.production}
+    ports: !override []
+
+  minio:
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:?Define MINIO_ACCESS_KEY en .env.production}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:?Define MINIO_SECRET_KEY en .env.production}
+    ports: !override []
+
+  minio-init:
+    command:
+      - mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} && mc mb --ignore-existing local/${MINIO_BUCKET}
+
+  backup:
+    environment: &production-backup-environment
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      BACKUP_ROOT: /backups
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+      TZ: America/Guatemala
+    volumes: !override
+      - ${PRODUCTION_BACKUP_PATH:-./backups-production}:/backups
+
+  restore-test:
+    environment: *production-backup-environment
+    volumes: !override
+      - ${PRODUCTION_BACKUP_PATH:-./backups-production}:/backups
+
+  api:
+    environment:
+      APP_ENV: production
+      COOKIE_SECURE: "true"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?Define JWT_ACCESS_SECRET en .env.production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?Define JWT_REFRESH_SECRET en .env.production}
+      ADMIN_WEB_URL: https://${ADMIN_DOMAIN:?Define ADMIN_DOMAIN en .env.production}
+      CLIENT_PWA_URL: https://${CLIENT_DOMAIN:?Define CLIENT_DOMAIN en .env.production}
+      CORS_ORIGINS: https://${ADMIN_DOMAIN},https://${CLIENT_DOMAIN}
+      MEDIA_STORAGE_PROVIDER: S3
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_BUCKET: ${MINIO_BUCKET:?Define MINIO_BUCKET en .env.production}
+      S3_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY}
+      S3_FORCE_PATH_STYLE: "true"
+    ports: !override []
+
+  admin-web:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: https://${ADMIN_DOMAIN}/proxy/api
+    ports: !override []
+
+  client-pwa:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: https://${CLIENT_DOMAIN}/proxy/api
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+    ports: !override []
+
+  caddy:
+    image: caddy:2.10.0-alpine
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      admin-web:
+        condition: service_started
+      client-pwa:
+        condition: service_started
+    environment:
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+      CLIENT_DOMAIN: ${CLIENT_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN:?Define API_DOMAIN en .env.production}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,25 @@
+node_modules
+.next
+dist
+build
+coverage
+.env
+.env.*
+!.env.example
+!.env.staging.example
+!.env.production.example
+*.log
+*.tsbuildinfo
+.DS_Store
+.vscode/
+apps/*/app/page 2.tsx
+apps/*/app/globals 2.css
+/.turbo
+/tmp
+/backups
+/backups-staging
+/backups-production
+
+/test-results/
+/.ci-runtime.env
+/publicacion/

@@ -1,0 +1,6 @@
+NAME                            IMAGE                         COMMAND                  SERVICE      CREATED          STATUS                    PORTS
+sistemadelealtad-admin-web-1    sistemadelealtad-admin-web    "docker-entrypoint.s…"   admin-web    16 minutes ago   Up 16 minutes             0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+sistemadelealtad-api-1          sistemadelealtad-api          "docker-entrypoint.s…"   api          34 minutes ago   Up 34 minutes (healthy)   0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp
+sistemadelealtad-client-pwa-1   sistemadelealtad-client-pwa   "docker-entrypoint.s…"   client-pwa   36 minutes ago   Up 36 minutes             0.0.0.0:3002->3002/tcp, [::]:3002->3002/tcp
+sistemadelealtad-driver-pwa-1   sistemadelealtad-driver-pwa   "docker-entrypoint.s…"   driver-pwa   36 minutes ago   Up 36 minutes             0.0.0.0:3003->3003/tcp, [::]:3003->3003/tcp
+sistemadelealtad-postgres-1     postgres:16-alpine            "docker-entrypoint.s…"   postgres     36 minutes ago   Up 36 minutes (healthy)   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp

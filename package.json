@@ -1,0 +1,53 @@
+{
+  "name": "sistema-lealtad",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de Lealtad y Premiacion para tiendas fisicas",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build:packages && npm run build -w @lealtad/api && npm run build -w @lealtad/admin-web && npm run build -w @lealtad/client-pwa && npm run build -w @lealtad/driver-pwa",
+    "build:packages": "npm run build -w @lealtad/database",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "prettier --write .",
+    "db:generate": "npm run db:generate -w @lealtad/database",
+    "db:migrate": "npm run db:migrate -w @lealtad/database",
+    "db:deploy": "npm run db:deploy -w @lealtad/database",
+    "db:studio": "npm run db:studio -w @lealtad/database",
+    "db:seed": "npm run db:seed -w @lealtad/database",
+    "db:seed:qa": "npm run db:seed:qa -w @lealtad/database",
+    "db:seed:guatemala-geo": "npm run db:seed:guatemala-geo -w @lealtad/database",
+    "backup:create": "docker compose --env-file .env exec backup /usr/local/bin/backup.sh",
+    "backup:test": "docker compose --env-file .env --profile tools run --rm restore-test",
+    "staging:up": "docker compose --env-file .env.staging -p xre-staging -f docker-compose.yml -f docker-compose.staging.yml up -d --build",
+    "staging:down": "docker compose --env-file .env.staging -p xre-staging -f docker-compose.yml -f docker-compose.staging.yml down",
+    "staging:status": "docker compose --env-file .env.staging -p xre-staging -f docker-compose.yml -f docker-compose.staging.yml ps",
+    "staging:logs": "docker compose --env-file .env.staging -p xre-staging -f docker-compose.yml -f docker-compose.staging.yml logs -f --tail=100",
+    "staging:backup:test": "docker compose --env-file .env.staging -p xre-staging -f docker-compose.yml -f docker-compose.staging.yml --profile tools run --rm restore-test",
+    "production:config": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml config --quiet",
+    "production:up": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml up -d --build",
+    "production:down": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml down",
+    "production:status": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml ps",
+    "production:backup:test": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml --profile tools run --rm restore-test",
+    "test:ci": "node scripts/ci/run.cjs",
+    "test:api:ci": "node scripts/ci/api-checks.cjs",
+    "test:unit:ci": "node --require ./scripts/ci/ts-register.cjs --test --test-reporter=junit --test-reporter-destination=/results/unitarios.xml apps/api/test/auth-cookie-and-reward-segmentation.test.ts apps/api/test/registration-and-banner-validation.test.ts apps/api/test/store-online-critical-rules.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "overrides": {
+    "uuid": "^11.1.1",
+    "postcss": "^8.5.10"
+  },
+  "engines": {
+    "node": ">=20.12.0",
+    "npm": ">=10.0.0"
+  }
+}

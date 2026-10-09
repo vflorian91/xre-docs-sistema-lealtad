@@ -1,0 +1,2 @@
+ALTER TABLE "PointRule"
+ALTER COLUMN "pointValueAmount" TYPE DECIMAL(18,5);

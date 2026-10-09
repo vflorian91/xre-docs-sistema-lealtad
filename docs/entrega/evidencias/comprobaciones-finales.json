@@ -1,0 +1,16 @@
+{
+  "typecheck": {
+    "api": "Aprobado, salida sin errores y código 0",
+    "clientPwa": "Aprobado, salida sin errores y código 0"
+  },
+  "build": "API y cliente recompilados mediante Docker tras corrección de navegación",
+  "ui": "Canjes y Perfil conservan la vista tras cargar resumen sin catálogo online",
+  "visualQA": {
+    "reportPages": 16,
+    "manualPages": 11,
+    "speakerScriptPages": 4,
+    "slides": 9,
+    "method": "Render de PDF y presentación e inspección visual de todas las páginas y diapositivas"
+  },
+  "scope": "No acredita despliegue público, prueba de carga, concurrencia simultánea ni pentest"
+}

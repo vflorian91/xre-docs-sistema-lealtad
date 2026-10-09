@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: xre_ci
+      POSTGRES_USER: xre_ci
+      POSTGRES_PASSWORD: ${CI_POSTGRES_PASSWORD:?CI runtime generates the database password}
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U xre_ci -d xre_ci"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - ci_postgres:/var/lib/postgresql/data
+  api:
+    build:
+      context: .
+      dockerfile: docker/ci.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      CI: "true"
+      API_PORT: "4000"
+      APP_ENV: production
+      COOKIE_SECURE: "false"
+      DATABASE_URL: postgresql://xre_ci:${CI_POSTGRES_PASSWORD}@postgres:5432/xre_ci
+      JWT_ACCESS_SECRET: ${CI_JWT_ACCESS_SECRET:?CI runtime generates the JWT access secret}
+      JWT_REFRESH_SECRET: ${CI_JWT_REFRESH_SECRET:?CI runtime generates the JWT refresh secret}
+      ADMIN_WEB_URL: http://localhost:3000
+      CLIENT_PWA_URL: http://localhost:3002
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3002
+      MEDIA_STORAGE_PROVIDER: LOCAL
+      MEDIA_STORAGE_DIR: /var/lealtad/media
+      CI_RESULTS_DIR: /results
+    volumes:
+      - ./test-results:/results
+      - ci_media:/var/lealtad/media
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://localhost:4000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 3s
+      timeout: 5s
+      retries: 50
+      start_period: 15s
+volumes:
+  ci_postgres:
+  ci_media:

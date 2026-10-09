@@ -1,0 +1,25 @@
+{
+  "operationalEnvIncluded": false,
+  "demoCredentialsIncluded": false,
+  "databaseDumpIncluded": false,
+  "knownLocalSecretsDetected": false,
+  "sourceFileCount": 636,
+  "sourceSanitizedFiles": [
+    ".env.example",
+    ".env.production.example",
+    ".env.staging.example",
+    "docker-compose.local.yml",
+    "docker-compose.staging.yml",
+    "docker-compose.yml",
+    "package.json",
+    "docs/architecture/auth-p0.md"
+  ],
+  "presentationSlides": 9,
+  "durationSeconds": 480,
+  "pdfPages": {
+    "Guion_exposicion_8_minutos_XRE_Docs.pdf": 4,
+    "Informe_tecnico_y_seguridad_XRE_Docs.pdf": 16,
+    "Manual_de_usuario_XRE_Docs.pdf": 11,
+    "Presentacion_XRE_Docs_8_minutos.pdf": 9
+  }
+}

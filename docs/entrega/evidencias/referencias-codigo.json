@@ -1,0 +1,92 @@
+[
+  {
+    "file": "apps/api/src/modules/auth/auth.service.ts",
+    "line": 88,
+    "pattern": "argon2.verify",
+    "sha256": "9d57367b4cd4999f9eb38eb5b3513c8dfa2c7c8752adb2f4d911602fe3980a4e"
+  },
+  {
+    "file": "apps/api/src/modules/auth/cookie.util.ts",
+    "line": 52,
+    "pattern": "httpOnly: true",
+    "sha256": "ee1546f0343bc30e0b164482f61d71773d07609e2046ffab6f57953871a428a8"
+  },
+  {
+    "file": "apps/api/src/modules/auth/cookie.util.ts",
+    "line": 105,
+    "pattern": "assertCsrfTokenMatches",
+    "sha256": "ee1546f0343bc30e0b164482f61d71773d07609e2046ffab6f57953871a428a8"
+  },
+  {
+    "file": "apps/api/src/modules/auth/permissions.guard.ts",
+    "line": 23,
+    "pattern": "hasAllPermissions",
+    "sha256": "58216f944b5935dcdb565a6ecd618d9b56ad07c4c4d9d156d54542d63f2295a0"
+  },
+  {
+    "file": "apps/api/src/modules/auth/jwt-auth.guard.ts",
+    "line": 66,
+    "pattern": "session.revokedAt",
+    "sha256": "fd12dd7d4275a44928a000f3dd3d7f20cd26d2a358c794675c2d0d796afed8ac"
+  },
+  {
+    "file": "apps/api/src/modules/purchases/purchase.schemas.ts",
+    "line": 34,
+    "pattern": ".strict()",
+    "sha256": "84adadd919267808c30f704263c4273662620ceaa8be651c37ef604e766b53a6"
+  },
+  {
+    "file": "apps/api/src/modules/purchases/purchases.service.ts",
+    "line": 106,
+    "pattern": "storeId_invoiceNumber",
+    "sha256": "fc20e2a97c6fdde9ddd2cd48e6fa206c6230e783bfd0ae78812d1bb0f0e7aa09"
+  },
+  {
+    "file": "apps/api/src/modules/redemptions/redemptions.service.ts",
+    "line": 296,
+    "pattern": "pg_advisory_xact_lock",
+    "sha256": "175e271dbb1ad35070fe0e76d92f803c7f4696ab5fbfc9cbe4cb7f46c27e0ed6"
+  },
+  {
+    "file": "apps/api/src/modules/client/client.service.ts",
+    "line": 56,
+    "pattern": "customerId: customer.id",
+    "sha256": "a4ae81b8f4c900db3471ca746ca21676a517ff5d1858b8f18fca1f2142217b64"
+  },
+  {
+    "file": "apps/api/src/main.ts",
+    "line": 18,
+    "pattern": "assertProductionSecrets",
+    "sha256": "c0c78b334a0e586772a06bd07ef4b53d4d0c9ded9c1acfe1cefb5dd052c9d9ad"
+  },
+  {
+    "file": "apps/api/src/modules/media/media.service.ts",
+    "line": 441,
+    "pattern": "async getAssetContent",
+    "sha256": "2b7e0451c8714ffe1bdc7e999811878937f9e3e6f447616633b81265fafbf973"
+  },
+  {
+    "file": "apps/api/src/modules/media/media.service.ts",
+    "line": 471,
+    "pattern": "private async storeFile",
+    "sha256": "2b7e0451c8714ffe1bdc7e999811878937f9e3e6f447616633b81265fafbf973"
+  },
+  {
+    "file": "apps/client-pwa/app/page.tsx",
+    "line": 721,
+    "pattern": "setView((currentView)",
+    "sha256": "75bd0b76bf43c88af03bd0c61a74c7db4b874d414b67a77621c6fa3435eea1af"
+  },
+  {
+    "file": "docker-compose.production.yml",
+    "line": 47,
+    "pattern": "COOKIE_SECURE",
+    "sha256": "225af6377bf3e566ae2693850422d9568fd0957625d995fcc60ba432bbcb9f32"
+  },
+  {
+    "file": "docker/Caddyfile",
+    "line": 4,
+    "pattern": "Strict-Transport-Security",
+    "sha256": "65284bb87b90b2ca35b898d5892daef181f31e07146aeb101bf928231ca1a74e"
+  }
+]

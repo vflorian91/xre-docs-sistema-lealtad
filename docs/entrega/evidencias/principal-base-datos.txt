@@ -1,0 +1,5 @@
+ rolname | rolsuper | rolcreatedb | rolcreaterole 
+---------+----------+-------------+---------------
+ lealtad | t        | t           | t
+(1 row)
+

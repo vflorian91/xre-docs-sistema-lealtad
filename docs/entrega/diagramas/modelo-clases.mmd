@@ -1,0 +1,38 @@
+classDiagram
+Customer "1" --> "many" Purchase : realiza
+Store "1" --> "many" Purchase : registra
+InternalUser "1" --> "many" Purchase : opera
+Customer "1" --> "many" PointMovement : acumula
+Purchase "1" --> "many" PointMovement : origina
+Customer "1" --> "many" RedemptionRequest : solicita
+RedeemableProduct "1" --> "many" RedemptionRequest : premio
+Store "1" --> "many" RedemptionRequest : retiro
+InternalUser "1" --> "many" InternalUserPermission : permisos directos
+InternalUser "1" --> "many" UserStore : tiendas asignadas
+InternalUser "1" --> "many" InternalSession : sesion
+Customer "1" --> "many" CustomerSession : sesion
+class Customer {
+ +String id
+ +String code
+ +String status
+}
+class Purchase {
+ +String invoiceNumber
+ +Decimal amount
+ +Int pointsCalculated
+ +PurchaseStatus status
+}
+class PointMovement {
+ +Int points
+ +PointMovementStatus status
+}
+class RedemptionRequest {
+ +String requestCode
+ +RedemptionRequestStatus status
+ +Int pointsReserved
+}
+class RedeemableProduct {
+ +Int pointsValue
+ +Int stock
+ +Int reservedStock
+}

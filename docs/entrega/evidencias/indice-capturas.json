@@ -1,0 +1,114 @@
+[
+  {
+    "file": "01-acceso-cliente.jpg",
+    "capturedAtUTC": "2026-10-09T04:05:31.049216+00:00",
+    "sha256": "f7ad79907bce11a94f852bac009692796833b114989b2096396c8e45f925e495",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "02-cliente-saldo.jpg",
+    "capturedAtUTC": "2026-10-09T04:33:18.847934+00:00",
+    "sha256": "985c39295dccce13a732caff2367e3dc509d3650bdb25b2a6f7402eb0584aef6",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "03-panel-lealtad.jpg",
+    "capturedAtUTC": "2026-10-09T04:07:30.973624+00:00",
+    "sha256": "3361834a578b52e3151b14312dc45a7c1d30175800e7cb4ecde8e18d3435f4a1",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "04-clientes-demo.jpg",
+    "capturedAtUTC": "2026-10-09T04:09:43.925873+00:00",
+    "sha256": "b474e411ffbf39f1f29a568ac295612f219d2de21f306c2190845ed40842f1ea",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "05-perfil-trazabilidad.jpg",
+    "capturedAtUTC": "2026-10-09T04:10:35.325538+00:00",
+    "sha256": "d4ea727683d04965052e7f58cce560fc263dbe5dba9bd3e1a5cfd31183705c95",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "06-canjes-estados.jpg",
+    "capturedAtUTC": "2026-10-09T04:11:48.243604+00:00",
+    "sha256": "62e8a52c9d00078a72a6be82944e634fa9d5105d693a844218bbdb79482699f2",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "07-canje-detalle.jpg",
+    "capturedAtUTC": "2026-10-09T04:12:17.429391+00:00",
+    "sha256": "111aed91c4508ae767f098297fb5f81b82ab1faf6fa02de172f99528c823dd9d",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "08-auditoria.jpg",
+    "capturedAtUTC": "2026-10-09T04:12:28.331900+00:00",
+    "sha256": "c8dc587bce5f14da3b872984af8a5c1d7dae0970c23d67730d353c385a40e10b",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "09-catalogo-canjes-cliente.jpg",
+    "capturedAtUTC": "2026-10-09T04:33:37.545450+00:00",
+    "sha256": "cf7250840cf7bb33e920b055733be675baa9004d552f492875eddffa058f6cf6",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "10-perfil-cliente.jpg",
+    "capturedAtUTC": "2026-10-09T04:12:38.462910+00:00",
+    "sha256": "a9ee9f42c2c10c68495a389fa5dc12298f73b85f5df8a2c05028f8d95c0b02a0",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "11-usuarios-demo.jpg",
+    "capturedAtUTC": "2026-10-09T04:12:38.868021+00:00",
+    "sha256": "3c5e9fad59806958bbf04e99f3d20c04a13892d2b1173aa0a4f12310836f768d",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "12-historial-canjes-cliente.jpg",
+    "capturedAtUTC": "2026-10-09T04:33:26.483657+00:00",
+    "sha256": "c7cccab091c90138b44348f482c5331d7b342632c1e25f62b1358510d9702cc7",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "13-permiso-auditoria-desmarcado.jpg",
+    "capturedAtUTC": "2026-10-09T04:13:30.507104+00:00",
+    "sha256": "7652356e61abc5de79fd2d7a71d2ff22b5456ea758160c3d3e3297cba049263b",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "14-historial-compras-cliente.jpg",
+    "capturedAtUTC": "2026-10-09T04:33:33.352197+00:00",
+    "sha256": "8c18d4fef527181c5da63d745e48b2eb292bdb90a2b3c307207b5e5d053b638b",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3002"
+  },
+  {
+    "file": "15-acceso-administracion.jpg",
+    "capturedAtUTC": "2026-10-09T04:13:58.612572+00:00",
+    "sha256": "02d4c3e42be72b2238863e77d218bbd6f9b29159215ae2ef77f599c86ceaf571",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  },
+  {
+    "file": "16-facturas-operador.jpg",
+    "capturedAtUTC": "2026-10-09T04:23:38.684186+00:00",
+    "sha256": "0dc78368e9899735f9d9ccf9856ed862441a9cf144835b7eb5286f07ca0dbdb5",
+    "source": "Interfaz real de la aplicación local, cuentas Demo XRE",
+    "url": "http://localhost:3000"
+  }
+]

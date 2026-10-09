@@ -1,0 +1,9 @@
+Fecha UTC: 2026-10-09T04:07:14Z
+Entorno: PostgreSQL local en Docker
+Metodo: pg_dump formato custom y pg_restore en base temporal independiente
+SHA256 del respaldo privado: af476f154ef28c5eef1758eb1678d4ed168e72a0ce8bcd717aba59c834ab5789
+Tablas comparadas: 53
+Resultado: APROBADA. Conteos identicos en todas las tablas.
+Limpieza: eliminacion exclusiva de la base temporal creada para la prueba
+Alcance: respaldo y restauracion de base de datos. Archivos multimedia no incluidos en esta prueba.
+No se entrega el dump porque contiene datos y hashes de credenciales.

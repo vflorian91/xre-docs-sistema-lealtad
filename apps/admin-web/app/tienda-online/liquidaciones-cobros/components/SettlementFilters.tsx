@@ -1,0 +1,72 @@
+'use client';
+
+import { Search } from 'lucide-react';
+import { FormEvent } from 'react';
+
+export type SettlementFiltersState = {
+  search: string;
+  paymentMethod: string;
+  status: string;
+  dateFrom: string;
+  dateTo: string;
+};
+
+export const initialSettlementFilters: SettlementFiltersState = {
+  search: '',
+  paymentMethod: '',
+  status: '',
+  dateFrom: '',
+  dateTo: '',
+};
+
+export default function SettlementFilters({
+  filters,
+  onChange,
+  onSubmit,
+}: {
+  filters: SettlementFiltersState;
+  onChange: (filters: SettlementFiltersState) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}) {
+  return (
+    <form className="customer-table-toolbar" onSubmit={onSubmit}>
+      <label className="customer-filter-field">
+        <span>Buscar</span>
+        <input
+          onChange={(event) => onChange({ ...filters, search: event.target.value })}
+          placeholder="No. liquidacion o referencia"
+          value={filters.search}
+        />
+      </label>
+      <label className="customer-filter-field">
+        <span>Metodo de pago</span>
+        <select onChange={(event) => onChange({ ...filters, paymentMethod: event.target.value })} value={filters.paymentMethod}>
+          <option value="">Todos</option>
+          <option value="EFECTIVO_CONTRA_ENTREGA">Efectivo contra entrega</option>
+          <option value="VISA_LINK_MANUAL">Visa Link</option>
+          <option value="TRANSFERENCIA_BANCARIA">Transferencia bancaria</option>
+          <option value="DEPOSITO_BANCARIO">Deposito bancario</option>
+        </select>
+      </label>
+      <label className="customer-filter-field">
+        <span>Estado</span>
+        <select onChange={(event) => onChange({ ...filters, status: event.target.value })} value={filters.status}>
+          <option value="">Todos</option>
+          <option value="ACTIVA">Activa</option>
+          <option value="ANULADA">Anulada</option>
+        </select>
+      </label>
+      <label className="customer-filter-field">
+        <span>Desde</span>
+        <input onChange={(event) => onChange({ ...filters, dateFrom: event.target.value })} type="date" value={filters.dateFrom} />
+      </label>
+      <label className="customer-filter-field">
+        <span>Hasta</span>
+        <input onChange={(event) => onChange({ ...filters, dateTo: event.target.value })} type="date" value={filters.dateTo} />
+      </label>
+      <button className="admin-primary customer-filter-submit table-filter-search-button" type="submit">
+        <Search size={16} /> Buscar
+      </button>
+    </form>
+  );
+}

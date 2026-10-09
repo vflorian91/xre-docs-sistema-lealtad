@@ -1,0 +1,1404 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InternalUserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum StoreStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum StoreLocationType {
+  CAPITAL
+  DEPARTMENT
+}
+
+enum PurchaseStatus {
+  APPROVED
+  PENDING_REVIEW
+  REJECTED
+  REVERSED
+}
+
+enum PointMovementType {
+  PURCHASE_EARNED
+  PURCHASE_REVERSED
+  POINT_CONVERTED_TO_BALANCE
+  ADMIN_ADJUSTMENT_POSITIVE
+  ADMIN_ADJUSTMENT_NEGATIVE
+  REDEMPTION_RESERVED
+  REDEMPTION_USED
+  REDEMPTION_RELEASED
+  EXPIRED
+}
+
+enum PointMovementStatus {
+  AVAILABLE
+  PENDING
+  REVERSED
+  USED
+  EXPIRED
+}
+
+enum PointPromotionType {
+  DOUBLE_POINTS
+  TRIPLE_POINTS
+  CUSTOM_MULTIPLIER
+  FIXED_BONUS
+  SPECIAL_AMOUNT
+  SHOE_TYPE_RULE
+}
+
+enum PointPromotionStatus {
+  ACTIVE
+  INACTIVE
+  ENDED
+}
+
+enum PromotionalBalanceMovementType {
+  ADMIN_CREDIT
+  POINT_CONVERSION
+  PURCHASE_USE
+  ADMIN_ADJUSTMENT_NEGATIVE
+  EXPIRED
+  REVERSAL
+}
+
+enum PromotionalBalanceMovementStatus {
+  AVAILABLE
+  USED
+  REVERSED
+  EXPIRED
+}
+
+enum RedemptionRequestStatus {
+  PENDING_APPROVAL
+  APPROVED
+  SENT_TO_STORE
+  READY
+  DELIVERED
+  REJECTED
+  CANCELLED
+  EXPIRED
+}
+
+enum AuditActorType {
+  INTERNAL_USER
+  CUSTOMER
+  SYSTEM
+}
+
+enum NotificationAudience {
+  GLOBAL_CUSTOMERS
+  GLOBAL_INTERNAL
+  CUSTOMER
+  CUSTOMER_SEGMENT
+  INTERNAL_USER
+  ROLE
+  DRIVER
+}
+
+enum NotificationChannel {
+  INTERNAL
+  PUSH
+}
+
+enum NotificationRecipientStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+model InternalUser {
+  id                 String             @id @default(cuid())
+  fullName           String
+  email              String             @unique
+  passwordHash       String
+  profilePhotoUrl    String?
+  status             InternalUserStatus @default(ACTIVE)
+  failedLoginCount   Int                @default(0)
+  lockedUntil        DateTime?
+  mustChangePassword Boolean            @default(false)
+  paisItemId         String?
+  departamentoItemId String?
+  municipioItemId    String?
+  zonaItemId         String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  paisItem                    CatalogItem?             @relation("InternalUserPais", fields: [paisItemId], references: [id])
+  departamentoItem            CatalogItem?             @relation("InternalUserDepartamento", fields: [departamentoItemId], references: [id])
+  municipioItem               CatalogItem?             @relation("InternalUserMunicipio", fields: [municipioItemId], references: [id])
+  zonaItem                    CatalogItem?             @relation("InternalUserZona", fields: [zonaItemId], references: [id])
+  roleAssignments             InternalUserRole[]
+  directPermissions           InternalUserPermission[]
+  storeAssignments            UserStore[]
+  purchases                   Purchase[]
+  auditLogs                   AuditLog[]               @relation("InternalUserAuditActor")
+  createdCustomers            Customer[]               @relation("CustomerCreatedByInternalUser")
+  managedRedemptionRequests   RedemptionRequest[]      @relation("RedemptionManagedBy")
+  approvedRedemptionRequests  RedemptionRequest[]      @relation("RedemptionApprovedBy")
+  sentRedemptionRequests      RedemptionRequest[]      @relation("RedemptionSentToStoreBy")
+  preparedRedemptionRequests  RedemptionRequest[]      @relation("RedemptionPreparedBy")
+  deliveredRedemptionRequests RedemptionRequest[]      @relation("RedemptionDeliveredBy")
+  rejectedRedemptionRequests  RedemptionRequest[]      @relation("RedemptionRejectedBy")
+  cancelledRedemptionRequests RedemptionRequest[]      @relation("RedemptionCancelledBy")
+  storesCreated               Store[]                  @relation("StoreCreatedBy")
+  storesUpdated               Store[]                  @relation("StoreUpdatedBy")
+  storesDeactivated           Store[]                  @relation("StoreDeactivatedBy")
+  mediaAssets                 MediaAsset[]             @relation("MediaUploadedByInternalUser")
+  notificationsCreated        Notification[]           @relation("NotificationCreatedByInternalUser")
+  directNotifications         Notification[]           @relation("NotificationInternalUserTarget")
+  notificationRecipients      NotificationRecipient[]  @relation("NotificationRecipientInternalUser")
+  loyaltyLevelRulesCreated    LoyaltyLevelRule[]
+  sessions                    InternalSession[]
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isSystem    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users         InternalUserRole[]
+  permissions   RolePermission[]
+  notifications Notification[]     @relation("NotificationRoleTarget")
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  module      String
+  action      String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  roles RolePermission[]
+  users InternalUserPermission[]
+}
+
+model InternalUserRole {
+  userId String
+  roleId String
+
+  user InternalUser @relation(fields: [userId], references: [id])
+  role Role         @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model InternalUserPermission {
+  userId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+
+  user       InternalUser @relation(fields: [userId], references: [id])
+  permission Permission   @relation(fields: [permissionId], references: [id])
+
+  @@id([userId, permissionId])
+}
+
+model InternalSession {
+  id               String    @id @default(cuid())
+  internalUserId   String
+  activeStoreId    String?
+  refreshTokenHash String
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  internalUser InternalUser @relation(fields: [internalUserId], references: [id])
+  activeStore  Store?       @relation("ActiveStoreSessions", fields: [activeStoreId], references: [id])
+
+  @@index([internalUserId, createdAt])
+  @@index([activeStoreId])
+  @@index([expiresAt])
+}
+
+model Store {
+  id                          String            @id @default(cuid())
+  code                        String            @unique
+  name                        String
+  address                     String?
+  locationType                StoreLocationType @default(CAPITAL)
+  countryId                   String?
+  departmentId                String?
+  municipalityId              String?
+  zoneId                      String?
+  brandId                     String?
+  status                      StoreStatus       @default(ACTIVE)
+  createdByInternalUserId     String?
+  updatedByInternalUserId     String?
+  deactivatedByInternalUserId String?
+  deactivatedAt               DateTime?
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
+
+  createdByInternalUser     InternalUser?       @relation("StoreCreatedBy", fields: [createdByInternalUserId], references: [id])
+  updatedByInternalUser     InternalUser?       @relation("StoreUpdatedBy", fields: [updatedByInternalUserId], references: [id])
+  deactivatedByInternalUser InternalUser?       @relation("StoreDeactivatedBy", fields: [deactivatedByInternalUserId], references: [id])
+  users                     UserStore[]
+  activeSessions            InternalSession[]   @relation("ActiveStoreSessions")
+  customers                 Customer[]          @relation("CustomerRegistrationStore")
+  purchases                 Purchase[]
+  pointPromotions           PointPromotion[]
+  pickupRedemptionRequests  RedemptionRequest[] @relation("RedemptionPickupStore")
+  storeOrderItemsOrigin     StoreOrderItem[]    @relation("StoreOrderItemOriginStore")
+
+  @@index([status, locationType])
+  @@index([countryId])
+  @@index([departmentId])
+  @@index([municipalityId])
+  @@index([zoneId])
+  @@index([createdByInternalUserId])
+  @@index([updatedByInternalUserId])
+  @@index([deactivatedByInternalUserId])
+}
+
+model UserStore {
+  userId    String
+  storeId   String
+  createdAt DateTime @default(now())
+
+  user  InternalUser @relation(fields: [userId], references: [id])
+  store Store        @relation(fields: [storeId], references: [id])
+
+  @@id([userId, storeId])
+}
+
+model Customer {
+  id                      String         @id @default(cuid())
+  code                    String         @unique
+  fullName                String
+  phone                   String         @unique
+  taxId                   String?        @unique
+  email                   String?        @unique
+  pinHash                 String?
+  passwordHash            String?
+  mustChangePassword      Boolean        @default(false)
+  birthDate               DateTime?
+  profilePhotoUrl         String?
+  address                 String?
+  zone                    String?
+  city                    String?
+  department              String?
+  country                 String?
+  brand                   String?
+  brandItemId             String?
+  reference               String?
+  status                  CustomerStatus @default(ACTIVE)
+  registrationSource      String
+  registrationStoreId     String?
+  createdByInternalUserId String?
+  purchasesCount          Int            @default(0)
+  loyaltyLevel            String         @default("Básico")
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+
+  registrationStore           Store?                       @relation("CustomerRegistrationStore", fields: [registrationStoreId], references: [id])
+  brandItem                   CatalogItem?                 @relation("CustomerBrand", fields: [brandItemId], references: [id])
+  createdByInternalUser       InternalUser?                @relation("CustomerCreatedByInternalUser", fields: [createdByInternalUserId], references: [id])
+  purchases                   Purchase[]
+  pointMovements              PointMovement[]
+  promotionalBalanceMovements PromotionalBalanceMovement[]
+  redemptionRequests          RedemptionRequest[]
+  mediaAssets                 MediaAsset[]                 @relation("MediaUploadedByCustomer")
+  directNotifications         Notification[]               @relation("NotificationCustomerTarget")
+  notificationRecipients      NotificationRecipient[]      @relation("NotificationRecipientCustomer")
+  sessions                    CustomerSession[]
+  marketingBannerEvents       MarketingBannerEvent[]
+  auditLogs                   AuditLog[]                   @relation("CustomerAuditActor")
+  storeCarts                  StoreCart[]
+  storeOrders                 StoreOrder[]
+  addresses                   CustomerAddress[]
+
+  @@index([loyaltyLevel])
+  @@index([brandItemId])
+}
+
+model CustomerAddress {
+  id           String   @id @default(cuid())
+  customerId   String
+  label        String
+  addressType  String   @default("CASA")
+  department   String
+  municipality String
+  zone         String?
+  addressLine  String
+  reference    String?
+  postalCode   String?
+  recipientName String?
+  contactPhone String
+  latitude     Float?
+  longitude    Float?
+  isDefault    Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  customer Customer     @relation(fields: [customerId], references: [id])
+  orders   StoreOrder[]
+
+  @@index([customerId, isActive])
+  @@map("customer_addresses")
+}
+
+model LoyaltyLevelRule {
+  id                      String    @id @default(cuid())
+  name                    String
+  brandItemId             String?
+  brandNameSnapshot       String?
+  isActive                Boolean   @default(true)
+  createdByInternalUserId String?
+  activatedAt             DateTime  @default(now())
+  deactivatedAt           DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  brand                 CatalogItem?       @relation("LoyaltyLevelRuleBrand", fields: [brandItemId], references: [id])
+  createdByInternalUser InternalUser?      @relation(fields: [createdByInternalUserId], references: [id])
+  tiers                 LoyaltyLevelTier[]
+
+  @@index([brandItemId, isActive])
+  @@index([createdAt])
+}
+
+model LoyaltyLevelTier {
+  id           String   @id @default(cuid())
+  ruleId       String
+  code         String
+  name         String
+  minPurchases Int
+  maxPurchases Int?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  rule LoyaltyLevelRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@unique([ruleId, code])
+  @@index([ruleId, sortOrder])
+  @@index([sortOrder])
+}
+
+model CustomerSession {
+  id               String    @id @default(cuid())
+  customerId       String
+  refreshTokenHash String
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@index([customerId, createdAt])
+  @@index([expiresAt])
+}
+
+model CustomerCodeSequence {
+  id        Int      @id @default(1)
+  nextValue Int      @default(1)
+  updatedAt DateTime @updatedAt
+}
+
+model Catalog {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items CatalogItem[]
+}
+
+model CatalogItem {
+  id               String   @id @default(cuid())
+  catalogId        String
+  parentItemId     String?
+  code             String
+  name             String
+  description      String?
+  cardImageUrl     String?
+  cardTextColor    String?
+  socialLinks      Json?
+  allowsSubcatalog Boolean  @default(false)
+  sortOrder        Int      @default(0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  catalog                   Catalog                      @relation(fields: [catalogId], references: [id])
+  parentItem                CatalogItem?                 @relation("CatalogItemHierarchy", fields: [parentItemId], references: [id])
+  children                  CatalogItem[]                @relation("CatalogItemHierarchy")
+  redeemableProducts        RedeemableProduct[]
+  rewardsAsBrand            RedeemableProduct[]          @relation("RewardBrand")
+  targetedMarketingBanners  MarketingBannerTargetBrand[]
+  brandCustomers            Customer[]                   @relation("CustomerBrand")
+  loyaltyLevelRulesAsBrand  LoyaltyLevelRule[]           @relation("LoyaltyLevelRuleBrand")
+  pointRulesAsBrand         PointRule[]                  @relation("PointRuleBrand")
+  pointPromotionsAsBrand    PointPromotion[]             @relation("PointPromotionBrand")
+  internalUsersPais         InternalUser[]               @relation("InternalUserPais")
+  internalUsersDepartamento InternalUser[]               @relation("InternalUserDepartamento")
+  internalUsersMunicipio    InternalUser[]               @relation("InternalUserMunicipio")
+  internalUsersZona         InternalUser[]               @relation("InternalUserZona")
+
+  @@unique([catalogId, code])
+  @@index([parentItemId])
+}
+
+model RedeemableProduct {
+  id                         String    @id @default(cuid())
+  code                       String    @unique
+  name                       String
+  description                String?
+  pointsValue                Int
+  stock                      Int?
+  reservedStock              Int       @default(0)
+  imageUrl                   String?
+  categoryItemId             String?
+  brandItemId                String?
+  isActive                   Boolean   @default(true)
+  isFeatured                 Boolean   @default(false)
+  productType                String?
+  genderTarget               String?
+  requiresApproval           Boolean   @default(true)
+  isGiftCard                 Boolean   @default(false)
+  displayOrder               Int       @default(0)
+  isPublished                Boolean   @default(true)
+  publishStartDate           DateTime?
+  publishEndDate             DateTime?
+  redemptionLimitPerCustomer Int?
+  termsConditions            String?
+  createdByInternalUserId    String?
+  updatedByInternalUserId    String?
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+
+  category CatalogItem?        @relation(fields: [categoryItemId], references: [id])
+  brand    CatalogItem?        @relation("RewardBrand", fields: [brandItemId], references: [id])
+  requests RedemptionRequest[]
+
+  @@index([isActive, isFeatured, displayOrder])
+  @@index([brandItemId])
+  @@index([categoryItemId])
+  @@map("redeemable_products")
+}
+
+model RedemptionRequest {
+  id                          String                  @id @default(cuid())
+  requestCode                 String                  @unique
+  customerId                  String
+  productId                   String
+  productNameSnapshot         String
+  productPointsSnapshot       Int
+  productImageUrlSnapshot     String?
+  productDescriptionSnapshot  String?
+  productIsGiftCardSnapshot   Boolean                 @default(false)
+  pickupStoreId               String
+  pointMovementId             String?                 @unique
+  status                      RedemptionRequestStatus @default(PENDING_APPROVAL)
+  pointsReserved              Int
+  requestedAt                 DateTime                @default(now())
+  expiresAt                   DateTime?
+  reviewStartedAt             DateTime?
+  approvedAt                  DateTime?
+  sentToStoreAt               DateTime?
+  readyAt                     DateTime?
+  deliveredAt                 DateTime?
+  rejectedAt                  DateTime?
+  cancelledAt                 DateTime?
+  approvedByInternalUserId    String?
+  sentToStoreByInternalUserId String?
+  preparedByInternalUserId    String?
+  deliveredByInternalUserId   String?
+  rejectedByInternalUserId    String?
+  cancelledByInternalUserId   String?
+  approvalComment             String?
+  sentToStoreComment          String?
+  preparationComment          String?
+  deliveryObservation         String?
+  deliveredToName             String?
+  validationCode              String?
+  validationQrPayload         Json?
+  deliveryEvidenceUrl         String?
+  operationalValidations      Json?
+  rejectionReason             String?
+  cancellationReason          String?
+  managedByInternalUserId     String?
+  createdAt                   DateTime                @default(now())
+  updatedAt                   DateTime                @updatedAt
+
+  customer                  Customer          @relation(fields: [customerId], references: [id])
+  product                   RedeemableProduct @relation(fields: [productId], references: [id])
+  pointMovement             PointMovement?    @relation(fields: [pointMovementId], references: [id])
+  pickupStore               Store             @relation("RedemptionPickupStore", fields: [pickupStoreId], references: [id])
+  managedByInternalUser     InternalUser?     @relation("RedemptionManagedBy", fields: [managedByInternalUserId], references: [id])
+  approvedByInternalUser    InternalUser?     @relation("RedemptionApprovedBy", fields: [approvedByInternalUserId], references: [id])
+  sentToStoreByInternalUser InternalUser?     @relation("RedemptionSentToStoreBy", fields: [sentToStoreByInternalUserId], references: [id])
+  preparedByInternalUser    InternalUser?     @relation("RedemptionPreparedBy", fields: [preparedByInternalUserId], references: [id])
+  deliveredByInternalUser   InternalUser?     @relation("RedemptionDeliveredBy", fields: [deliveredByInternalUserId], references: [id])
+  rejectedByInternalUser    InternalUser?     @relation("RedemptionRejectedBy", fields: [rejectedByInternalUserId], references: [id])
+  cancelledByInternalUser   InternalUser?     @relation("RedemptionCancelledBy", fields: [cancelledByInternalUserId], references: [id])
+
+  @@index([customerId, requestedAt])
+  @@index([productId])
+  @@index([status, requestedAt])
+  @@index([pickupStoreId, requestedAt])
+  @@index([validationCode])
+  @@map("redemption_requests")
+}
+
+model PointRule {
+  id                      String    @id @default(cuid())
+  name                    String
+  amountPerPoint          Decimal   @db.Decimal(12, 2)
+  pointValueAmount        Decimal   @default(0.01) @db.Decimal(18, 5)
+  minimumAmount           Decimal   @default(0) @db.Decimal(12, 2)
+  maxPointsPerPurchase    Int?
+  pointsExpirationDays    Int?
+  roundingMode            String    @default("FLOOR")
+  startsAt                DateTime  @default(now())
+  endsAt                  DateTime?
+  isActive                Boolean   @default(true)
+  brandItemId             String?
+  createdByInternalUserId String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  brand          CatalogItem?    @relation("PointRuleBrand", fields: [brandItemId], references: [id])
+  pointMovements PointMovement[]
+
+  @@index([isActive, startsAt, endsAt])
+  @@index([brandItemId])
+}
+
+model PointPromotion {
+  id                      String               @id @default(cuid())
+  name                    String
+  type                    PointPromotionType
+  multiplier              Decimal?             @db.Decimal(6, 2)
+  bonusPoints             Int?
+  minimumAmount           Decimal?             @db.Decimal(12, 2)
+  startsAt                DateTime
+  endsAt                  DateTime
+  status                  PointPromotionStatus @default(ACTIVE)
+  targetLevels            String[]             @default([])
+  storeId                 String?
+  brandItemId             String?
+  zoneId                  String?
+  departmentId            String?
+  municipalityId          String?
+  shoeTypeId              String?
+  priority                Int                  @default(100)
+  usedAt                  DateTime?
+  createdByInternalUserId String?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  store          Store?          @relation(fields: [storeId], references: [id])
+  brand          CatalogItem?    @relation("PointPromotionBrand", fields: [brandItemId], references: [id])
+  pointMovements PointMovement[]
+
+  @@index([status, startsAt, endsAt])
+  @@index([storeId, startsAt, endsAt])
+  @@index([shoeTypeId, startsAt, endsAt])
+  @@index([brandItemId, startsAt, endsAt])
+}
+
+model Purchase {
+  id                String         @id @default(cuid())
+  customerId        String
+  storeId           String
+  internalUserId    String
+  invoiceNumber     String
+  externalSource    String?
+  externalInvoiceId String?
+  externalPayload   Json?
+  externalSyncedAt  DateTime?
+  amount            Decimal        @db.Decimal(12, 2)
+  shoeTypeId        String?
+  categoryId        String?
+  brandId           String?
+  pointsCalculated  Int            @default(0)
+  status            PurchaseStatus @default(APPROVED)
+  purchasedAt       DateTime       @default(now())
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  customer                    Customer                     @relation(fields: [customerId], references: [id])
+  store                       Store                        @relation(fields: [storeId], references: [id])
+  internalUser                InternalUser                 @relation(fields: [internalUserId], references: [id])
+  pointMovements              PointMovement[]
+  promotionalBalanceMovements PromotionalBalanceMovement[]
+
+  @@unique([storeId, invoiceNumber])
+  @@unique([externalSource, externalInvoiceId])
+  @@index([customerId, purchasedAt])
+  @@index([storeId, purchasedAt])
+  @@index([externalSource, externalSyncedAt])
+}
+
+model PointMovement {
+  id                     String              @id @default(cuid())
+  customerId             String
+  purchaseId             String?
+  pointRuleId            String?
+  pointPromotionId       String?
+  redemptionRequest      RedemptionRequest?
+  type                   PointMovementType
+  status                 PointMovementStatus @default(AVAILABLE)
+  points                 Int
+  basePointsCalculated   Int?
+  pointsBeforePromotion  Int?
+  pointRuleSnapshot      Json?
+  pointPromotionSnapshot Json?
+  description            String?
+  expiresAt              DateTime?
+  createdAt              DateTime            @default(now())
+
+  customer       Customer        @relation(fields: [customerId], references: [id])
+  purchase       Purchase?       @relation(fields: [purchaseId], references: [id])
+  pointRule      PointRule?      @relation(fields: [pointRuleId], references: [id])
+  pointPromotion PointPromotion? @relation(fields: [pointPromotionId], references: [id])
+
+  @@index([customerId, createdAt])
+  @@index([status, expiresAt])
+  @@index([purchaseId])
+  @@index([pointRuleId])
+  @@index([pointPromotionId])
+}
+
+model PromotionalBalanceMovement {
+  id          String                           @id @default(cuid())
+  customerId  String
+  purchaseId  String?
+  type        PromotionalBalanceMovementType
+  status      PromotionalBalanceMovementStatus @default(AVAILABLE)
+  amount      Decimal                          @db.Decimal(12, 2)
+  description String?
+  expiresAt   DateTime?
+  createdAt   DateTime                         @default(now())
+
+  customer Customer  @relation(fields: [customerId], references: [id])
+  purchase Purchase? @relation(fields: [purchaseId], references: [id])
+
+  @@index([customerId, createdAt])
+  @@index([purchaseId])
+  @@index([status, expiresAt])
+}
+
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  isEditable  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaAsset {
+  id                       String   @id @default(cuid())
+  purpose                  String
+  filename                 String
+  mimeType                 String
+  sizeBytes                Int
+  storageProvider          String
+  storageKey               String   @unique
+  publicUrl                String
+  uploadedByInternalUserId String?
+  uploadedByCustomerId     String?
+  createdAt                DateTime @default(now())
+
+  uploadedByInternalUser InternalUser? @relation("MediaUploadedByInternalUser", fields: [uploadedByInternalUserId], references: [id])
+  uploadedByCustomer     Customer?     @relation("MediaUploadedByCustomer", fields: [uploadedByCustomerId], references: [id])
+
+  @@index([purpose, createdAt])
+  @@index([uploadedByInternalUserId, createdAt])
+  @@index([uploadedByCustomerId, createdAt])
+}
+
+model MarketingBanner {
+  id           String    @id @default(cuid())
+  title        String
+  subtitle     String?
+  badge        String?
+  imageUrl     String?
+  ctaLabel     String?
+  ctaUrl       String?
+  tone         String    @default("blue")
+  isActive     Boolean   @default(true)
+  status       String    @default("ACTIVE")
+  placement    String    @default("LOYALTY")
+  startsAt     DateTime  @default(now())
+  endsAt       DateTime?
+  sortOrder    Int       @default(0)
+  audienceType String    @default("ALL")
+  totalViews   Int       @default(0)
+  totalClicks  Int       @default(0)
+  lastViewAt   DateTime?
+  lastClickAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  events       MarketingBannerEvent[]
+  targetBrands MarketingBannerTargetBrand[]
+
+  @@index([status, startsAt, endsAt, sortOrder])
+  @@index([placement, status, startsAt, endsAt, sortOrder])
+  @@index([isActive, startsAt, endsAt, sortOrder])
+  @@index([audienceType])
+  @@index([sortOrder])
+}
+
+model MarketingBannerTargetBrand {
+  bannerId String
+  brandId  String
+
+  banner MarketingBanner @relation(fields: [bannerId], references: [id], onDelete: Cascade)
+  brand  CatalogItem     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  @@id([bannerId, brandId])
+  @@index([brandId])
+}
+
+model MarketingBannerEvent {
+  id         String   @id @default(cuid())
+  bannerId   String
+  eventType  String
+  customerId String?
+  sessionId  String?
+  createdAt  DateTime @default(now())
+
+  banner   MarketingBanner @relation(fields: [bannerId], references: [id])
+  customer Customer?       @relation(fields: [customerId], references: [id])
+
+  @@index([bannerId, eventType, createdAt])
+  @@index([customerId, createdAt])
+}
+
+model Notification {
+  id                      String               @id @default(cuid())
+  title                   String
+  body                    String
+  type                    String               @default("INFO")
+  channel                 NotificationChannel  @default(INTERNAL)
+  audience                NotificationAudience
+  customerId              String?
+  internalUserId          String?
+  driverId                String?
+  roleId                  String?
+  createdByInternalUserId String?
+  isActive                Boolean              @default(true)
+  startsAt                DateTime             @default(now())
+  expiresAt               DateTime?
+  metadata                Json?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  customer              Customer?               @relation("NotificationCustomerTarget", fields: [customerId], references: [id])
+  internalUser          InternalUser?           @relation("NotificationInternalUserTarget", fields: [internalUserId], references: [id])
+  driver                StoreDriver?            @relation("NotificationDriverTarget", fields: [driverId], references: [id])
+  role                  Role?                   @relation("NotificationRoleTarget", fields: [roleId], references: [id])
+  createdByInternalUser InternalUser?           @relation("NotificationCreatedByInternalUser", fields: [createdByInternalUserId], references: [id])
+  recipients            NotificationRecipient[]
+
+  @@index([audience, isActive, startsAt, expiresAt])
+  @@index([customerId, createdAt])
+  @@index([internalUserId, createdAt])
+  @@index([roleId, createdAt])
+}
+
+model NotificationRecipient {
+  id             String                      @id @default(cuid())
+  notificationId String
+  customerId     String?
+  internalUserId String?
+  driverId       String?
+  status         NotificationRecipientStatus @default(UNREAD)
+  readAt         DateTime?
+  archivedAt     DateTime?
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+
+  notification Notification  @relation(fields: [notificationId], references: [id])
+  customer     Customer?     @relation("NotificationRecipientCustomer", fields: [customerId], references: [id])
+  internalUser InternalUser? @relation("NotificationRecipientInternalUser", fields: [internalUserId], references: [id])
+  driver       StoreDriver?  @relation("NotificationRecipientDriver", fields: [driverId], references: [id])
+
+  @@unique([notificationId, customerId])
+  @@unique([notificationId, internalUserId])
+  @@unique([notificationId, driverId])
+  @@index([customerId, status, createdAt])
+  @@index([internalUserId, status, createdAt])
+  @@index([driverId, status, createdAt])
+}
+
+model AuditLog {
+  id                  String         @id @default(cuid())
+  actorType           AuditActorType
+  actorInternalUserId String?
+  actorCustomerId     String?
+  action              String
+  module              String
+  entityType          String?
+  entityId            String?
+  storeId             String?
+  metadata            Json?
+  ipAddress           String?
+  userAgent           String?
+  createdAt           DateTime       @default(now())
+
+  actorInternalUser InternalUser? @relation("InternalUserAuditActor", fields: [actorInternalUserId], references: [id])
+  actorCustomer     Customer?     @relation("CustomerAuditActor", fields: [actorCustomerId], references: [id])
+
+  @@index([module, createdAt])
+  @@index([entityType, entityId])
+  @@index([actorInternalUserId, createdAt])
+  @@index([actorCustomerId, createdAt])
+}
+
+model StoreBrand {
+  id                      String   @id @default(cuid())
+  name                    String
+  code                    String   @unique
+  description             String?
+  logoUrl                 String?
+  primaryColor            String?
+  websiteUrl              String?
+  displayOrder            Int      @default(0)
+  isActive                Boolean  @default(true)
+  isFeatured              Boolean  @default(false)
+  createdByInternalUserId String?
+  updatedByInternalUserId String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  products   StoreProduct[]
+  orderItems StoreOrderItem[]
+
+  @@index([isActive, displayOrder])
+  @@map("store_brands")
+}
+
+model StoreProduct {
+  id                      String   @id @default(cuid())
+  brandId                 String
+  name                    String
+  sku                     String?  @unique
+  shortDescription        String?
+  fullDescription         String?
+  price                   Decimal  @db.Decimal(12, 2)
+  stockQuantity           Int      @default(0)
+  minimumStock            Int?
+  mainImageUrl            String?
+  isActive                Boolean  @default(true)
+  isVisibleInStore        Boolean  @default(true)
+  isFeatured              Boolean  @default(false)
+  generatesLoyaltyPoints  Boolean  @default(true)
+  productType             String?
+  genderTarget            String?
+  displayOrder            Int      @default(0)
+  createdByInternalUserId String?
+  updatedByInternalUserId String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  brand          StoreBrand                  @relation(fields: [brandId], references: [id])
+  images         StoreProductImage[]
+  variants       StoreProductVariant[]
+  stockMovements StoreProductStockMovement[]
+  cartItems      StoreCartItem[]
+  orderItems     StoreOrderItem[]
+
+  @@index([brandId])
+  @@index([isActive, isVisibleInStore, displayOrder])
+  @@map("store_products")
+}
+
+model StoreProductVariant {
+  id                      String   @id @default(cuid())
+  productId               String
+  sku                     String?  @unique
+  optionValues            Json
+  optionLabel             String
+  price                   Decimal  @db.Decimal(12, 2)
+  promotionalPrice        Decimal? @db.Decimal(12, 2)
+  stockQuantity           Int      @default(0)
+  minimumStock            Int?
+  size                    String?
+  color                   String?
+  genderTarget            String?
+  productType             String?
+  imageUrl                String?
+  isActive                Boolean  @default(true)
+  displayOrder            Int      @default(0)
+  createdByInternalUserId String?
+  updatedByInternalUserId String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  product        StoreProduct                @relation(fields: [productId], references: [id])
+  stockMovements StoreProductStockMovement[]
+  cartItems      StoreCartItem[]
+  orderItems     StoreOrderItem[]
+
+  @@index([productId, isActive, displayOrder])
+  @@map("store_product_variants")
+}
+
+model StoreProductImage {
+  id           String   @id @default(cuid())
+  productId    String
+  imageUrl     String
+  displayOrder Int      @default(0)
+  isMain       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  product StoreProduct @relation(fields: [productId], references: [id])
+
+  @@index([productId, displayOrder])
+  @@map("store_product_images")
+}
+
+model StoreProductStockMovement {
+  id                      String   @id @default(cuid())
+  productId               String
+  variantId               String?
+  movementType            String
+  quantity                Int
+  previousStock           Int
+  newStock                Int
+  referenceType           String?
+  referenceId             String?
+  comment                 String?
+  createdByInternalUserId String?
+  createdAt               DateTime @default(now())
+
+  product StoreProduct         @relation(fields: [productId], references: [id])
+  variant StoreProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@index([productId, createdAt])
+  @@index([variantId, createdAt])
+  @@map("store_product_stock_movements")
+}
+
+model StoreCart {
+  id         String   @id @default(cuid())
+  customerId String
+  status     String   @default("ACTIVE")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customer Customer        @relation(fields: [customerId], references: [id])
+  items    StoreCartItem[]
+
+  @@index([customerId, status])
+  @@map("store_carts")
+}
+
+model StoreCartItem {
+  id                String   @id @default(cuid())
+  cartId            String
+  productId         String
+  variantId         String?
+  quantity          Int
+  unitPriceSnapshot Decimal  @db.Decimal(12, 2)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  cart    StoreCart            @relation(fields: [cartId], references: [id])
+  product StoreProduct         @relation(fields: [productId], references: [id])
+  variant StoreProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@index([variantId])
+  @@map("store_cart_items")
+}
+
+model StoreOrder {
+  id                     String    @id @default(cuid())
+  orderNumber            String    @unique
+  customerId             String
+  subtotalAmount         Decimal   @db.Decimal(12, 2)
+  shippingAmount         Decimal   @default(0) @db.Decimal(12, 2)
+  totalAmount            Decimal   @db.Decimal(12, 2)
+  paymentMethodRequested String
+  clientPaymentStatus    String
+  orderStatus            String    @default("PEDIDO_SOLICITADO")
+  deliveryStatus         String    @default("PENDIENTE_PROGRAMACION")
+  suggestedDeliveryDate  DateTime
+  confirmedDeliveryDate  DateTime?
+  deliveryTimeRange      String?
+  deliveryAddress        String
+  deliveryDepartmentId   String?
+  deliveryMunicipalityId String?
+  deliveryZoneId         String?
+  deliveryReference      String?
+  deliveryPhone          String
+  receiverName           String?
+  customerAddressId      String?
+  deliveryAddressSnapshot Json?
+  assignedDriverId       String?
+  deliveryCodeHash        String?
+  deliveryCodeGeneratedAt DateTime?
+  deliveryCodeValidatedAt DateTime?
+  deliveryCodeValidatedByDriverId String?
+  deliveryCodeFailedAttempts Int @default(0)
+  deliveryCodeStatus      String?
+  cancelledAt            DateTime?
+  cancelReason           String?
+  loyaltyPointsAwarded   Boolean   @default(false)
+  loyaltyPointsAwardedValue Int?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  customer          Customer                         @relation(fields: [customerId], references: [id])
+  customerAddress   CustomerAddress?                 @relation(fields: [customerAddressId], references: [id])
+  items             StoreOrderItem[]
+  timeline          StoreOrderTimeline[]
+  payments          StoreOrderPayment[]
+  assignedDriver    StoreDriver?                     @relation(fields: [assignedDriverId], references: [id])
+  assignmentHistory StoreDeliveryAssignmentHistory[]
+  settlementItems   StorePaymentSettlementItem[]
+  deliveryIncidents StoreDeliveryIncident[]
+
+  @@index([customerId, createdAt])
+  @@index([orderStatus])
+  @@index([deliveryStatus])
+  @@index([confirmedDeliveryDate])
+  @@index([assignedDriverId])
+  @@map("store_orders")
+}
+
+model StoreOrderItem {
+  id                   String   @id @default(cuid())
+  orderId              String
+  productId            String
+  variantId            String?
+  brandId              String
+  productNameSnapshot  String
+  variantLabelSnapshot String?
+  variantOptionsSnapshot Json?
+  skuSnapshot          String?
+  brandNameSnapshot    String
+  productImageSnapshot String?
+  unitPrice            Decimal  @db.Decimal(12, 2)
+  quantity             Int
+  subtotal             Decimal  @db.Decimal(12, 2)
+  originStoreId        String?
+  originStoreSnapshot  Json?
+  pickupStatus         String   @default("PENDIENTE_ASIGNAR_TIENDA")
+  pickedUpAt           DateTime?
+  pickedUpByDriverId   String?
+  pickupNote           String?
+  pickupEvidenceUrl    String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  order            StoreOrder           @relation(fields: [orderId], references: [id])
+  product          StoreProduct         @relation(fields: [productId], references: [id])
+  variant          StoreProductVariant? @relation(fields: [variantId], references: [id])
+  brand            StoreBrand           @relation(fields: [brandId], references: [id])
+  originStore      Store?               @relation("StoreOrderItemOriginStore", fields: [originStoreId], references: [id])
+  pickedUpByDriver StoreDriver?         @relation("StoreOrderItemPickedUpBy", fields: [pickedUpByDriverId], references: [id])
+
+  @@index([orderId])
+  @@index([brandId])
+  @@index([variantId])
+  @@index([originStoreId])
+  @@index([pickupStatus])
+  @@map("store_order_items")
+}
+
+model StoreOrderTimeline {
+  id                      String   @id @default(cuid())
+  orderId                 String
+  statusType              String
+  previousStatus          String?
+  newStatus               String
+  comment                 String?
+  createdByInternalUserId String?
+  createdByClientId       String?
+  createdByRole           String
+  createdAt               DateTime @default(now())
+
+  order StoreOrder @relation(fields: [orderId], references: [id])
+
+  @@index([orderId, createdAt])
+  @@map("store_order_timeline")
+}
+
+model StoreOrderPayment {
+  id                              String    @id @default(cuid())
+  orderId                         String
+  paymentMethod                   String
+  paymentStatus                   String
+  amount                          Decimal   @db.Decimal(12, 2)
+  currency                        String    @default("GTQ")
+  visaLinkUrl                     String?
+  visaLinkSentAt                  DateTime?
+  visaLinkSentByInternalUserId    String?
+  authorizationCode               String?
+  voucherNumber                   String?
+  referenceNumber                 String?
+  paidAt                          DateTime?
+  confirmedByInternalUserId       String?
+  receivedByDriverId              String?
+  notes                           String?
+  settlementStatus                String    @default("NO_APLICA")
+  settlementId                    String?
+  settledAt                       DateTime?
+  settledByInternalUserId         String?
+  receiptFileUrl                  String?
+  receiptFileName                 String?
+  receiptUploadedAt               DateTime?
+  receiptUploadedByInternalUserId String?
+  selectedBankAccountId           String?
+  bankNameSnapshot                String?
+  accountHolderSnapshot           String?
+  accountNumberSnapshot           String?
+  accountTypeSnapshot             String?
+  cashAvailableAmount             Decimal?  @db.Decimal(12, 2)
+  visaLinkRequestedAt             DateTime?
+  reportedByCustomerAt            DateTime?
+  reviewedByInternalUserId        String?
+  reviewedAt                      DateTime?
+  rejectionReason                 String?
+  createdAt                       DateTime  @default(now())
+  updatedAt                       DateTime  @updatedAt
+
+  order            StoreOrder                  @relation(fields: [orderId], references: [id])
+  settlement       StorePaymentSettlement?     @relation(fields: [settlementId], references: [id])
+  settlementItem   StorePaymentSettlementItem?
+  selectedBankAccount StoreBankAccount?        @relation(fields: [selectedBankAccountId], references: [id])
+
+  @@index([orderId])
+  @@index([paymentStatus])
+  @@index([settlementStatus])
+  @@map("store_order_payments")
+}
+
+model StoreBankAccount {
+  id            String   @id @default(cuid())
+  bankName      String
+  accountHolder String
+  accountNumber String
+  accountType   String
+  isActive      Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  payments StoreOrderPayment[]
+
+  @@index([isActive])
+  @@map("store_bank_accounts")
+}
+
+model StorePaymentSettlement {
+  id                       String    @id @default(cuid())
+  settlementNumber         String    @unique
+  settlementDate           DateTime
+  paymentMethod            String?
+  totalPayments            Int
+  totalAmount              Decimal   @db.Decimal(12, 2)
+  status                   String    @default("ACTIVA")
+  reference                String?
+  comment                  String?
+  createdByInternalUserId  String?
+  annulledByInternalUserId String?
+  annulledAt               DateTime?
+  annulmentReason          String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  payments StoreOrderPayment[]
+  items    StorePaymentSettlementItem[]
+
+  @@index([settlementDate])
+  @@index([paymentMethod])
+  @@index([status])
+  @@map("store_payment_settlements")
+}
+
+model StorePaymentSettlementItem {
+  id                String    @id @default(cuid())
+  settlementId      String
+  paymentId         String    @unique
+  orderId           String
+  amount            Decimal   @db.Decimal(12, 2)
+  paymentMethod     String
+  authorizationCode String?
+  voucherNumber     String?
+  referenceNumber   String?
+  paidAt            DateTime?
+  createdAt         DateTime  @default(now())
+
+  settlement StorePaymentSettlement @relation(fields: [settlementId], references: [id])
+  payment    StoreOrderPayment      @relation(fields: [paymentId], references: [id])
+  order      StoreOrder             @relation(fields: [orderId], references: [id])
+
+  @@index([settlementId])
+  @@index([orderId])
+  @@map("store_payment_settlement_items")
+}
+
+model StorePaymentSettlementNumberSequence {
+  id        Int      @id @default(1)
+  nextValue Int      @default(1)
+  updatedAt DateTime @updatedAt
+
+  @@map("store_payment_settlement_number_sequence")
+}
+
+model StoreOrderNumberSequence {
+  id        Int      @id @default(1)
+  nextValue Int      @default(1)
+  updatedAt DateTime @updatedAt
+
+  @@map("store_order_number_sequence")
+}
+
+model StoreDriver {
+  id                      String    @id @default(cuid())
+  fullName                String
+  phone                   String
+  email                   String?   @unique
+  passwordHash            String?
+  mustChangePassword      Boolean   @default(true)
+  accessStatus            String    @default("PENDIENTE_PRIMER_INGRESO")
+  lastLoginAt             DateTime?
+  code                    String?   @unique
+  type                    String    @default("INTERNO")
+  isActive                Boolean   @default(true)
+  profilePhotoUrl         String?
+  vehiclePlate            String?
+  vehicleType             String?
+  vehicleBrand            String?
+  vehicleModel            String?
+  notes                   String?
+  createdByInternalUserId String?
+  updatedByInternalUserId String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  assignedOrders        StoreOrder[]
+  assignmentHistoryFrom StoreDeliveryAssignmentHistory[] @relation("PreviousDriverAssignments")
+  assignmentHistoryTo   StoreDeliveryAssignmentHistory[] @relation("NewDriverAssignments")
+  sessions              StoreDriverSession[]
+  pickedUpOrderItems    StoreOrderItem[]                 @relation("StoreOrderItemPickedUpBy")
+  deliveryIncidents     StoreDeliveryIncident[]
+  notificationsTarget   Notification[]                   @relation("NotificationDriverTarget")
+  notificationRecipients NotificationRecipient[]         @relation("NotificationRecipientDriver")
+
+  @@index([isActive])
+  @@index([accessStatus])
+  @@map("store_drivers")
+}
+
+// FRD 08 · Slice B — Incidencias de entrega reportadas por el motorista.
+model StoreDeliveryIncident {
+  id                       String    @id @default(cuid())
+  orderId                  String
+  driverId                 String?
+  affectedStoreId          String?
+  affectedOrderItemId      String?
+  incidentType             String
+  comment                  String?
+  evidencePhotoUrl         String?
+  latitude                 Float?
+  longitude                Float?
+  addressText              String?
+  status                   String    @default("PENDIENTE_REVISION")
+  reportedAt               DateTime  @default(now())
+  reviewedByInternalUserId String?
+  reviewedAt               DateTime?
+  adminResolution          String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  order  StoreOrder   @relation(fields: [orderId], references: [id])
+  driver StoreDriver? @relation(fields: [driverId], references: [id])
+
+  @@index([orderId])
+  @@index([affectedStoreId])
+  @@index([affectedOrderItemId])
+  @@index([status])
+  @@map("store_delivery_incidents")
+}
+
+model StoreDriverSession {
+  id               String    @id @default(cuid())
+  driverId         String
+  refreshTokenHash String
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  driver StoreDriver @relation(fields: [driverId], references: [id])
+
+  @@index([driverId])
+  @@index([expiresAt])
+  @@map("store_driver_sessions")
+}
+
+model StoreDeliveryAssignmentHistory {
+  id                      String   @id @default(cuid())
+  orderId                 String
+  previousDriverId        String?
+  newDriverId             String?
+  reasonCode              String?
+  comment                 String?
+  createdByInternalUserId String?
+  createdAt               DateTime @default(now())
+
+  order          StoreOrder   @relation(fields: [orderId], references: [id])
+  previousDriver StoreDriver? @relation("PreviousDriverAssignments", fields: [previousDriverId], references: [id])
+  newDriver      StoreDriver? @relation("NewDriverAssignments", fields: [newDriverId], references: [id])
+
+  @@index([orderId, createdAt])
+  @@index([newDriverId])
+  @@map("store_delivery_assignment_history")
+}

@@ -1,0 +1,485 @@
+[
+  {
+    "id": "T01",
+    "suite": "API",
+    "name": "API y dependencias disponibles",
+    "expected": 200,
+    "automatedName": "T01 API y dependencias disponibles",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T02",
+    "suite": "API",
+    "name": "Ruta interna sin sesion rechazada",
+    "expected": 401,
+    "automatedName": "T02 Ruta interna sin sesion rechazada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T03",
+    "suite": "API",
+    "name": "Login invalido rechazado",
+    "expected": 401,
+    "automatedName": "T03 Login invalido rechazado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T04",
+    "suite": "API",
+    "name": "Login interno y cookies de sesion",
+    "expected": 201,
+    "automatedName": "T04 Login interno y cookies de sesion",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T05",
+    "suite": "API",
+    "name": "Creacion de tienda de demostracion",
+    "expected": 201,
+    "automatedName": "T05 Creacion de tienda de demostracion",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T06",
+    "suite": "API",
+    "name": "Login del operador con permisos limitados",
+    "expected": 201,
+    "automatedName": "T06 Login del operador con permisos limitados",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T07",
+    "suite": "API",
+    "name": "Acceso a auditoria sin permiso rechazado",
+    "expected": 403,
+    "automatedName": "T07 Acceso a auditoria sin permiso rechazado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T08",
+    "suite": "API",
+    "name": "Seleccion de tienda sin CSRF rechazada",
+    "expected": 403,
+    "automatedName": "T08 Seleccion de tienda sin CSRF rechazada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T09",
+    "suite": "API",
+    "name": "Tienda no asignada rechazada",
+    "expected": 403,
+    "automatedName": "T09 Tienda no asignada rechazada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T10",
+    "suite": "API",
+    "name": "Seleccion de tienda asignada",
+    "expected": 201,
+    "automatedName": "T10 Seleccion de tienda asignada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T11",
+    "suite": "API",
+    "name": "Registro de cliente y codigo generado",
+    "expected": 201,
+    "automatedName": "T11 Registro de cliente y codigo generado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T12",
+    "suite": "API",
+    "name": "Campos no permitidos en factura rechazados",
+    "expected": 400,
+    "automatedName": "T12 Campos no permitidos en factura rechazados",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T13",
+    "suite": "API",
+    "name": "Monto negativo rechazado",
+    "expected": 400,
+    "automatedName": "T13 Monto negativo rechazado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T14",
+    "suite": "API",
+    "name": "Calculo de puntos en servidor",
+    "expected": 201,
+    "automatedName": "T14 Calculo de puntos en servidor",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T15",
+    "suite": "API",
+    "name": "Factura genera movimiento de puntos",
+    "expected": 201,
+    "automatedName": "T15 Factura genera movimiento de puntos",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T16",
+    "suite": "API",
+    "name": "Factura duplicada rechazada",
+    "expected": 409,
+    "automatedName": "T16 Factura duplicada rechazada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T17",
+    "suite": "API",
+    "name": "Cliente consulta puntos propios",
+    "expected": 200,
+    "automatedName": "T17 Cliente consulta puntos propios",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T18",
+    "suite": "API",
+    "name": "Identidad del cliente procede de su sesion",
+    "expected": 200,
+    "automatedName": "T18 Identidad del cliente procede de su sesion",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T19",
+    "suite": "API",
+    "name": "Sesion de cliente rechazada en API interna",
+    "expected": 401,
+    "automatedName": "T19 Sesion de cliente rechazada en API interna",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T20",
+    "suite": "API",
+    "name": "Creacion de premio con permiso",
+    "expected": 201,
+    "automatedName": "T20 Creacion de premio con permiso",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T21",
+    "suite": "API",
+    "name": "Canje sin puntos suficientes rechazado",
+    "expected": 400,
+    "automatedName": "T21 Canje sin puntos suficientes rechazado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T22",
+    "suite": "API",
+    "name": "Solicitud reserva puntos y stock",
+    "expected": 201,
+    "automatedName": "T22 Solicitud reserva puntos y stock",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T23",
+    "suite": "API",
+    "name": "Operador sin permiso no aprueba canje",
+    "expected": 403,
+    "automatedName": "T23 Operador sin permiso no aprueba canje",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T24",
+    "suite": "API",
+    "name": "Aprobacion administrativa del canje",
+    "expected": 201,
+    "automatedName": "T24 Aprobacion administrativa del canje",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T25",
+    "suite": "API",
+    "name": "Envio del premio a tienda",
+    "expected": 201,
+    "automatedName": "T25 Envio del premio a tienda",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T26",
+    "suite": "API",
+    "name": "Premio listo en tienda",
+    "expected": 201,
+    "automatedName": "T26 Premio listo en tienda",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T27",
+    "suite": "API",
+    "name": "Entrega del premio con trazabilidad",
+    "expected": 201,
+    "automatedName": "T27 Entrega del premio con trazabilidad",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T28",
+    "suite": "API",
+    "name": "Segunda entrega rechazada",
+    "expected": [
+      400,
+      409
+    ],
+    "automatedName": "T28 Segunda entrega rechazada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T29",
+    "suite": "API",
+    "name": "Cancelacion devuelve puntos y reserva de stock",
+    "expected": 201,
+    "automatedName": "T29 Cancelacion devuelve puntos y reserva de stock",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T30",
+    "suite": "API",
+    "name": "Reversa autorizada conserva historial",
+    "expected": 201,
+    "automatedName": "T30 Reversa autorizada conserva historial",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T31",
+    "suite": "API",
+    "name": "Saldo final consistente",
+    "expected": 200,
+    "automatedName": "T31 Saldo final consistente",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T32",
+    "suite": "API",
+    "name": "Renovacion de sesion valida",
+    "expected": 201,
+    "automatedName": "T32 Renovacion de sesion valida",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T33",
+    "suite": "API",
+    "name": "Reutilizacion de refresh antiguo detectada",
+    "expected": 401,
+    "automatedName": "T33 Reutilizacion de refresh antiguo detectada",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T34",
+    "suite": "API",
+    "name": "Sesion revocada rechaza token de acceso",
+    "expected": 401,
+    "automatedName": "T34 Sesion revocada rechaza token de acceso",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T35",
+    "suite": "API",
+    "name": "Cierre de sesion autorizado",
+    "expected": 201,
+    "automatedName": "T35 Cierre de sesion autorizado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T36",
+    "suite": "API",
+    "name": "Cookie antigua falla despues del cierre",
+    "expected": 401,
+    "automatedName": "T36 Cookie antigua falla despues del cierre",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "T37",
+    "suite": "API",
+    "name": "Limite de solicitudes de login aplicado",
+    "expected": 429,
+    "automatedName": "T37 Limite de solicitudes de login aplicado",
+    "command": "npm run test:api:ci"
+  },
+  {
+    "id": "U01",
+    "suite": "UNIT",
+    "name": "cookie session requires its matching CSRF token",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "cookie session requires its matching CSRF token",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U02",
+    "suite": "UNIT",
+    "name": "admin and client CSRF cookies do not authorize each other",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "admin and client CSRF cookies do not authorize each other",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U03",
+    "suite": "UNIT",
+    "name": "Bearer authentication does not require CSRF",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "Bearer authentication does not require CSRF",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U04",
+    "suite": "UNIT",
+    "name": "customer without brand only receives global rewards",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "customer without brand only receives global rewards",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U05",
+    "suite": "UNIT",
+    "name": "customer with brand receives global and matching brand rewards",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "customer with brand receives global and matching brand rewards",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U06",
+    "suite": "UNIT",
+    "name": "customer registration accepts catalog and store identifiers",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "customer registration accepts catalog and store identifiers",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U07",
+    "suite": "UNIT",
+    "name": "customer registration rejects malformed identifiers",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "customer registration rejects malformed identifiers",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U08",
+    "suite": "UNIT",
+    "name": "brand-targeted banner requires at least one brand",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "brand-targeted banner requires at least one brand",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U09",
+    "suite": "UNIT",
+    "name": "global banner does not require brand targets",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "global banner does not require brand targets",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U10",
+    "suite": "UNIT",
+    "name": "redemption workflow no longer accepts pending approval status",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "redemption workflow no longer accepts pending approval status",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U11",
+    "suite": "UNIT",
+    "name": "store order accepts only official online store payment methods",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "store order accepts only official online store payment methods",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U12",
+    "suite": "UNIT",
+    "name": "store order payment methods start with the official payment status",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "store order payment methods start with the official payment status",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U13",
+    "suite": "UNIT",
+    "name": "mensajero no puede entregar VISA_LINK_MANUAL con pago pendiente",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "mensajero no puede entregar VISA_LINK_MANUAL con pago pendiente",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U14",
+    "suite": "UNIT",
+    "name": "mensajero no puede entregar TRANSFERENCIA_BANCARIA con pago pendiente",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "mensajero no puede entregar TRANSFERENCIA_BANCARIA con pago pendiente",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U15",
+    "suite": "UNIT",
+    "name": "mensajero no puede entregar DEPOSITO_BANCARIO con pago pendiente",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "mensajero no puede entregar DEPOSITO_BANCARIO con pago pendiente",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U16",
+    "suite": "UNIT",
+    "name": "mensajero puede completar efectivo si el monto coincide exactamente y dispara puntos al entregar",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "mensajero puede completar efectivo si el monto coincide exactamente y dispara puntos al entregar",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U17",
+    "suite": "UNIT",
+    "name": "puntos de compra online se acreditan solo al entregar y por productos marcados",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "puntos de compra online se acreditan solo al entregar y por productos marcados",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U18",
+    "suite": "UNIT",
+    "name": "mensajero no puede completar efectivo con monto parcial",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "mensajero no puede completar efectivo con monto parcial",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U19",
+    "suite": "UNIT",
+    "name": "crear liquidacion exige pagos confirmados y pendientes de liquidar",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "crear liquidacion exige pagos confirmados y pendientes de liquidar",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U20",
+    "suite": "UNIT",
+    "name": "pago con incidencia no aparece como elegible para liquidacion",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "pago con incidencia no aparece como elegible para liquidacion",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U21",
+    "suite": "UNIT",
+    "name": "anular liquidacion devuelve pagos a pendiente de liquidar",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "anular liquidacion devuelve pagos a pendiente de liquidar",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U22",
+    "suite": "UNIT",
+    "name": "exportes CSV de liquidaciones incluyen encabezados esperados",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "exportes CSV de liquidaciones incluyen encabezados esperados",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U23",
+    "suite": "UNIT",
+    "name": "export CSV de reportes responde encabezados correctos",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "export CSV de reportes responde encabezados correctos",
+    "command": "npm run test:unit:ci"
+  }
+]

@@ -1,0 +1,179 @@
+name: sistemadelealtad
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sistema_lealtad}
+      POSTGRES_USER: ${POSTGRES_USER:-lealtad}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-REPLACE_WITH_SECURE_LOCAL_VALUE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-lealtad-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-lealtad_local_storage_password}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-lealtad-local} ${MINIO_SECRET_KEY:-lealtad_local_storage_password} && mc mb --ignore-existing local/${MINIO_BUCKET:-lealtad-media}"]
+
+  backup:
+    build:
+      context: .
+      dockerfile: docker/backups/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+      api:
+        condition: service_healthy
+    environment: &backup-environment
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: ${POSTGRES_DB:-sistema_lealtad}
+      PGUSER: ${POSTGRES_USER:-lealtad}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-REPLACE_WITH_SECURE_LOCAL_VALUE}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-lealtad-local}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-lealtad_local_storage_password}
+      MINIO_BUCKET: ${MINIO_BUCKET:-lealtad-media}
+      BACKUP_ROOT: /backups
+      BACKUP_INTERVAL_SECONDS: "${BACKUP_INTERVAL_SECONDS:-86400}"
+      BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-14}"
+      TZ: America/Guatemala
+    volumes:
+      - ./backups:/backups
+
+  restore-test:
+    build:
+      context: .
+      dockerfile: docker/backups/Dockerfile
+    profiles: ["tools"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    environment: *backup-environment
+    volumes:
+      - ./backups:/backups
+    entrypoint: ["/usr/local/bin/backup-entrypoint.sh"]
+    command: ["/usr/local/bin/restore-test.sh"]
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    environment:
+      API_PORT: "4000"
+      APP_ENV: production
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lealtad}:${POSTGRES_PASSWORD:-REPLACE_WITH_SECURE_LOCAL_VALUE}@postgres:5432/${POSTGRES_DB:-sistema_lealtad}?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?Define JWT_ACCESS_SECRET en .env}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?Define JWT_REFRESH_SECRET en .env}
+      JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN_DAYS: ${JWT_REFRESH_EXPIRES_IN_DAYS:-30}
+      ADMIN_WEB_URL: ${ADMIN_WEB_URL:-http://localhost:3000}
+      CLIENT_PWA_URL: ${CLIENT_PWA_URL:-http://localhost:3002}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:3002,http://localhost:3003}
+      MEDIA_STORAGE_DIR: /var/lealtad/media
+      MEDIA_STORAGE_PROVIDER: S3
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: ${MINIO_BUCKET:-lealtad-media}
+      S3_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY:-lealtad-local}
+      S3_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY:-lealtad_local_storage_password}
+      S3_FORCE_PATH_STYLE: "true"
+    ports:
+      - "4000:4000"
+    volumes:
+      - media_data:/var/lealtad/media
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/api/health').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: docker/admin-web.Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /proxy/api
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports:
+      - "3000:3000"
+
+  client-pwa:
+    build:
+      context: .
+      dockerfile: docker/client-pwa.Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /proxy/api
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports:
+      - "3002:3002"
+
+  driver-pwa:
+    build:
+      context: .
+      dockerfile: docker/driver-pwa.Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /proxy/api
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports:
+      - "3003:3003"
+
+volumes:
+  postgres_data:
+  media_data:
+  minio_data:

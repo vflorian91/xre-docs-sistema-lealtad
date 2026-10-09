@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "PointMovementType" ADD VALUE 'POINT_CONVERTED_TO_BALANCE';

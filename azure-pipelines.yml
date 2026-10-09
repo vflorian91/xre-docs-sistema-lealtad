@@ -1,0 +1,46 @@
+trigger:
+  branches:
+    include: [main]
+pr:
+  branches:
+    include: [main]
+pool:
+  vmImage: ubuntu-latest
+jobs:
+  - job: Validar
+    displayName: '37 API y 23 pruebas automatizadas'
+    timeoutInMinutes: 30
+    steps:
+      - checkout: self
+        clean: true
+        persistCredentials: false
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '22.x'
+        displayName: 'Node.js 22'
+      - script: node scripts/ci/run.cjs
+        displayName: 'Ejecutar las 60 verificaciones en Docker aislado'
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: 'test-results/api.xml'
+          testRunTitle: 'XRE Docs - 37 comprobaciones API'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          failTaskOnFailureToPublishResults: true
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: 'test-results/unitarios.xml'
+          testRunTitle: 'XRE Docs - 23 pruebas automatizadas'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          failTaskOnFailureToPublishResults: true
+      - task: PublishPipelineArtifact@1
+        condition: succeededOrFailed()
+        inputs:
+          targetPath: 'test-results'
+          artifact: 'resultados-pruebas'
+        displayName: 'Guardar reportes JUnit y resultados JSON'

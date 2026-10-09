@@ -1,0 +1,1 @@
+ALTER TYPE "NotificationAudience" ADD VALUE 'CUSTOMER_SEGMENT';

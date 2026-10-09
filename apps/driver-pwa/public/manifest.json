@@ -1,0 +1,9 @@
+{
+  "name": "PWA Mensajero",
+  "short_name": "Mensajero",
+  "start_url": "/login",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#18324a",
+  "icons": []
+}

@@ -1,0 +1,31 @@
+✔ cookie session requires its matching CSRF token (3.4963ms)
+✔ admin and client CSRF cookies do not authorize each other (0.8895ms)
+✔ Bearer authentication does not require CSRF (0.6786ms)
+✔ customer without brand only receives global rewards (4.5469ms)
+✔ customer with brand receives global and matching brand rewards (0.9577ms)
+✔ customer registration accepts catalog and store identifiers (10.156ms)
+✔ customer registration rejects malformed identifiers (2.0115ms)
+✔ brand-targeted banner requires at least one brand (4.2303ms)
+✔ global banner does not require brand targets (2.75ms)
+✔ redemption workflow no longer accepts pending approval status (2.2814ms)
+✔ store order accepts only official online store payment methods (5.1025ms)
+✔ store order payment methods start with the official payment status (0.7542ms)
+✔ mensajero no puede entregar VISA_LINK_MANUAL con pago pendiente (4.2436ms)
+✔ mensajero no puede entregar TRANSFERENCIA_BANCARIA con pago pendiente (0.656ms)
+✔ mensajero no puede entregar DEPOSITO_BANCARIO con pago pendiente (0.781ms)
+✔ mensajero puede completar efectivo si el monto coincide exactamente y dispara puntos al entregar (264.8677ms)
+✔ puntos de compra online se acreditan solo al entregar y por productos marcados (2.6486ms)
+✔ mensajero no puede completar efectivo con monto parcial (1.0025ms)
+✔ crear liquidacion exige pagos confirmados y pendientes de liquidar (1.1412ms)
+✔ pago con incidencia no aparece como elegible para liquidacion (0.6082ms)
+✔ anular liquidacion devuelve pagos a pendiente de liquidar (1.2312ms)
+✔ exportes CSV de liquidaciones incluyen encabezados esperados (0.7811ms)
+✔ export CSV de reportes responde encabezados correctos (0.9398ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4842.4077

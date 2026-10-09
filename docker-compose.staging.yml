@@ -1,0 +1,89 @@
+name: REPLACE_WITH_SECURE_LOCAL_VALUE
+
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: ${STAGING_POSTGRES_DB:-sistema_lealtad_staging}
+      POSTGRES_USER: ${STAGING_POSTGRES_USER:-lealtad_staging}
+      POSTGRES_PASSWORD: ${STAGING_POSTGRES_PASSWORD:?Define STAGING_POSTGRES_PASSWORD en .env.staging}
+    ports: !override
+      - "${STAGING_POSTGRES_PORT:-55432}:5432"
+
+  minio:
+    environment:
+      MINIO_ROOT_USER: ${STAGING_MINIO_ACCESS_KEY:?Define STAGING_MINIO_ACCESS_KEY en .env.staging}
+      MINIO_ROOT_PASSWORD: ${STAGING_MINIO_SECRET_KEY:?Define STAGING_MINIO_SECRET_KEY en .env.staging}
+    ports: !override
+      - "${STAGING_MINIO_PORT:-9100}:9000"
+      - "${STAGING_MINIO_CONSOLE_PORT:-9101}:9001"
+
+  minio-init:
+    command:
+      - mc alias set local http://minio:9000 ${STAGING_MINIO_ACCESS_KEY} ${STAGING_MINIO_SECRET_KEY} && mc mb --ignore-existing local/${STAGING_MINIO_BUCKET:-lealtad-media-staging}
+
+  backup:
+    environment: &staging-backup-environment
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: ${STAGING_POSTGRES_DB:-sistema_lealtad_staging}
+      PGUSER: ${STAGING_POSTGRES_USER:-lealtad_staging}
+      PGPASSWORD: ${STAGING_POSTGRES_PASSWORD}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${STAGING_MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${STAGING_MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${STAGING_MINIO_BUCKET:-lealtad-media-staging}
+      BACKUP_ROOT: /backups
+      BACKUP_INTERVAL_SECONDS: ${STAGING_BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_RETENTION_DAYS: ${STAGING_BACKUP_RETENTION_DAYS:-14}
+      TZ: America/Guatemala
+    volumes: !override
+      - ./backups-staging:/backups
+
+  restore-test:
+    environment: *staging-backup-environment
+    volumes: !override
+      - ./backups-staging:/backups
+
+  api:
+    environment:
+      APP_ENV: production
+      COOKIE_SECURE: ${STAGING_COOKIE_SECURE:-false}
+      DATABASE_URL: postgresql://${STAGING_POSTGRES_USER:-lealtad_staging}:${STAGING_POSTGRES_PASSWORD}@postgres:5432/${STAGING_POSTGRES_DB:-sistema_lealtad_staging}?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?Define JWT_ACCESS_SECRET en .env.staging}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?Define JWT_REFRESH_SECRET en .env.staging}
+      ADMIN_WEB_URL: ${STAGING_ADMIN_URL:-http://localhost:3100}
+      CLIENT_PWA_URL: ${STAGING_CLIENT_URL:-http://localhost:3102}
+      CORS_ORIGINS: ${STAGING_ADMIN_URL:-http://localhost:3100},${STAGING_CLIENT_URL:-http://localhost:3102}
+      MEDIA_STORAGE_PROVIDER: S3
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: ${STAGING_MINIO_BUCKET:-lealtad-media-staging}
+      S3_ACCESS_KEY_ID: ${STAGING_MINIO_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${STAGING_MINIO_SECRET_KEY}
+      S3_FORCE_PATH_STYLE: "true"
+    ports: !override
+      - "${STAGING_API_PORT:-4100}:4000"
+    volumes: !override
+      - staging_legacy_media:/var/lealtad/media
+
+  admin-web:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: ${STAGING_ADMIN_URL:-http://localhost:3100}/proxy/api
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports: !override
+      - "${STAGING_ADMIN_PORT:-3100}:3000"
+
+  client-pwa:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: ${STAGING_CLIENT_URL:-http://localhost:3102}/proxy/api
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports: !override
+      - "${STAGING_CLIENT_PORT:-3102}:3002"
+
+volumes:
+  staging_legacy_media:

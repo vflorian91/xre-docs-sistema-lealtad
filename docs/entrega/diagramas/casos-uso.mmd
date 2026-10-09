@@ -1,0 +1,22 @@
+flowchart LR
+cliente[Cliente]
+operador[Operador con tienda asignada]
+revisor[Revisor autorizado]
+admin[Administrador]
+subgraph sistema[Sistema de lealtad]
+saldo([Consultar saldo e historial propio])
+solicitar([Solicitar o cancelar canje])
+factura([Registrar factura])
+entrega([Preparar y entregar premio])
+aprobar([Aprobar y enviar canje])
+auditoria([Consultar auditoria])
+config([Configurar usuarios reglas y tiendas])
+end
+cliente --> saldo
+cliente --> solicitar
+operador --> factura
+operador --> entrega
+revisor --> aprobar
+revisor --> auditoria
+admin --> config
+admin --> auditoria

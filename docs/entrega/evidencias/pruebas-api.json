@@ -1,0 +1,556 @@
+{
+  "project": "XRE Docs",
+  "executedAt": "2026-10-09T04:06:22.956Z",
+  "timezone": "America/Guatemala",
+  "environment": "Docker local HTTP",
+  "testCount": 37,
+  "passed": 37,
+  "tests": [
+    {
+      "id": "T01",
+      "title": "API y dependencias disponibles",
+      "status": 200,
+      "expected": 200,
+      "result": "APROBADA",
+      "milliseconds": 213,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T02",
+      "title": "Ruta interna sin sesion rechazada",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 24,
+      "detail": "Sesion requerida."
+    },
+    {
+      "id": "T03",
+      "title": "Login invalido rechazado",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 285,
+      "detail": "Credenciales invalidas."
+    },
+    {
+      "id": "T04",
+      "title": "Login interno y cookies de sesion",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 434,
+      "detail": "Cookies HttpOnly en acceso y renovacion. Valores omitidos."
+    },
+    {
+      "id": "T05",
+      "title": "Creacion de tienda de demostracion",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 109,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T06",
+      "title": "Login del operador con permisos limitados",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 355,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T07",
+      "title": "Acceso a auditoria sin permiso rechazado",
+      "status": 403,
+      "expected": 403,
+      "result": "APROBADA",
+      "milliseconds": 15,
+      "detail": "No tienes permiso para realizar esta accion."
+    },
+    {
+      "id": "T08",
+      "title": "Seleccion de tienda sin CSRF rechazada",
+      "status": 403,
+      "expected": 403,
+      "result": "APROBADA",
+      "milliseconds": 5,
+      "detail": "Token CSRF invalido."
+    },
+    {
+      "id": "T09",
+      "title": "Tienda no asignada rechazada",
+      "status": 403,
+      "expected": 403,
+      "result": "APROBADA",
+      "milliseconds": 21,
+      "detail": "No tienes asignada esta tienda."
+    },
+    {
+      "id": "T10",
+      "title": "Seleccion de tienda asignada",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 37,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T11",
+      "title": "Registro de cliente y codigo generado",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 362,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T12",
+      "title": "Campos no permitidos en factura rechazados",
+      "status": 400,
+      "expected": 400,
+      "result": "APROBADA",
+      "milliseconds": 19,
+      "detail": "Datos invalidos."
+    },
+    {
+      "id": "T13",
+      "title": "Monto negativo rechazado",
+      "status": 400,
+      "expected": 400,
+      "result": "APROBADA",
+      "milliseconds": 22,
+      "detail": "Datos invalidos."
+    },
+    {
+      "id": "T14",
+      "title": "Calculo de puntos en servidor",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 90,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T15",
+      "title": "Factura genera movimiento de puntos",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 221,
+      "detail": "Q500 genera 500 puntos con la regla vigente."
+    },
+    {
+      "id": "T16",
+      "title": "Factura duplicada rechazada",
+      "status": 409,
+      "expected": 409,
+      "result": "APROBADA",
+      "milliseconds": 104,
+      "detail": "Ya existe una compra registrada con este No. de factura en la tienda activa."
+    },
+    {
+      "id": "T17",
+      "title": "Cliente consulta puntos propios",
+      "status": 200,
+      "expected": 200,
+      "result": "APROBADA",
+      "milliseconds": 139,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T18",
+      "title": "Identidad del cliente procede de su sesion",
+      "status": 200,
+      "expected": 200,
+      "result": "APROBADA",
+      "milliseconds": 63,
+      "detail": "Cliente alterno conserva su identidad y 0 puntos al enviar el ID de otro cliente."
+    },
+    {
+      "id": "T19",
+      "title": "Sesion de cliente rechazada en API interna",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 4,
+      "detail": "Sesion requerida."
+    },
+    {
+      "id": "T20",
+      "title": "Creacion de premio con permiso",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 106,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T21",
+      "title": "Canje sin puntos suficientes rechazado",
+      "status": 400,
+      "expected": 400,
+      "result": "APROBADA",
+      "milliseconds": 109,
+      "detail": "No tienes puntos suficientes para solicitar este producto."
+    },
+    {
+      "id": "T22",
+      "title": "Solicitud reserva puntos y stock",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 135,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T23",
+      "title": "Operador sin permiso no aprueba canje",
+      "status": 403,
+      "expected": 403,
+      "result": "APROBADA",
+      "milliseconds": 19,
+      "detail": "No tienes permiso para realizar esta accion."
+    },
+    {
+      "id": "T24",
+      "title": "Aprobacion administrativa del canje",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 81,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T25",
+      "title": "Envio del premio a tienda",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 84,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T26",
+      "title": "Premio listo en tienda",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 86,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T27",
+      "title": "Entrega del premio con trazabilidad",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 100,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T28",
+      "title": "Segunda entrega rechazada",
+      "status": 400,
+      "expected": [
+        400,
+        409
+      ],
+      "result": "APROBADA",
+      "milliseconds": 44,
+      "detail": "Solo puedes marcar como entregadas las solicitudes listas para recoger."
+    },
+    {
+      "id": "T29",
+      "title": "Cancelacion devuelve puntos y reserva de stock",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 77,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T30",
+      "title": "Reversa autorizada conserva historial",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 90,
+      "detail": "Respuesta verificada"
+    },
+    {
+      "id": "T31",
+      "title": "Saldo final consistente",
+      "status": 200,
+      "expected": 200,
+      "result": "APROBADA",
+      "milliseconds": 31,
+      "detail": "500 puntos por compra menos 200 del premio entregado = 300 disponibles. Cancelacion y reversa no alteran el resultado neto."
+    },
+    {
+      "id": "T32",
+      "title": "Renovacion de sesion valida",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 298,
+      "detail": "Resultado verificado"
+    },
+    {
+      "id": "T33",
+      "title": "Reutilizacion de refresh antiguo detectada",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 144,
+      "detail": "El hash de refresh ya rotado invalida la sesion. Valores omitidos."
+    },
+    {
+      "id": "T34",
+      "title": "Sesion revocada rechaza token de acceso",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 15,
+      "detail": "Sesion invalida o expirada."
+    },
+    {
+      "id": "T35",
+      "title": "Cierre de sesion autorizado",
+      "status": 201,
+      "expected": 201,
+      "result": "APROBADA",
+      "milliseconds": 33,
+      "detail": "Resultado verificado"
+    },
+    {
+      "id": "T36",
+      "title": "Cookie antigua falla despues del cierre",
+      "status": 401,
+      "expected": 401,
+      "result": "APROBADA",
+      "milliseconds": 13,
+      "detail": "Sesion invalida o expirada."
+    },
+    {
+      "id": "T37",
+      "title": "Limite de solicitudes de login aplicado",
+      "status": 429,
+      "expected": 429,
+      "result": "APROBADA",
+      "milliseconds": 0,
+      "detail": "Secuencia de respuestas: 401, 401, 401, 429, 429, 429"
+    }
+  ],
+  "cookies": [
+    {
+      "name": "admin_at",
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "SameSite=Lax",
+      "valueOmitted": true
+    },
+    {
+      "name": "admin_rt",
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "SameSite=Lax",
+      "valueOmitted": true
+    },
+    {
+      "name": "admin_csrf",
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "SameSite=Lax",
+      "valueOmitted": true
+    }
+  ],
+  "health": {
+    "ok": true,
+    "service": "lealtad-api",
+    "timestamp": "2026-10-09T04:04:33.425Z",
+    "checks": {
+      "database": {
+        "ok": true
+      },
+      "storage": {
+        "provider": "LOCAL",
+        "ok": true
+      }
+    }
+  },
+  "securityHeaders": {
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "SAMEORIGIN",
+    "referrer-policy": "no-referrer",
+    "access-control-allow-origin": null
+  },
+  "demo": {
+    "customerCode": "RMT-000002",
+    "customerId": "cmv0fyott0014ltunrri5nyuq",
+    "storeName": "XRE Tienda Demo Centro",
+    "storeId": "cmv0fyo5v000kltunghay7jl9",
+    "brand": "Nine West",
+    "invoice": "8610080001",
+    "amount": 500,
+    "pointsEarned": 500,
+    "rewardPoints": 200,
+    "availablePoints": 300,
+    "redemptionCode": "ZFTR359764",
+    "redemptionId": "cmv0fypyl0025ltunkh695eej",
+    "rewardId": "cmv0fypt1001wltuniw00t9wm"
+  },
+  "auditEvents": [
+    {
+      "action": "entregable.demo_fixture_created",
+      "module": "entregable",
+      "entityType": "InternalUser",
+      "createdAt": "2026-10-09T04:02:30.375Z"
+    },
+    {
+      "action": "entregable.demo_fixture_created",
+      "module": "entregable",
+      "entityType": "InternalUser",
+      "createdAt": "2026-10-09T04:02:30.547Z"
+    },
+    {
+      "action": "auth.internal.login_failed",
+      "module": "auth",
+      "entityType": "InternalUser",
+      "createdAt": "2026-10-09T04:04:33.749Z"
+    },
+    {
+      "action": "auth.internal.login_success",
+      "module": "auth",
+      "entityType": "InternalUser",
+      "createdAt": "2026-10-09T04:04:34.188Z"
+    },
+    {
+      "action": "stores.create",
+      "module": "stores",
+      "entityType": "Store",
+      "createdAt": "2026-10-09T04:04:34.411Z"
+    },
+    {
+      "action": "stores.create",
+      "module": "stores",
+      "entityType": "Store",
+      "createdAt": "2026-10-09T04:04:34.495Z"
+    },
+    {
+      "action": "stores.assign_users",
+      "module": "stores",
+      "entityType": "Store",
+      "createdAt": "2026-10-09T04:04:34.580Z"
+    },
+    {
+      "action": "auth.internal.login_success",
+      "module": "auth",
+      "entityType": "InternalUser",
+      "createdAt": "2026-10-09T04:04:34.952Z"
+    },
+    {
+      "action": "stores.set_active",
+      "module": "stores",
+      "entityType": "Store",
+      "createdAt": "2026-10-09T04:04:35.029Z"
+    },
+    {
+      "action": "stores.set_active",
+      "module": "stores",
+      "entityType": "Store",
+      "createdAt": "2026-10-09T04:04:35.066Z"
+    },
+    {
+      "action": "auth.customer.register",
+      "module": "auth",
+      "entityType": "Customer",
+      "createdAt": "2026-10-09T04:04:35.427Z"
+    },
+    {
+      "action": "auth.customer.register",
+      "module": "auth",
+      "entityType": "Customer",
+      "createdAt": "2026-10-09T04:04:35.774Z"
+    },
+    {
+      "action": "purchases.create",
+      "module": "purchases",
+      "entityType": "Purchase",
+      "createdAt": "2026-10-09T04:04:36.080Z"
+    },
+    {
+      "action": "purchases.duplicate_invoice_attempt",
+      "module": "purchases",
+      "entityType": "Purchase",
+      "createdAt": "2026-10-09T04:04:36.230Z"
+    },
+    {
+      "action": "redeemable_products.create",
+      "module": "redeemable_products",
+      "entityType": "RedeemableProduct",
+      "createdAt": "2026-10-09T04:04:36.539Z"
+    },
+    {
+      "action": "redemption_requests.request_failed",
+      "module": "redemption_requests",
+      "entityType": "RedeemableProduct",
+      "createdAt": "2026-10-09T04:04:36.641Z"
+    },
+    {
+      "action": "redemption_requests.request",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:36.775Z"
+    },
+    {
+      "action": "redemption_requests.approve",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:36.880Z"
+    },
+    {
+      "action": "redemption_requests.mark_sent_to_store",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:36.965Z"
+    },
+    {
+      "action": "redemption_requests.mark_ready",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:37.051Z"
+    },
+    {
+      "action": "redemption_requests.mark_delivered",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:37.152Z"
+    },
+    {
+      "action": "redemption_requests.request",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:37.321Z"
+    },
+    {
+      "action": "redemption_requests.customer_cancel",
+      "module": "redemption_requests",
+      "entityType": "RedemptionRequest",
+      "createdAt": "2026-10-09T04:04:37.414Z"
+    },
+    {
+      "action": "purchases.create",
+      "module": "purchases",
+      "entityType": "Purchase",
+      "createdAt": "2026-10-09T04:04:37.561Z"
+    },
+    {
+      "action": "purchases.reverse",
+      "module": "purchases",
+      "entityType": "Purchase",
+      "createdAt": "2026-10-09T04:04:37.652Z"
+    }
+  ]
+}

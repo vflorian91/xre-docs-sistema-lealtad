@@ -1,0 +1,1 @@
+Los diagramas son editables en Mermaid. casos-uso.mmd representa actores y casos mediante un flowchart con nodos de caso de uso. Las figuras del informe simplifican atributos para facilitar lectura. Fuente: packages/database/prisma/schema.prisma y módulos de la API.

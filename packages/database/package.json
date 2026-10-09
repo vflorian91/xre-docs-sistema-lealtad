@@ -1,0 +1,28 @@
+{
+  "name": "@lealtad/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:seed": "node prisma/seed.mjs",
+    "db:seed:qa": "node prisma/seed-qa-store-online.mjs",
+    "db:seed:guatemala-geo": "node prisma/load-guatemala-geography.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "argon2": "^0.41.1",
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "prisma": "^5.18.0",
+    "typescript": "^5.5.4"
+  }
+}

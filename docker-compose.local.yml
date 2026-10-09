@@ -1,0 +1,12 @@
+services:
+  api:
+    depends_on: !override
+      postgres:
+        condition: service_healthy
+    environment:
+      MEDIA_STORAGE_PROVIDER: LOCAL
+      SEED_SUPER_ADMIN_EMAIL: ${SEED_SUPER_ADMIN_EMAIL:-admin@example.com}
+      SEED_SUPER_ADMIN_PASSWORD: ${SEED_SUPER_ADMIN_PASSWORD:-REPLACE_WITH_SECURE_LOCAL_VALUE}
+      SEED_SUPER_ADMIN_FULL_NAME: ${SEED_SUPER_ADMIN_FULL_NAME:-Super Administrador}
+    volumes:
+      - ./packages/database/prisma/migrations:/app/packages/database/prisma/migrations:ro

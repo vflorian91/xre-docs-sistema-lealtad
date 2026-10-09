@@ -1,0 +1,24 @@
+sequenceDiagram
+actor C as Cliente
+participant API as API con guard de cliente
+participant DB as PostgreSQL
+actor R as Revisor
+actor T as Operador de tienda
+C->>API: Solicitar producto y tienda con sesion
+API->>API: Validar identidad estado marca y vigencia
+API->>DB: Iniciar transaccion
+API->>DB: Bloquear cliente y producto
+API->>DB: Leer saldo y stock nuevamente
+alt Saldo y stock suficientes
+API->>DB: Reservar stock crear solicitud y debitar puntos
+DB-->>API: Confirmar transaccion
+API-->>C: Solicitud pendiente y saldo disponible
+R->>API: Aprobar y enviar a tienda con permisos
+T->>API: Preparar y entregar en tienda asignada
+API->>DB: Actualizar estado y responsables
+API->>DB: Registrar auditoria
+API-->>C: Estado entregado
+else Operacion invalida
+DB-->>API: Revertir transaccion
+API-->>C: Rechazo con error funcional
+end
