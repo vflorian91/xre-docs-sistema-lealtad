@@ -2,6 +2,8 @@
 
 El pipeline `azure-pipelines.yml` ejecuta 37 comprobaciones de API (T01–T37) y los 23 casos existentes de Node.js. Publica dos ejecuciones JUnit en la pestaña Tests y conserva los reportes como artefacto.
 
+**Validación en Azure DevOps aprobada:** [ejecución 20261009.3, ID 10](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=10&view=ms.vss-test-web.build-test-results-tab), del 9 de octubre de 2026. Azure registró **60 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, distribuidas en 37/37 API y 23/23 automatizadas. El pipeline completo terminó con estado **Success** y publicó el artefacto `resultados-pruebas`. Código validado: `bbaf11b930e1ab5753a043f9f05f89e030f530a8`. Las capturas finales están en `docs/evidencias-ci/06-pipeline-aprobado.jpg` y `docs/evidencias-ci/07-resultados-60-pruebas.jpg`.
+
 ## Repetir localmente
 
 Con Docker Desktop activo y Node.js 22 instalado, ejecutar desde la raíz:
