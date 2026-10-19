@@ -16,7 +16,7 @@ type Props = {
   onMonthChange: (value: string) => void;
 };
 
-const paymentColors = ['#0f6fff', '#16a34a', '#6d28d9', '#f97316', '#94a3b8'];
+const paymentColors = ['#855b38', '#16a34a', '#657650', '#f97316', '#94a3b8'];
 
 export default function OnlineStoreDashboard({ data, isLoading, selectedMonth, onMonthChange }: Props) {
   const salesMetrics = data.sales?.metrics ?? {};
@@ -34,7 +34,7 @@ export default function OnlineStoreDashboard({ data, isLoading, selectedMonth, o
     { label: 'Envios en ruta', value: formatNumber(deliveryMetrics.enRuta ?? 0), tone: 'violet', icon: Truck },
   ];
 
-  const daily = buildDailyStoreSeries(allRows);
+  const daily = buildDailyStoreSeries(allRows, selectedMonth);
   const paymentItems = buildPaymentDonut(allRows);
 
   return (
@@ -96,23 +96,25 @@ export default function OnlineStoreDashboard({ data, isLoading, selectedMonth, o
   );
 }
 
-function buildDailyStoreSeries(rows: StoreSaleRow[]): { labels: string[]; series: ChartSeries[] } {
-  const days = Array.from({ length: 30 }, (_, index) => String(index + 1));
-  const sales = new Array(30).fill(0);
-  const orders = new Array(30).fill(0);
-  const delivered = new Array(30).fill(0);
+function buildDailyStoreSeries(rows: StoreSaleRow[], month: string): { labels: string[]; series: ChartSeries[] } {
+  const [year, monthNumber] = month.split('-').map(Number);
+  const dayCount = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+  const days = Array.from({ length: dayCount }, (_, index) => String(index + 1));
+  const sales = new Array(dayCount).fill(0);
+  const orders = new Array(dayCount).fill(0);
+  const delivered = new Array(dayCount).fill(0);
   for (const row of rows) {
-    const day = new Date(row.createdAt).getDate() - 1;
-    if (day < 0 || day > 29) continue;
-    sales[day] += Number(row.totalAmount ?? 0);
+    const day = new Date(row.createdAt).getUTCDate() - 1;
+    if (day < 0 || day >= dayCount) continue;
+    if (row.clientPaymentStatus === 'PAGO_CONFIRMADO') sales[day] += Number(row.totalAmount ?? 0);
     orders[day] += 1;
     if (row.orderStatus === 'ENTREGADO') delivered[day] += 1;
   }
   return {
     labels: days.map((day) => `${day}`),
     series: [
-      { label: 'Ventas online', color: '#0f6fff', values: sales },
-      { label: 'Clientes online', color: '#6d28d9', values: orders },
+      { label: 'Ventas online', color: '#855b38', values: sales },
+      { label: 'Pedidos online', color: '#657650', values: orders },
       { label: 'Entregas completadas', color: '#16a34a', values: delivered },
     ],
   };
@@ -125,7 +127,7 @@ function buildPaymentDonut(rows: StoreSaleRow[]): DonutItem[] {
     counts.set(label, (counts.get(label) ?? 0) + 1);
   }
   const items = Array.from(counts.entries()).map(([label, value], index) => ({ label, value, color: paymentColors[index % paymentColors.length] }));
-  return items.length ? items : [{ label: 'Sin pagos', value: 1, color: '#e2e8f0' }];
+  return items.length ? items : [{ label: 'Sin pagos', value: 1, color: '#e5dcd0' }];
 }
 
 function countStatus(rows: StoreSaleRow[], status: string) {
@@ -138,6 +140,10 @@ function paymentMethodLabel(value?: string | null) {
     TRANSFERENCIA: 'Transferencia',
     DEPOSITO: 'Deposito',
     EFECTIVO: 'Efectivo',
+    VISA_LINK_MANUAL: 'Visa Link',
+    TRANSFERENCIA_BANCARIA: 'Transferencia',
+    DEPOSITO_BANCARIO: 'Deposito',
+    EFECTIVO_CONTRA_ENTREGA: 'Contra entrega',
   };
   return value ? labels[value] ?? value.replaceAll('_', ' ') : 'Sin metodo';
 }

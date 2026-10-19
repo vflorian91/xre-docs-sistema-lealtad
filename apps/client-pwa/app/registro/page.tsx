@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CheckCircle2, Loader2, LockKeyhole, Mail, Phone, ShoppingBag, UserRound } from 'lucide-react';
+import ClientAuthHeader from '../components/ClientAuthHeader';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
@@ -94,13 +95,7 @@ export default function RegistroClientePage() {
   return (
     <main className="client-stage">
       <section className="client-screen auth-client-screen modern-auth-screen">
-        <header className="modern-auth-header">
-          <img alt="Sistema de Lealtad" src="/icons/icon-512.png" />
-          <strong>Sistema de Lealtad</strong>
-          <p>Tus compras, tus beneficios</p>
-          <h1>Crear cuenta</h1>
-          <span>Regístrate con tus datos básicos. El NIT es obligatorio.</span>
-        </header>
+        <ClientAuthHeader title="Crear cuenta" subtitle="Regístrate con tus datos básicos. El NIT es obligatorio." />
 
         <form className="client-login modern-auth-card" onSubmit={register}>
           {message ? <RegisterMessage message={message} /> : null}

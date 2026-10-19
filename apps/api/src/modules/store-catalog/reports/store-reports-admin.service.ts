@@ -206,7 +206,7 @@ export class StoreReportsAdminService {
     const search = query.search?.trim();
 
     const where: Prisma.StoreOrderPaymentWhereInput = {
-      ...(dateFilter ? { paidAt: dateFilter } : {}),
+      ...(dateFilter ? { AND: [{ OR: [{ paidAt: dateFilter }, { paidAt: null, createdAt: dateFilter }] }] } : {}),
       ...(query.paymentMethod?.trim() ? { paymentMethod: query.paymentMethod.trim() } : {}),
       ...(query.paymentStatus?.trim() ? { paymentStatus: query.paymentStatus.trim() } : {}),
       ...(query.settlementStatus?.trim() ? { settlementStatus: query.settlementStatus.trim() } : {}),
@@ -715,7 +715,9 @@ export class StoreReportsAdminService {
   }
 
   private parseDateRange(query: ReportQuery) {
-    return { dateFrom: this.parseOptionalDate(query.dateFrom), dateTo: this.parseOptionalDate(query.dateTo) };
+    const dateTo = this.parseOptionalDate(query.dateTo);
+    if (dateTo && /^\d{4}-\d{2}-\d{2}$/.test(query.dateTo ?? '')) dateTo.setUTCHours(23, 59, 59, 999);
+    return { dateFrom: this.parseOptionalDate(query.dateFrom), dateTo };
   }
 
   private parseOptionalDate(value: string | undefined) {

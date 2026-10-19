@@ -4,6 +4,7 @@ import { Loader2, LockKeyhole, Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { hasAdminSession, setAdminSession } from './lib/adminApi';
+import XdocWordmark from './components/XdocWordmark';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
@@ -82,13 +83,17 @@ export default function AdminLoginPage() {
       <section className="admin-auth-layout">
         <div className="admin-auth-copy">
           <div className="brand login-brand">
-            <div className="brand-mark logo-mark">
-              <img src="/images/brand/loyalty-logo.png" alt="Sistema de Lealtad" />
-            </div>
-            <strong>Sistema de <span>Lealtad</span></strong>
+            <XdocWordmark />
           </div>
           <h1>Bienvenido de nuevo</h1>
-          <p>Accede al panel administrativo y gestiona tu programa de lealtad.</p>
+          <p>Tu tienda, tus clientes y cada nuevo paso, en un solo lugar.</p>
+          <div className="xdoc-admin-editorial" aria-hidden="true">
+            <img src="/images/editorial/court.webp" alt="" />
+            <img src="/images/editorial/runner.png" alt="" />
+            <img src="/images/editorial/classic.png" alt="" />
+            <img src="/images/editorial/canvas.png" alt="" />
+          </div>
+          <span className="xdoc-admin-caption">Un clásico en cada paso.</span>
         </div>
 
         <form className="admin-login" onSubmit={login}>

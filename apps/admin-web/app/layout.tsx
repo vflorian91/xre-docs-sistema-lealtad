@@ -1,11 +1,12 @@
 import './globals.css';
 import './dashboard-visual.css';
 import './base-admin-screens.css';
+import './vintage-admin.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Administrador | Sistema de Lealtad',
-  description: 'Web Administrador del Sistema de Lealtad y Premiacion',
+  title: 'Zapateria XDOC | Administración',
+  description: 'Panel administrativo de Zapateria XDOC: tienda, clientes y programa de lealtad.',
 };
 
 export const dynamic = 'force-dynamic';

@@ -1,6 +1,8 @@
-# XRE Docs — Sistema de lealtad
+# Zapateria XDOC — Sistema de lealtad y tienda online
 
 Aplicación de fidelización comercial con validación automatizada en Azure DevOps.
+
+La actualización de octubre incorpora la identidad XDOC y el estilo vintage en administración, tienda y mensajeros, logos de marcas y correcciones de los reportes mensuales. La guía [XDOC-ACTUALIZACION](docs/XDOC-ACTUALIZACION.md) explica los cambios y la carga opcional del catálogo de 70 productos y la actividad de septiembre y octubre, sin publicar credenciales de la instalación local.
 
 - Código público: https://github.com/vflorian91/xre-docs-sistema-lealtad
 - Proyecto Azure DevOps: https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad

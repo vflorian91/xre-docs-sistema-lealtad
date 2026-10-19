@@ -2,6 +2,7 @@
 
 import { Home, LogOut, PackageCheck, ShoppingBag, UserCircle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import XdocWordmark from './XdocWordmark';
 import { clearDriverSession, driverApiRequest, getStoredDriverUser, statusLabel } from './lib/driverApi';
 
 export async function logoutDriver() {
@@ -21,6 +22,7 @@ export function DriverShell({ title, children, hideHeader = false }: { title: st
 
   return (
     <main className={`driver-shell ${isHome ? 'driver-home-shell' : ''}`}>
+      <XdocWordmark />
       {!isHome && !hideHeader ? (
         <>
           <header className="driver-topbar">

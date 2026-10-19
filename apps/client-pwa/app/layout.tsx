@@ -1,9 +1,10 @@
 import './globals.css';
+import './vintage-theme.css';
 import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
-  title: 'PWA Cliente | Sistema de Lealtad',
-  description: 'Consulta de puntos y beneficios del cliente',
+  title: 'Zapateria XDOC | Tu próximo par',
+  description: 'Descubre tu próximo par y disfruta tus puntos y beneficios en Zapateria XDOC.',
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#2563eb',
+  themeColor: '#855b38',
   width: 'device-width',
   initialScale: 1,
 };

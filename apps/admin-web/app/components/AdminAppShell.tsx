@@ -26,6 +26,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import AdminSidebarController from '../AdminSidebarController';
+import XdocWordmark from './XdocWordmark';
 import { absoluteMediaUrl, adminApiRequest, clearAdminSession, getStoredAdminUser, hasAdminSession, StoredAdminUser } from '../lib/adminApi';
 import { resolveNotificationTarget } from '../lib/notificationLinks';
 
@@ -462,11 +463,8 @@ export default function AdminAppShell({
       <main className={`admin-shell routed-admin-shell${hideSidebar ? ' admin-shell-no-sidebar' : ''}`}>
         {hideSidebar ? null : <aside className="sidebar">
           <div className="brand">
-            <div className="brand-mark logo-mark">
-              <img src="/images/brand/loyalty-logo.png" alt="Sistema de Lealtad" />
-            </div>
             <div>
-              <strong>Sistema de Lealtad</strong>
+              <XdocWordmark />
               <span>Panel Administrativo</span>
             </div>
           </div>
@@ -631,7 +629,7 @@ export default function AdminAppShell({
           <div className="content">
             {isRouteLoading ? (
               <div className="admin-route-loader" role="status" aria-live="polite">
-                <img alt="" className="admin-route-loader-logo" src="/images/brand/loyalty-logo.png" />
+                <span className="xdoc-admin-loading" aria-hidden="true">XDOC.</span>
                 <span>Cargando pantalla...</span>
               </div>
             ) : null}

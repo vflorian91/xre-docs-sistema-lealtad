@@ -96,7 +96,7 @@ export default function DashboardClient() {
         ] = await Promise.all([
           adminApiRequest<StoreSalesResponse>(`/admin/store/reports/sales?page=1&pageSize=5&${range}`),
           adminApiRequest<StoreSalesResponse>(`/admin/store/reports/sales?page=1&pageSize=100&${range}`),
-          adminApiRequest<StorePaymentsResponse>(`/admin/store/reports/payments?page=1&pageSize=5`),
+          adminApiRequest<StorePaymentsResponse>(`/admin/store/reports/payments?page=1&pageSize=5&${range}`),
           adminApiRequest<StoreDeliveriesResponse>(`/admin/store/reports/deliveries?page=1&pageSize=5&${range}`),
           adminApiRequest<StoreProductsResponse>(`/admin/store/reports/products?page=1&pageSize=1&${range}`),
           adminApiRequest<SummaryResponse>('/admin/summary'),

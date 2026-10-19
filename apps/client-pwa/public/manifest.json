@@ -1,11 +1,11 @@
 {
-  "name": "Sistema de Lealtad - Cliente",
-  "short_name": "Lealtad Cliente",
+  "name": "Zapateria XDOC",
+  "short_name": "XDOC",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#061353",
-  "theme_color": "#0758f8",
+  "background_color": "#faf7f2",
+  "theme_color": "#855b38",
   "lang": "es",
   "orientation": "portrait",
   "icons": [

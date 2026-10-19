@@ -41,6 +41,7 @@ export default function StoreAppShell({ children }: { children: React.ReactNode 
     <main className="client-stage store-app-stage">
       <section className="client-screen store-app-screen">
         <header className="client-mobile-header store-app-topbar">
+          <a className="client-store-wordmark" href="/">Zapateria <b>XDOC</b></a>
           <div className="client-mobile-header-main">
             <a className="delivery-pill in-header store-app-delivery" href="/direcciones" aria-label="Cambiar direccion de entrega">
               <MapPin size={14} />

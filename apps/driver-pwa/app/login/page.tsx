@@ -2,6 +2,7 @@
 
 import { Eye, EyeOff, LockKeyhole, LogIn, Mail } from 'lucide-react';
 import { FormEvent, useState } from 'react';
+import XdocWordmark from '../XdocWordmark';
 import { DriverUser, driverApiRequest, setDriverSession } from '../lib/driverApi';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,6 +52,7 @@ export default function LoginPage() {
   return (
     <main className="driver-login-page">
       <section className="driver-login-card" aria-labelledby="driver-login-title">
+        <XdocWordmark />
         <h1 id="driver-login-title">Acceso de motorista</h1>
         <p>Ingresa con tu correo y contraseña para ver tus rutas, pedidos asignados y estado de entregas.</p>
         {error ? <div className="form-error driver-login-error">{error}</div> : null}

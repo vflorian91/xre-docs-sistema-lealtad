@@ -1,9 +1,9 @@
 {
-  "name": "PWA Mensajero",
-  "short_name": "Mensajero",
+  "name": "Zapateria XDOC · Mensajeros",
+  "short_name": "XDOC Entregas",
   "start_url": "/login",
   "display": "standalone",
-  "background_color": "#f6f8fb",
-  "theme_color": "#18324a",
+  "background_color": "#faf7f2",
+  "theme_color": "#855b38",
   "icons": []
 }

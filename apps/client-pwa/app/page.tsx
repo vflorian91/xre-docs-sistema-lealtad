@@ -40,6 +40,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import React, { FormEvent, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import ClientAuthHeader from './components/ClientAuthHeader';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
@@ -1320,7 +1321,7 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
     return (
       <main className="client-stage">
         <section className="client-screen client-loading">
-          <img alt="" className="client-loading-logo" src="/images/logo-lealtad.png" />
+          <span className="xdoc-loading-wordmark" role="status">XDOC.</span>
         </section>
       </main>
     );
@@ -1427,7 +1428,7 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
       <section className="client-screen">
         {isLoading ? (
           <div className="client-refresh-overlay" role="status" aria-live="polite">
-            <img alt="" src="/images/logo-lealtad.png" />
+            <span className="xdoc-loading-wordmark" role="status">XDOC.</span>
           </div>
         ) : null}
         {!(view === 'profile' && profileSection === 'menu') ? (
@@ -2144,13 +2145,7 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
 
 function AuthHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <header className="modern-auth-header">
-      <img alt="Sistema de Lealtad" src="/icons/icon-512.png" />
-      <strong>Sistema de Lealtad</strong>
-      <p>Tus compras, tus beneficios</p>
-      <h1>{title}</h1>
-      <span>{subtitle}</span>
-    </header>
+    <ClientAuthHeader title={title} subtitle={subtitle} />
   );
 }
 
@@ -2507,6 +2502,7 @@ function ClientTopHeader({
     <header className="client-mobile-header">
       <div className="client-mobile-header-main">
         <div>
+          <a className="client-store-wordmark" href="/">Zapateria <b>XDOC</b></a>
           {shouldShowGreeting ? (
             <>
               <h1>¡Hola, {firstName(customerName)}! <span aria-hidden="true">👋</span></h1>
@@ -2671,7 +2667,7 @@ function FeaturedBrands({ brands }: { brands: StoreBrand[] }) {
           </a>
         ))}
       </div>
-      <p className="brand-hint">☝︎ Toca una marca para ver sus productos</p>
+      <p className="brand-hint">Encuentra tu próximo par en tus marcas favoritas.</p>
     </section>
   );
 }

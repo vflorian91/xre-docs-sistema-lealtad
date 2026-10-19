@@ -1,9 +1,10 @@
 import './globals.css';
+import './vintage-theme.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Mensajero',
-  description: 'PWA operativa para mensajeros',
+  title: 'Zapateria XDOC | Mensajeros',
+  description: 'Portal de entregas de Zapateria XDOC',
   manifest: '/manifest.json',
 };
 

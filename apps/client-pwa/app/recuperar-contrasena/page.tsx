@@ -74,6 +74,7 @@ export default function ClientPasswordRecoveryPage() {
     <main className="client-stage">
       <section className="client-screen auth-client-screen modern-auth-screen">
         <header className="modern-auth-header">
+          <a className="xdoc-wordmark" href="/" aria-label="Zapateria XDOC, inicio"><span>Zapateria</span><strong>XDOC<span aria-hidden="true">.</span></strong></a>
           <a className="forgot-link" href="/">
             <ArrowLeft size={16} />
             Volver

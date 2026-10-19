@@ -4,7 +4,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: #f8fafc;
+  background: var(--paper);
   padding-bottom: 24px;
 }
 
@@ -197,7 +197,7 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #f8fafc;
+  background: var(--paper);
   color: var(--muted);
   overflow: hidden;
   flex-shrink: 0;
@@ -510,7 +510,7 @@
 
 .store-payment-option.is-selected {
   border-color: var(--blue);
-  background: #eff6ff;
+  background: var(--sand);
 }
 
 .store-payment-option input {
@@ -840,7 +840,7 @@
 
 .store-address-option.is-selected {
   border-color: var(--blue);
-  background: #eff6ff;
+  background: var(--sand);
 }
 
 .store-address-option input {
@@ -923,7 +923,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #dbe3ef;
+  background: var(--line);
 }
 
 .client-delivery-flow span.done {
@@ -1013,7 +1013,7 @@
 .store-search-row { display: flex; gap: 8px; align-items: stretch; }
 .store-search-row .store-search { flex: 1; }
 .store-filter-button { position: relative; flex: 0 0 auto; width: 46px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); display: grid; place-items: center; cursor: pointer; }
-.store-filter-button.is-active { border-color: var(--blue); color: var(--blue); background: #eff6ff; }
+.store-filter-button.is-active { border-color: var(--blue); color: var(--blue); background: var(--sand); }
 .store-filter-badge { position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--blue); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
 
 /* ── Variantes: color (tarjetas) + talla (chips) ── */
@@ -1030,7 +1030,7 @@
 .store-color-price { font-size: 12px; color: #475569; }
 .store-size-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .store-size-chip { min-width: 54px; min-height: 48px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); font-weight: 700; cursor: pointer; }
-.store-size-chip.is-active { border-color: var(--blue); background: #eff6ff; color: var(--blue); }
+.store-size-chip.is-active { border-color: var(--blue); background: var(--sand); color: var(--blue); }
 .store-size-chip.is-out { opacity: .4; text-decoration: line-through; cursor: not-allowed; }
 
 /* Detalle de producto con variantes: layout tipo catálogo móvil */
@@ -1186,8 +1186,8 @@
 }
 
 .store-product-choice-panel .store-color-card.is-active {
-  border-color: #1f66ad;
-  box-shadow: 0 0 0 3px #1f66ad inset;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand) inset;
 }
 
 .store-product-choice-panel .store-color-thumb {
@@ -1234,7 +1234,7 @@
 .store-size-title-row button {
   border: 0;
   background: transparent;
-  color: #1667ad;
+  color: var(--brand);
   font-size: 24px;
   font-weight: 500;
   padding: 0;
@@ -1262,9 +1262,9 @@
 }
 
 .store-product-choice-panel .store-size-chip.is-active {
-  border-color: #1f66ad;
-  background: #effcff;
-  box-shadow: 0 0 0 3px #1f66ad inset;
+  border-color: var(--brand);
+  background: var(--sand);
+  box-shadow: 0 0 0 3px var(--brand) inset;
   color: #111;
 }
 

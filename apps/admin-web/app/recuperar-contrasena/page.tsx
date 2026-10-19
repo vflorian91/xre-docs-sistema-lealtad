@@ -77,6 +77,7 @@ export default function AdminPasswordRecoveryPage() {
             <ArrowLeft size={16} />
             Volver
           </a>
+          <span className="xdoc-admin-caption">Zapateria XDOC · Administración</span>
           <h1>Recuperar contraseña</h1>
           <p>Genera un enlace temporal para restablecer el acceso de usuario interno.</p>
         </div>

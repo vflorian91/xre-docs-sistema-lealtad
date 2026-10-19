@@ -16,7 +16,7 @@ type Props = {
   onMonthChange: (value: string) => void;
 };
 
-const levelColors = ['#0f6fff', '#f97316', '#a8b3c7', '#f4b000', '#6d28d9'];
+const levelColors = ['#855b38', '#f97316', '#b6a591', '#f4b000', '#657650'];
 
 export default function LoyaltyPointsDashboard({ data, isLoading, selectedMonth, onMonthChange }: Props) {
   const monthly = data.monthly;
@@ -98,8 +98,8 @@ function buildLoyaltySeries(monthly: MonthlySummaryResponse | null): { labels: s
   return {
     labels,
     series: [
-      { label: 'Puntos otorgados', color: '#0f6fff', values: rows.map((row) => row.points) },
-      { label: 'Puntos canjeados', color: '#6d28d9', values: rows.map((row) => row.redeemedPoints) },
+      { label: 'Puntos otorgados', color: '#855b38', values: rows.map((row) => row.points) },
+      { label: 'Puntos canjeados', color: '#657650', values: rows.map((row) => row.redeemedPoints) },
       { label: 'Clientes activos', color: '#16a34a', values: rows.map((row) => row.newCustomers) },
     ],
   };
@@ -111,7 +111,7 @@ function buildLevelItems(rows: Array<{ level: string; count: number }>): DonutIt
     value: row.count,
     color: levelColors[index % levelColors.length],
   }));
-  return items.length ? items : [{ label: 'Sin niveles', value: 1, color: '#e2e8f0' }];
+  return items.length ? items : [{ label: 'Sin niveles', value: 1, color: '#e5dcd0' }];
 }
 
 function countExpiringCampaigns(promotions: PointPromotionRow[]) {
