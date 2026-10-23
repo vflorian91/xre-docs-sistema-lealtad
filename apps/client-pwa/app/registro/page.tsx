@@ -3,8 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CheckCircle2, Loader2, LockKeyhole, Mail, Phone, ShoppingBag, UserRound } from 'lucide-react';
 import ClientAuthHeader from '../components/ClientAuthHeader';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+import { fetchApiResponse, readApiBody } from '../lib/apiTransport';
 
 type RegistrationOptions = {
   brands: Array<{ id: string; code: string; name: string }>;
@@ -28,10 +27,11 @@ export default function RegistroClientePage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/auth/customer/registration-options`)
+    fetchApiResponse('/auth/customer/registration-options')
       .then(async (response) => {
+        const body = await readApiBody(response);
         if (!response.ok) throw new Error('No se pudieron cargar marcas y tiendas.');
-        return response.json() as Promise<RegistrationOptions>;
+        return body as RegistrationOptions;
       })
       .then(setOptions)
       .catch((error) => setMessage({ type: 'error', text: error instanceof Error ? error.message : 'No se pudieron cargar las opciones.' }));
@@ -59,7 +59,7 @@ export default function RegistroClientePage() {
     setMessage(null);
 
     try {
-      const response = await fetch(`${API_BASE}/auth/customer/register`, {
+      const response = await fetchApiResponse('/auth/customer/register', {
         method: 'POST',
         credentials: 'include',
         headers: { 'content-type': 'application/json' },
@@ -74,8 +74,7 @@ export default function RegistroClientePage() {
           registrationStoreId: form.registrationStoreId || undefined,
         }),
       });
-      const text = await response.text();
-      const body = text ? JSON.parse(text) : null;
+      const body = await readApiBody(response);
 
       if (!response.ok) {
         const issueText = body?.issues?.map((issue: { message: string }) => issue.message).join(' ');

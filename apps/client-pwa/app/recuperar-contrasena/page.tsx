@@ -3,8 +3,7 @@
 import { ArrowLeft, Loader2, LockKeyhole, Mail, ShieldCheck } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { FormEvent, useEffect, useState } from 'react';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+import { fetchApiResponse, readApiBody } from '../lib/apiTransport';
 
 type ResetRequestResponse = {
   ok: true;
@@ -120,12 +119,11 @@ function AuthInput({ icon, label, onChange, type, value }: { icon: ReactNode; la
 }
 
 async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetchApiResponse(path, {
     ...options,
     headers: { 'content-type': 'application/json', ...options.headers },
   });
-  const text = await response.text();
-  const body = text ? JSON.parse(text) : null;
+  const body = await readApiBody(response);
 
   if (!response.ok) {
     const issueText = body?.issues?.map((issue: { message: string }) => issue.message).join(' ');

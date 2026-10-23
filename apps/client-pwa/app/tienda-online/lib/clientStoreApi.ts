@@ -1,3 +1,5 @@
+import { fetchApiResponse, readApiBody } from '../../lib/apiTransport';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 function getCsrfCookie() {
@@ -12,7 +14,8 @@ async function refreshClientSession() {
   if (refreshPromise) return refreshPromise;
 
   refreshPromise = (async () => {
-    const response = await fetch(`${API_BASE}/auth/customer/refresh`, { method: 'POST', credentials: 'include' });
+    const response = await fetchApiResponse('/auth/customer/refresh', { method: 'POST' });
+    await readApiBody(response);
     if (!response.ok) {
       throw new Error('Sesion expirada. Ingresa nuevamente.');
     }
@@ -34,15 +37,14 @@ export async function clientStoreApiRequest<T>(path: string, options: RequestIni
     };
   };
 
-  let response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', cache: 'no-store', headers: buildHeaders() });
+  let response = await fetchApiResponse(path, { ...options, headers: buildHeaders() });
 
   if (response.status === 401 && !skipAuthRetry) {
     await refreshClientSession();
-    response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', cache: 'no-store', headers: buildHeaders() });
+    response = await fetchApiResponse(path, { ...options, headers: buildHeaders() });
   }
 
-  const text = await response.text();
-  const body = text ? JSON.parse(text) : null;
+  const body = await readApiBody(response);
 
   if (!response.ok) {
     const issueText = body?.issues?.map((issue: { message: string }) => issue.message).join(' ');

@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import React, { FormEvent, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ClientAuthHeader from './components/ClientAuthHeader';
+import { fetchApiResponse, readApiBody } from './lib/apiTransport';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
@@ -603,15 +604,14 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
       };
     };
 
-    let response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', headers: buildHeaders() });
+    let response = await fetchApiResponse(path, { ...options, headers: buildHeaders() });
 
     if (response.status === 401 && !skipAuthRetry) {
       await refreshClientSession();
-      response = await fetch(`${API_BASE}${path}`, { ...options, credentials: 'include', headers: buildHeaders() });
+      response = await fetchApiResponse(path, { ...options, headers: buildHeaders() });
     }
 
-    const text = await response.text();
-    const body = text ? JSON.parse(text) : null;
+    const body = await readApiBody(response);
 
     if (!response.ok) {
       const issueText = body?.issues?.map((issue: { message: string }) => issue.message).join(' ');
@@ -625,12 +625,11 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
     if (refreshPromiseRef.current) return refreshPromiseRef.current;
 
     refreshPromiseRef.current = (async () => {
-      const response = await fetch(`${API_BASE}/auth/customer/refresh`, {
+      const response = await fetchApiResponse('/auth/customer/refresh', {
         method: 'POST',
         credentials: 'include',
       });
-      const text = await response.text();
-      const body = text ? JSON.parse(text) : null;
+      const body = await readApiBody(response);
       if (!response.ok) {
         setAccessToken(null);
         throw new Error(body?.message || 'Sesion expirada. Ingresa nuevamente.');
@@ -1322,6 +1321,7 @@ export default function ClientHomePage({ initialView = 'home', initialProfileSec
       <main className="client-stage">
         <section className="client-screen client-loading">
           <span className="xdoc-loading-wordmark" role="status">XDOC.</span>
+          <p role="status">Conectando con la tienda… La primera conexión puede tardar un momento.</p>
         </section>
       </main>
     );
