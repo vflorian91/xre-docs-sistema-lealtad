@@ -17,6 +17,7 @@ RUN npm ci
 
 COPY apps/api apps/api
 COPY packages packages
+COPY docker/render-bootstrap.cjs docker/render-bootstrap.cjs
 
 RUN npm run db:generate \
   && npm run build:packages \

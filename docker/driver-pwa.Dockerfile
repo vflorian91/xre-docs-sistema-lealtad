@@ -20,6 +20,8 @@ COPY packages packages
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG API_INTERNAL_URL=http://api:4000
+ENV API_INTERNAL_URL=$API_INTERNAL_URL
 
 RUN npm run db:generate \
   && npm run build:packages \

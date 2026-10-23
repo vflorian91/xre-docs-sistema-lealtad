@@ -1,0 +1,156 @@
+# Free demonstration only. Credentials are supplied privately in Render.
+services:
+  -
+    type: "web"
+    runtime: "docker"
+    plan: "free"
+    region: "oregon"
+    repo: "https://github.com/vflorian91/xre-docs-sistema-lealtad"
+    branch: "main"
+    dockerContext: "."
+    autoDeployTrigger: "commit"
+    name: "xdoc-api-vflorian91"
+    dockerfilePath: "./docker/api.Dockerfile"
+    dockerCommand: "node docker/render-bootstrap.cjs"
+    healthCheckPath: "/api/health"
+    envVars:
+      -
+        key: "APP_ENV"
+        value: "production"
+      -
+        key: "PORT"
+        value: "10000"
+      -
+        key: "TZ"
+        value: "America/Guatemala"
+      -
+        key: "COOKIE_SECURE"
+        value: "true"
+      -
+        key: "DATABASE_URL"
+        fromDatabase:
+          name: "xdoc-db-vflorian91"
+          property: "connectionString"
+      -
+        key: "JWT_ACCESS_SECRET"
+        generateValue: true
+      -
+        key: "JWT_REFRESH_SECRET"
+        generateValue: true
+      -
+        key: "MEDIA_STORAGE_PROVIDER"
+        value: "LOCAL"
+      -
+        key: "MEDIA_STORAGE_DIR"
+        value: "/var/lealtad/media"
+      -
+        key: "ADMIN_WEB_URL"
+        value: "https://xdoc-admin-vflorian91.onrender.com"
+      -
+        key: "CLIENT_PWA_URL"
+        value: "https://xdoc-clientes-vflorian91.onrender.com"
+      -
+        key: "CORS_ORIGINS"
+        value: "https://xdoc-admin-vflorian91.onrender.com,https://xdoc-clientes-vflorian91.onrender.com,https://xdoc-motoristas-vflorian91.onrender.com"
+      -
+        key: "XDOC_LOAD_DEMO"
+        value: "true"
+      -
+        key: "SEED_SUPER_ADMIN_EMAIL"
+        value: "admin@example.com"
+      -
+        key: "SEED_SUPER_ADMIN_PASSWORD"
+        sync: false
+      -
+        key: "DEMO_CUSTOMER_PASSWORD"
+        sync: false
+      -
+        key: "DEMO_DRIVER_PASSWORD"
+        sync: false
+  -
+    type: "web"
+    runtime: "docker"
+    plan: "free"
+    region: "oregon"
+    repo: "https://github.com/vflorian91/xre-docs-sistema-lealtad"
+    branch: "main"
+    dockerContext: "."
+    autoDeployTrigger: "commit"
+    name: "xdoc-admin-vflorian91"
+    dockerfilePath: "./docker/admin-web.Dockerfile"
+    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/admin-web --hostname 0.0.0.0 --port \"$PORT\"'"
+    healthCheckPath: "/"
+    envVars:
+      -
+        key: "PORT"
+        value: "10000"
+      -
+        key: "NEXT_PUBLIC_API_URL"
+        value: "/proxy/api"
+      -
+        key: "API_INTERNAL_URL"
+        fromService:
+          type: "web"
+          name: "xdoc-api-vflorian91"
+          envVarKey: "RENDER_EXTERNAL_URL"
+  -
+    type: "web"
+    runtime: "docker"
+    plan: "free"
+    region: "oregon"
+    repo: "https://github.com/vflorian91/xre-docs-sistema-lealtad"
+    branch: "main"
+    dockerContext: "."
+    autoDeployTrigger: "commit"
+    name: "xdoc-clientes-vflorian91"
+    dockerfilePath: "./docker/client-pwa.Dockerfile"
+    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/client-pwa --hostname 0.0.0.0 --port \"$PORT\"'"
+    healthCheckPath: "/"
+    envVars:
+      -
+        key: "PORT"
+        value: "10000"
+      -
+        key: "NEXT_PUBLIC_API_URL"
+        value: "/proxy/api"
+      -
+        key: "API_INTERNAL_URL"
+        fromService:
+          type: "web"
+          name: "xdoc-api-vflorian91"
+          envVarKey: "RENDER_EXTERNAL_URL"
+  -
+    type: "web"
+    runtime: "docker"
+    plan: "free"
+    region: "oregon"
+    repo: "https://github.com/vflorian91/xre-docs-sistema-lealtad"
+    branch: "main"
+    dockerContext: "."
+    autoDeployTrigger: "commit"
+    name: "xdoc-motoristas-vflorian91"
+    dockerfilePath: "./docker/driver-pwa.Dockerfile"
+    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/driver-pwa --hostname 0.0.0.0 --port \"$PORT\"'"
+    healthCheckPath: "/login"
+    envVars:
+      -
+        key: "PORT"
+        value: "10000"
+      -
+        key: "NEXT_PUBLIC_API_URL"
+        value: "/proxy/api"
+      -
+        key: "API_INTERNAL_URL"
+        fromService:
+          type: "web"
+          name: "xdoc-api-vflorian91"
+          envVarKey: "RENDER_EXTERNAL_URL"
+databases:
+  -
+    name: "xdoc-db-vflorian91"
+    plan: "free"
+    region: "oregon"
+    databaseName: "xdoc_lealtad"
+    user: "xdoc"
+    postgresMajorVersion: "16"
+    ipAllowList: []
