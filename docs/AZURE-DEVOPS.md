@@ -2,7 +2,9 @@
 
 El pipeline `azure-pipelines.yml` ejecuta 37 comprobaciones de API (T01–T37) y 27 casos de Node.js (U01–U27). Publica dos ejecuciones JUnit en la pestaña Tests y conserva los reportes como artefacto. Los cuatro casos U24–U27 verifican el Inicio del conductor y se incorporaron el 22 de octubre de 2026.
 
-**Validación en Azure DevOps aprobada:** [ejecución 20261009.3, ID 10](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=10&view=ms.vss-test-web.build-test-results-tab), del 9 de octubre de 2026. Azure registró **60 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, distribuidas en 37/37 API y 23/23 automatizadas. El pipeline completo terminó con estado **Success** y publicó el artefacto `resultados-pruebas`. Código validado: `bbaf11b930e1ab5753a043f9f05f89e030f530a8`. Las capturas finales están en `docs/evidencias-ci/06-pipeline-aprobado.jpg` y `docs/evidencias-ci/07-resultados-60-pruebas.jpg`.
+**Última validación en Azure DevOps aprobada:** [ejecución 20261023.1, ID 12](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=12&view=ms.vss-test-web.build-test-results-tab), del **22 de octubre de 2026 en Guatemala**. Azure registró **64 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, en dos ejecuciones JUnit: 37 API y 27 automatizadas. El pipeline terminó con estado **Success** en el segundo intento y publicó el artefacto `resultados-pruebas`. Código validado: `7d61bf684c57ba5ee843727f1d071804111a7a8b`. Evidencia: [pipeline aprobado](evidencias-ci/09-azure-64-pipeline-aprobado.png) y [resultados de las 64 pruebas](evidencias-ci/10-azure-resultados-64-pruebas.png). El primer intento se detuvo antes de ejecutar pruebas por el entorno de módulos de PowerShell del agente; el reintento utilizó un entorno compatible, sin modificar el código validado.
+
+**Validación histórica aprobada:** [ejecución 20261009.3, ID 10](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=10&view=ms.vss-test-web.build-test-results-tab), del 9 de octubre de 2026. Azure registró **60 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, distribuidas en 37/37 API y 23/23 automatizadas. El pipeline completo terminó con estado **Success** y publicó el artefacto `resultados-pruebas`. Código validado: `bbaf11b930e1ab5753a043f9f05f89e030f530a8`. Las capturas finales están en `docs/evidencias-ci/06-pipeline-aprobado.jpg` y `docs/evidencias-ci/07-resultados-60-pruebas.jpg`.
 
 ## Repetir localmente
 
@@ -33,6 +35,8 @@ Los casos de Test Plans conservan el estado de diseño. Importar un caso no equi
 
 ## Evidencia local del mismo ejecutor de CI
 
+La ejecución local del **22 de octubre de 2026** terminó con **64/64 comprobaciones aprobadas**: 37 API y 27 automatizadas, sin fallas, errores ni casos omitidos. La revisión de tipos de la API también pasó. Los reportes de esta actualización se conservan en [local-20261022](evidencias-ci/local-20261022/); la captura [08-reglas-27-pruebas.png](evidencias-ci/08-reglas-27-pruebas.png) documenta la suite actualizada de Test Plans.
+
 La ejecución del 9 de octubre de 2026 a las 05:46 UTC (8 de octubre a las 23:46 en Guatemala) terminó con **37/37 comprobaciones API y 23/23 pruebas automatizadas aprobadas**, sin fallas ni casos omitidos. La comprobación de tipos de la API también pasó. Los archivos JUnit y JSON saneados están en `docs/evidencias-ci/local/`. Las capturas de las dos suites importadas y del repositorio público están en `docs/evidencias-ci/`.
 
 Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecución en Azure se registran separadamente en el pipeline.
@@ -45,6 +49,8 @@ Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecu
 4. Descargar el artefacto `resultados-pruebas` para conservar evidencia.
 
 La ejecución 8 falló antes de ejecutar pruebas porque la organización no tiene capacidad Microsoft-hosted habilitada. El pipeline utiliza ahora el agente propio existente **rikeli-local**, del pool **Default**, con Docker y Node.js 22. Este agente debe permanecer conectado y Docker Desktop debe estar activo. Azure DevOps coordina la ejecución y publica los resultados; el procesamiento ocurre en el equipo del agente. No se ha contratado capacidad de pago.
+
+Al iniciar el agente desde PowerShell 7, su proceso debe recibir un `PSModulePath` compatible con Windows PowerShell: las carpetas de módulos de `Documents/WindowsPowerShell`, `Program Files/WindowsPowerShell` y `Windows/System32/WindowsPowerShell/v1.0`. Heredar módulos de la consola PowerShell 7 puede detener las tareas antes de ejecutar pruebas con errores de tipos duplicados y `ConvertTo-SecureString`. El ajuste se aplica al entorno del proceso del agente; no requiere cambiar los módulos ni la configuración global del sistema.
 
 El pipeline se ejecuta al actualizar `main` o mediante **Run pipeline**. Las ejecuciones automáticas de pull requests están deshabilitadas para evitar que contribuciones externas al repositorio público ejecuten código en el agente propio.
 

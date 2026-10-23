@@ -7,6 +7,7 @@ La actualización de octubre incorpora la identidad XDOC y el estilo vintage en 
 - Código público: https://github.com/vflorian91/xre-docs-sistema-lealtad
 - Proyecto Azure DevOps: https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad
 - Pruebas: 37 comprobaciones de API y 27 casos automatizados, incluidos cuatro casos del Inicio del conductor.
+- Última validación: [64/64 pruebas aprobadas en Azure, ejecución 12](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=12&view=ms.vss-test-web.build-test-results-tab), el 22 de octubre de 2026 en Guatemala.
 - Pipeline: azure-pipelines.yml. Resultados publicados en dos ejecuciones JUnit y un artefacto.
 - Guía de ejecución: docs/AZURE-DEVOPS.md.
 - Catálogo de los 64 casos: tests/test-cases.json.
