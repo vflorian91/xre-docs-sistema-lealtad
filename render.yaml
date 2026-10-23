@@ -78,7 +78,7 @@ services:
     autoDeployTrigger: "commit"
     name: "xdoc-admin-vflorian91"
     dockerfilePath: "./docker/admin-web.Dockerfile"
-    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/admin-web --hostname 0.0.0.0 --port \"$PORT\"'"
+    dockerCommand: "node node_modules/next/dist/bin/next start apps/admin-web --hostname 0.0.0.0 --port 10000"
     healthCheckPath: "/"
     envVars:
       -
@@ -104,7 +104,7 @@ services:
     autoDeployTrigger: "commit"
     name: "xdoc-clientes-vflorian91"
     dockerfilePath: "./docker/client-pwa.Dockerfile"
-    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/client-pwa --hostname 0.0.0.0 --port \"$PORT\"'"
+    dockerCommand: "node node_modules/next/dist/bin/next start apps/client-pwa --hostname 0.0.0.0 --port 10000"
     healthCheckPath: "/"
     envVars:
       -
@@ -130,7 +130,7 @@ services:
     autoDeployTrigger: "commit"
     name: "xdoc-motoristas-vflorian91"
     dockerfilePath: "./docker/driver-pwa.Dockerfile"
-    dockerCommand: "/bin/sh -c 'exec node node_modules/next/dist/bin/next start apps/driver-pwa --hostname 0.0.0.0 --port \"$PORT\"'"
+    dockerCommand: "node node_modules/next/dist/bin/next start apps/driver-pwa --hostname 0.0.0.0 --port 10000"
     healthCheckPath: "/login"
     envVars:
       -
