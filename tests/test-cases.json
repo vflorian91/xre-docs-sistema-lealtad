@@ -481,5 +481,37 @@
     "expected": "Aprobado: aserciones del caso sin errores",
     "automatedName": "export CSV de reportes responde encabezados correctos",
     "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U24",
+    "suite": "UNIT",
+    "name": "dashboard keeps assignments across dates and counts completion instead of scheduled date",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "dashboard keeps assignments across dates and counts completion instead of scheduled date",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U25",
+    "suite": "UNIT",
+    "name": "a completed assignment disappears from pending and increments delivered on the next refresh",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "a completed assignment disappears from pending and increments delivered on the next refresh",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U26",
+    "suite": "UNIT",
+    "name": "delivery history is a fallback only when the actual completion timestamp is missing",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "delivery history is a fallback only when the actual completion timestamp is missing",
+    "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "U27",
+    "suite": "UNIT",
+    "name": "operational day follows Guatemala midnight, including UTC day and year changes",
+    "expected": "Aprobado: aserciones del caso sin errores",
+    "automatedName": "operational day follows Guatemala midnight, including UTC day and year changes",
+    "command": "npm run test:unit:ci"
   }
 ]

@@ -8,7 +8,7 @@ import { DeliverySummary, driverApiRequest, formatMoney, getStoredDriverUser, st
 
 type Dashboard = {
   cards: { today: number; pending: number; inRoute: number; delivered: number; failed: number };
-  todayDeliveries: DeliverySummary[];
+  activeDeliveries: DeliverySummary[];
 };
 
 type DriverAlert = { text: string; href: string; tone: string; icon: LucideIcon };
@@ -21,26 +21,38 @@ export default function InicioPage() {
 
   useEffect(() => {
     let isMounted = true;
-    setIsLoading(true);
-    driverApiRequest<Dashboard>('/driver/dashboard')
-      .then((result) => {
+    let isRefreshing = false;
+    async function refresh() {
+      if (isRefreshing || document.visibilityState === 'hidden') return;
+      isRefreshing = true;
+      try {
+        const result = await driverApiRequest<Dashboard>('/driver/dashboard');
         if (isMounted) {
           setDashboard(result);
           setError('');
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         if (isMounted) setError(err instanceof Error ? err.message : 'No se pudo cargar el inicio.');
-      })
-      .finally(() => {
+      } finally {
+        isRefreshing = false;
         if (isMounted) setIsLoading(false);
-      });
+      }
+    }
+    void refresh();
+    const interval = window.setInterval(refresh, 15_000);
+    window.addEventListener('focus', refresh);
+    window.addEventListener('online', refresh);
+    document.addEventListener('visibilitychange', refresh);
     return () => {
       isMounted = false;
+      window.clearInterval(interval);
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('online', refresh);
+      document.removeEventListener('visibilitychange', refresh);
     };
   }, []);
 
-  const deliveries = dashboard?.todayDeliveries ?? [];
+  const deliveries = dashboard?.activeDeliveries ?? [];
   const activeDelivery = useMemo(() => deliveries.find((delivery) => delivery.deliveryStatus === 'EN_RUTA') ?? null, [deliveries]);
   const nextDeliveries = useMemo(
     () => deliveries.filter((delivery) => delivery.id !== activeDelivery?.id && !['ENTREGADA', 'NO_ENTREGADA', 'FALLIDA', 'CANCELADA'].includes(delivery.deliveryStatus)).slice(0, 3),
@@ -54,7 +66,7 @@ export default function InicioPage() {
         <header className="driver-home-hero">
           <div>
             <h1>Hola, {firstName(user?.fullName) || 'motorista'}</h1>
-            <p>Resumen de tu operacion de hoy</p>
+            <p>Resumen de tu operación de entregas</p>
             <span className={`driver-presence ${activeDelivery ? 'route' : 'available'}`}>
               <i />{activeDelivery ? 'En ruta' : 'Disponible'}
             </span>
@@ -67,16 +79,16 @@ export default function InicioPage() {
 
         {!user ? <div className="form-error">No hay una sesion valida de motorista. Inicia sesion nuevamente.</div> : null}
         {error ? <div className="form-error">{error}</div> : null}
-        {isLoading ? <section className="driver-home-card driver-loading-card">Cargando operacion...</section> : <ActiveDeliveryCard delivery={activeDelivery} />}
+        {isLoading ? <section className="driver-home-card driver-loading-card">Cargando operación...</section> : dashboard ? <ActiveDeliveryCard delivery={activeDelivery} /> : null}
 
         <section className="driver-home-metrics">
           <article>
             <span className="metric-icon blue"><ShoppingBag size={28} /></span>
-            <div><span>Asignadas</span><strong>{dashboard?.cards.pending ?? 0}</strong></div>
+            <div><span>Asignadas</span><strong>{dashboard?.cards.pending ?? '—'}</strong></div>
           </article>
           <article>
             <span className="metric-icon green"><CheckCircle2 size={30} /></span>
-            <div><span>Entregadas</span><strong>{dashboard?.cards.delivered ?? 0}</strong></div>
+            <div><span>Entregadas hoy</span><strong>{dashboard?.cards.delivered ?? '—'}</strong></div>
           </article>
         </section>
 
@@ -99,7 +111,7 @@ export default function InicioPage() {
               ))}
             </div>
           ) : (
-            <EmptyState text="No tienes entregas asignadas para hoy." />
+            <EmptyState text={isLoading ? 'Cargando próximas entregas...' : dashboard ? 'No tienes próximas entregas pendientes.' : 'No se pudieron cargar las próximas entregas.'} />
           )}
         </section>
 

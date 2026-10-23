@@ -4,6 +4,12 @@ Los portales de administración, clientes y mensajeros comparten una identidad m
 
 El dashboard aplica el mes seleccionado a pagos, incluye pendientes sin fecha de pago y contempla todo el último día del período. La gráfica utiliza los días reales de cada mes y suma ventas con pago confirmado.
 
+## Inicio del conductor — 22 de octubre
+
+Inicio muestra todas las entregas pendientes asignadas al conductor, incluidas las programadas para otras fechas y las que están en recolección. Próximas entregas utiliza esas asignaciones y deja de mostrar los pedidos finalizados. El contador **Entregadas hoy** usa la fecha real de entrega y el día de Guatemala; no depende de la fecha programada ni de cambios posteriores en el pedido. Perfil usa el mismo criterio.
+
+Los datos se actualizan cada 15 segundos mientras la pantalla está visible, al regresar a la pestaña y al recuperar la conexión. La carga inicial y los errores no se presentan como contadores en cero. Cuatro pruebas nuevas cubren asignaciones entre fechas, actualización al completar una entrega, registros históricos y límites de medianoche en Guatemala. El pipeline publica ahora 37 comprobaciones API y 27 pruebas automatizadas, 64 en total.
+
 ## Datos opcionales para una presentación
 
 La carpeta `packages/database/prisma/demo/` contiene exclusivamente un catálogo y actividad ficticios. Incluye 70 productos (los 20 iniciales, 30 incorporaciones y 20 opciones adicionales para mujer), sus tallas, fotos y logos. Los precios y las existencias son ejemplos, sin relación comercial con las marcas.

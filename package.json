@@ -35,7 +35,7 @@
     "production:backup:test": "docker compose --env-file .env.production -p lealtad-production -f docker-compose.yml -f docker-compose.production.yml --profile tools run --rm restore-test",
     "test:ci": "node scripts/ci/run.cjs",
     "test:api:ci": "node scripts/ci/api-checks.cjs",
-    "test:unit:ci": "node --require ./scripts/ci/ts-register.cjs --test --test-reporter=junit --test-reporter-destination=/results/unitarios.xml apps/api/test/auth-cookie-and-reward-segmentation.test.ts apps/api/test/registration-and-banner-validation.test.ts apps/api/test/store-online-critical-rules.test.ts"
+    "test:unit:ci": "node --require ./scripts/ci/ts-register.cjs --test --test-reporter=junit --test-reporter-destination=/results/unitarios.xml apps/api/test/auth-cookie-and-reward-segmentation.test.ts apps/api/test/registration-and-banner-validation.test.ts apps/api/test/store-online-critical-rules.test.ts apps/api/test/driver-dashboard.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",

@@ -24,6 +24,7 @@ import { StoreOrderLoyaltyService } from '../store-catalog/order/store-order-loy
 import { buildOrderFlow, nextRequiredActionFor, assertActionAllowedInFlow } from '../store-catalog/order/store-order-flow';
 import { STORE_ACTOR, STORE_ORDER_ACTION } from '../store-catalog/order/store-order-permissions';
 import { ConfirmDeliveryInput, FailedDeliveryInput, MarkPickedUpInput, ReportIncidentInput } from './driver.schemas';
+import { driverOperationDayRange } from './driver-operation-day';
 
 const latestPaymentOrderBy = { createdAt: 'desc' as const };
 
@@ -63,26 +64,33 @@ export class DriverDeliveriesService {
 
   async dashboard(driver: DriverAuthUser) {
     await this.assertDriverActive(driver);
-    const today = this.dayRange(new Date());
+    const today = driverOperationDayRange();
 
-    const [todayOrders] = await Promise.all([
+    const [activeOrders, todayOrders, deliveredToday] = await Promise.all([
+      this.prisma.storeOrder.findMany({
+        where: this.activeAssignmentsWhere(driver.id),
+        orderBy: [{ confirmedDeliveryDate: 'asc' }, { deliveryTimeRange: 'asc' }, { createdAt: 'asc' }],
+        include: deliveryInclude,
+      }),
       this.prisma.storeOrder.findMany({
         where: { assignedDriverId: driver.id, confirmedDeliveryDate: today, orderStatus: { not: STORE_ORDER_STATUS.CANCELADO } },
         orderBy: [{ deliveryTimeRange: 'asc' }, { createdAt: 'desc' }],
         include: deliveryInclude,
       }),
+      this.prisma.storeOrder.count({ where: this.deliveredOnDayWhere(driver.id, today) }),
     ]);
     const countByStatus = (statuses: string[]) => todayOrders.filter((order) => statuses.includes(order.deliveryStatus)).length;
 
     return {
       cards: {
         today: todayOrders.length,
-        pending: countByStatus([STORE_DELIVERY_STATUS.ASIGNADA, STORE_DELIVERY_STATUS.PROGRAMADA]),
-        inRoute: countByStatus([STORE_DELIVERY_STATUS.EN_RUTA]),
-        delivered: countByStatus([STORE_DELIVERY_STATUS.ENTREGADA]),
+        pending: activeOrders.length,
+        inRoute: activeOrders.filter((order) => order.deliveryStatus === STORE_DELIVERY_STATUS.EN_RUTA).length,
+        delivered: deliveredToday,
         failed: countByStatus([STORE_DELIVERY_STATUS.NO_ENTREGADA, STORE_DELIVERY_STATUS.FALLIDA]),
       },
       todayDeliveries: todayOrders.map((order) => this.toSummaryDto(order)),
+      activeDeliveries: activeOrders.map((order) => this.toSummaryDto(order)),
     };
   }
 
@@ -224,19 +232,13 @@ export class DriverDeliveriesService {
   async profile(driver: DriverAuthUser) {
     const current = await this.prisma.storeDriver.findUnique({ where: { id: driver.id } });
     if (!current) throw new NotFoundException('Mensajero no encontrado.');
-    const today = this.dayRange(new Date());
-    const pendingStatuses = [
-      STORE_DELIVERY_STATUS.PROGRAMADA,
-      STORE_DELIVERY_STATUS.ASIGNADA,
-      STORE_DELIVERY_STATUS.EN_RUTA,
-      STORE_DELIVERY_STATUS.REPROGRAMADA,
-    ];
+    const today = driverOperationDayRange();
     const [deliveredToday, pendingDeliveries, activeDelivery, pendingSettlement] = await Promise.all([
       this.prisma.storeOrder.count({
-        where: { assignedDriverId: driver.id, confirmedDeliveryDate: today, deliveryStatus: STORE_DELIVERY_STATUS.ENTREGADA },
+        where: this.deliveredOnDayWhere(driver.id, today),
       }),
       this.prisma.storeOrder.count({
-        where: { assignedDriverId: driver.id, deliveryStatus: { in: pendingStatuses }, orderStatus: { not: STORE_ORDER_STATUS.CANCELADO } },
+        where: this.activeAssignmentsWhere(driver.id),
       }),
       this.prisma.storeOrder.findFirst({
         where: { assignedDriverId: driver.id, deliveryStatus: STORE_DELIVERY_STATUS.EN_RUTA },
@@ -1043,5 +1045,35 @@ export class DriverDeliveriesService {
     const end = new Date(start);
     end.setDate(end.getDate() + 1);
     return { gte: start, lt: end };
+  }
+
+  private activeAssignmentsWhere(driverId: string): Prisma.StoreOrderWhereInput {
+    return {
+      assignedDriverId: driverId,
+      orderStatus: { notIn: [STORE_ORDER_STATUS.CANCELADO, STORE_ORDER_STATUS.CERRADO_POR_INCIDENCIA, STORE_ORDER_STATUS.ENTREGADO] },
+      deliveryStatus: { in: ACTIVE_DRIVER_DELIVERY_STATUSES },
+    };
+  }
+
+  private deliveredOnDayWhere(driverId: string, day: { gte: Date; lt: Date }): Prisma.StoreOrderWhereInput {
+    return {
+      assignedDriverId: driverId,
+      deliveryStatus: STORE_DELIVERY_STATUS.ENTREGADA,
+      orderStatus: { not: STORE_ORDER_STATUS.CANCELADO },
+      OR: [
+        { deliveryCodeValidatedAt: day },
+        // Historical deliveries may predate delivery-code validation.
+        {
+          deliveryCodeValidatedAt: null,
+          timeline: {
+            some: {
+              statusType: STORE_ORDER_TIMELINE_STATUS_TYPE.DELIVERY_STATUS,
+              newStatus: STORE_DELIVERY_STATUS.ENTREGADA,
+              createdAt: day,
+            },
+          },
+        },
+      ],
+    };
   }
 }

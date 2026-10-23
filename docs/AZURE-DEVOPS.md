@@ -1,6 +1,6 @@
 # Pruebas en Azure DevOps
 
-El pipeline `azure-pipelines.yml` ejecuta 37 comprobaciones de API (T01–T37) y los 23 casos existentes de Node.js. Publica dos ejecuciones JUnit en la pestaña Tests y conserva los reportes como artefacto.
+El pipeline `azure-pipelines.yml` ejecuta 37 comprobaciones de API (T01–T37) y 27 casos de Node.js (U01–U27). Publica dos ejecuciones JUnit en la pestaña Tests y conserva los reportes como artefacto. Los cuatro casos U24–U27 verifican el Inicio del conductor y se incorporaron el 22 de octubre de 2026.
 
 **Validación en Azure DevOps aprobada:** [ejecución 20261009.3, ID 10](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=10&view=ms.vss-test-web.build-test-results-tab), del 9 de octubre de 2026. Azure registró **60 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, distribuidas en 37/37 API y 23/23 automatizadas. El pipeline completo terminó con estado **Success** y publicó el artefacto `resultados-pruebas`. Código validado: `bbaf11b930e1ab5753a043f9f05f89e030f530a8`. Las capturas finales están en `docs/evidencias-ci/06-pipeline-aprobado.jpg` y `docs/evidencias-ci/07-resultados-60-pruebas.jpg`.
 
@@ -18,14 +18,14 @@ Las comprobaciones API forman un flujo secuencial: compras, saldo, solicitudes, 
 
 ## Casos de prueba
 
-`tests/test-cases.json` conserva los 60 casos, identificadores, nombres y resultados esperados. Los archivos `tests/azure-test-cases-api.csv` y `tests/azure-test-cases-unit.csv` permiten importarlos en dos suites de Azure Test Plans. Los nombres automatizados coinciden con JUnit; los U01–U23 son identificadores de catálogo.
+`tests/test-cases.json` conserva los 64 casos, identificadores, nombres y resultados esperados. Los archivos `tests/azure-test-cases-api.csv` y `tests/azure-test-cases-unit.csv` permiten importarlos en dos suites de Azure Test Plans. Los nombres automatizados coinciden con JUnit; los U01–U27 son identificadores de catálogo. `tests/azure-test-cases-driver-dashboard.csv` contiene únicamente U24–U27 para incorporarlos sin duplicar los 60 casos originales.
 
-Los 60 casos ya se importaron en el proyecto **XRE Docs Lealtad**, organización **victoreflorian**:
+Los 64 casos están importados en el proyecto **XRE Docs Lealtad**, organización **victoreflorian**. Los cuatro casos del conductor se agregaron el 22 de octubre de 2026:
 
 | Suite | Casos | Identificadores de Azure |
 | --- | ---: | --- |
 | [API — 37 comprobaciones](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_testPlans/define?planId=64&suiteId=66) | 37 | 67–103 |
-| [Reglas — 23 pruebas automatizadas](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_testPlans/define?planId=64&suiteId=104) | 23 | 105–127 |
+| [Reglas — 27 pruebas automatizadas](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_testPlans/define?planId=64&suiteId=104) | 27 | 105–127 y 129–132 |
 
 El plan es **Validación XRE Docs — API y reglas automatizadas**, ID 64. `tests/azure-work-items.json` relaciona cada caso con su identificador real. No volver a importar los CSV con la columna ID vacía: eso crearía casos duplicados.
 
@@ -41,14 +41,14 @@ Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecu
 
 1. Crear un pipeline desde el repositorio GitHub y seleccionar el archivo existente `azure-pipelines.yml` de `main`.
 2. Autorizar la conexión solamente para este repositorio y pipeline.
-3. Ejecutar el pipeline y revisar Tests: 37 casos API y 23 automatizados.
+3. Ejecutar el pipeline y revisar Tests: 37 casos API y 27 automatizados.
 4. Descargar el artefacto `resultados-pruebas` para conservar evidencia.
 
 La ejecución 8 falló antes de ejecutar pruebas porque la organización no tiene capacidad Microsoft-hosted habilitada. El pipeline utiliza ahora el agente propio existente **rikeli-local**, del pool **Default**, con Docker y Node.js 22. Este agente debe permanecer conectado y Docker Desktop debe estar activo. Azure DevOps coordina la ejecución y publica los resultados; el procesamiento ocurre en el equipo del agente. No se ha contratado capacidad de pago.
 
 El pipeline se ejecuta al actualizar `main` o mediante **Run pipeline**. Las ejecuciones automáticas de pull requests están deshabilitadas para evitar que contribuciones externas al repositorio público ejecuten código en el agente propio.
 
-La ejecución 9 completó las 60 verificaciones, pero Azure rechazó el JUnit nativo de Node.js porque sus `testcase` estaban directamente bajo `testsuites`. El paso `scripts/ci/normalize-junit.ps1` coloca los nodos originales dentro de `testsuite` y calcula sus totales para el importador de Azure. Conserva nombres, duraciones, fallas, errores y pruebas omitidas; además exige que el reporte contenga los 23 casos. Esta adaptación del formato no cambia las aserciones ni sus resultados. Se utiliza `UseNode@1` en lugar de la tarea obsoleta `NodeTool@0`.
+La ejecución 9 completó las 60 verificaciones originales, pero Azure rechazó el JUnit nativo de Node.js porque sus `testcase` estaban directamente bajo `testsuites`. El paso `scripts/ci/normalize-junit.ps1` coloca los nodos originales dentro de `testsuite` y calcula sus totales para el importador de Azure. Conserva nombres, duraciones, fallas, errores y pruebas omitidas; actualmente exige que el reporte contenga los 27 casos. Esta adaptación del formato no cambia las aserciones ni sus resultados. Se utiliza `UseNode@1` en lugar de la tarea obsoleta `NodeTool@0`.
 
 Los documentos de `docs/entrega/` corresponden a la validación local original del 8 de octubre de 2026. Los resultados nuevos de CI se consultan en Azure DevOps. No se copian credenciales, cookies ni tokens a los reportes.
 

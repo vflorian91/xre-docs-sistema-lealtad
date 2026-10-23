@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$ReportPath,
-    [int]$ExpectedCount = 23
+    [int]$ExpectedCount = 27
 )
 
 $ErrorActionPreference = 'Stop'
