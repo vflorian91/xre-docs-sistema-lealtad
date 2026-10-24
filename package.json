@@ -36,7 +36,8 @@
     "test:ci": "node scripts/ci/run.cjs",
     "test:client:http": "node --require ./scripts/ci/ts-register.cjs --test tests/client-api-transport.test.cjs",
     "test:api:ci": "node scripts/ci/api-checks.cjs",
-    "test:unit:ci": "node --require ./scripts/ci/ts-register.cjs --test --test-reporter=junit --test-reporter-destination=/results/unitarios.xml apps/api/test/auth-cookie-and-reward-segmentation.test.ts apps/api/test/registration-and-banner-validation.test.ts apps/api/test/store-online-critical-rules.test.ts apps/api/test/driver-dashboard.test.ts"
+    "test:unit:ci": "node --require ./scripts/ci/ts-register.cjs --test --test-reporter=junit --test-reporter-destination=/results/unitarios.xml apps/api/test/auth-cookie-and-reward-segmentation.test.ts apps/api/test/registration-and-banner-validation.test.ts apps/api/test/store-online-critical-rules.test.ts apps/api/test/driver-dashboard.test.ts",
+    "test:admin:http": "node --require ./scripts/ci/ts-register.cjs --test tests/admin-api-transport.test.cjs"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",

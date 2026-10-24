@@ -1,3 +1,5 @@
+import { fetchAdminResponse, readAdminBody } from './apiTransport';
+
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 export type StoredAdminUser = {
@@ -74,12 +76,12 @@ async function refreshAdminSessionOnce() {
   let body: unknown;
 
   try {
-    response = await fetch(`${API_BASE}/auth/internal/refresh`, {
+    response = await fetchAdminResponse('/auth/internal/refresh', {
       method: 'POST',
       credentials: 'include',
       cache: 'no-store',
     });
-    body = await readJsonResponse(response);
+    body = await readAdminBody(response);
   } catch (networkError) {
     throw new Error(translateNetworkError(networkError));
   }
@@ -98,7 +100,7 @@ export async function adminApiRequest<T>(path: string, options: RequestInit = {}
 
   try {
     response = await fetchAdmin(path, options);
-    body = await readJsonResponse(response);
+    body = await readAdminBody(response);
   } catch (networkError) {
     throw new Error(translateNetworkError(networkError));
   }
@@ -107,7 +109,7 @@ export async function adminApiRequest<T>(path: string, options: RequestInit = {}
     try {
       await refreshAdminSession();
       response = await fetchAdmin(path, options);
-      body = await readJsonResponse(response);
+      body = await readAdminBody(response);
     } catch (networkError) {
       throw new Error(translateNetworkError(networkError));
     }
@@ -124,7 +126,7 @@ function fetchAdmin(path: string, options: RequestInit) {
   const method = (options.method ?? 'GET').toUpperCase();
   const csrfToken = getCookieValue('admin_csrf');
 
-  return fetch(`${API_BASE}${path}`, {
+  return fetchAdminResponse(path, {
     ...options,
     credentials: 'include',
     cache: 'no-store',
@@ -134,11 +136,6 @@ function fetchAdmin(path: string, options: RequestInit) {
       ...options.headers,
     },
   });
-}
-
-async function readJsonResponse(response: Response) {
-  const text = await response.text();
-  return text ? JSON.parse(text) : null;
 }
 
 function getApiErrorText(body: unknown, fallback: string) {
