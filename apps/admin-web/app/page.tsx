@@ -6,7 +6,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { hasAdminSession, setAdminSession } from './lib/adminApi';
 import XdocWordmark from './components/XdocWordmark';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+import { fetchAdminResponse, readAdminBody } from './lib/apiTransport';
 
 type InternalUser = {
   id: string;
@@ -40,14 +40,13 @@ export default function AdminLoginPage() {
     const normalizedEmail = email.trim().toLowerCase();
 
     try {
-      const response = await fetch(`${API_BASE}/auth/internal/login`, {
+      const response = await fetchAdminResponse('/auth/internal/login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ email: normalizedEmail, password }),
       });
-      const text = await response.text();
-      const body = text ? JSON.parse(text) : null;
+      const body = await readAdminBody(response);
 
       if (!response.ok) {
         const issueText = body?.issues?.map((issue: { message: string }) => issue.message).join(' ');
@@ -126,7 +125,7 @@ export default function AdminLoginPage() {
           <a className="forgot-link" href="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
           <button className="admin-primary" disabled={isSubmitting} type="submit">
             {isSubmitting ? <Loader2 className="spin" size={18} /> : null}
-            Entrar
+            {isSubmitting ? 'Conectando con el servidor…' : 'Entrar'}
           </button>
         </form>
       </section>
