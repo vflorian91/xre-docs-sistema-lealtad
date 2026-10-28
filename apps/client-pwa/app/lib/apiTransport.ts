@@ -32,7 +32,7 @@ export function createApiTransport(apiBase: string, options: TransportOptions = 
   const send = options.fetch ?? ((...args: Parameters<typeof fetch>) => fetch(...args));
   const now = options.now ?? Date.now;
   const sleep = options.sleep ?? ((milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds)));
-  const startupTimeoutMs = options.startupTimeoutMs ?? 90_000;
+  const startupTimeoutMs = options.startupTimeoutMs ?? 180_000;
   const probeTimeoutMs = options.probeTimeoutMs ?? 10_000;
   const retryIntervalMs = options.retryIntervalMs ?? 2_000;
   const readyCacheMs = options.readyCacheMs ?? 15_000;

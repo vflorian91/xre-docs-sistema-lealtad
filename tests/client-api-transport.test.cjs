@@ -106,3 +106,18 @@ test('an aborted caller does not send a mutation after a shared startup wait', a
   await assert.rejects(request('/orders', { method: 'POST', signal: controller.signal }), { name: 'AbortError' });
   assert.equal(calls.length, 1);
 });
+
+
+test('allows a cold startup longer than ninety seconds before sending login once', async () => {
+  let probes = 0;
+  const fixture = setup((url) => {
+    if (url.endsWith('/health') && probes++ === 0) {
+      fixture.advance(95_000);
+      return html();
+    }
+    return json({ ok: true });
+  }, { startupTimeoutMs: undefined });
+  await fixture.request('/login', { method: 'POST', body: '{}' });
+  assert.equal(fixture.calls.filter(({ url }) => url.endsWith('/login')).length, 1);
+  assert.equal(probes, 2);
+});

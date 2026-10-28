@@ -46,6 +46,7 @@ export default function DashboardClient() {
   const [selectedMonth, setSelectedMonth] = useState(currentMonthValue);
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [storeData, setStoreData] = useState<{
     sales: StoreSalesResponse | null;
     salesAll: StoreSalesResponse | null;
@@ -78,6 +79,7 @@ export default function DashboardClient() {
     async function loadDashboard() {
       if (!hasAdminSession()) return;
       setIsLoading(true);
+      setMessage(null);
       const { dateFrom, dateTo } = monthRange(selectedMonth);
       const range = `dateFrom=${dateFrom}&dateTo=${dateTo}`;
 
@@ -121,7 +123,7 @@ export default function DashboardClient() {
     return () => {
       isMounted = false;
     };
-  }, [selectedMonth]);
+  }, [selectedMonth, loadAttempt]);
 
   function changeTab(tab: DashboardTab) {
     router.replace(`/dashboard?tab=${tab}`, { scroll: false });
@@ -131,8 +133,9 @@ export default function DashboardClient() {
     <AdminRoutedShell title="Dashboard">
       <section className="split-dashboard">
         <DashboardTabs activeTab={activeTab} onChange={changeTab} />
-        {message ? <div className="admin-status error">{message}</div> : null}
-        {activeTab === 'tienda-online' ? (
+        {message ? <div className="admin-status error" role="alert">{message} <button type="button" onClick={() => setLoadAttempt((value) => value + 1)}>Reintentar carga</button></div> : null}
+        {isLoading ? <div className="admin-status" role="status">Conectando con el servidor y cargando los datos. El primer acceso puede tardar hasta tres minutos.</div> : null}
+        {isLoading || message ? null : activeTab === 'tienda-online' ? (
           <OnlineStoreDashboard
             data={storeData}
             isLoading={isLoading}

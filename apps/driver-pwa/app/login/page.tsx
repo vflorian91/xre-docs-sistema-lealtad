@@ -97,7 +97,7 @@ export default function LoginPage() {
           </label>
           <button className="driver-login-submit" disabled={submitting} type="submit">
             <LogIn size={27} aria-hidden="true" />
-            {submitting ? 'Ingresando...' : 'Ingresar'}
+            {submitting ? 'Conectando con el servidor…' : 'Ingresar'}
           </button>
         </form>
       </section>

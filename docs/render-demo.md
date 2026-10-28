@@ -19,3 +19,9 @@ Cada portal utiliza `/proxy/api` en su propio dominio y cookies seguras. La cone
 El arranque restaura las imágenes originales del catálogo en el almacenamiento temporal. Las imágenes nuevas subidas por los usuarios se pierden al reemplazar o reiniciar la instancia. PostgreSQL gratuito vence a los 30 días; las aplicaciones se suspenden tras inactividad y comparten las horas gratuitas mensuales del espacio de trabajo. Esta configuración es para una demostración desechable.
 
 Referencias: [servicios gratuitos](https://render.com/docs/free), [Blueprints](https://render.com/docs/blueprint-spec), [Docker](https://render.com/docs/docker).
+
+## Acceso después de varios días
+
+Los tres portales comprueban `/proxy/api/health` y esperan hasta tres minutos mientras arrancan el portal y la API. Solo se repite la comprobación de salud; pedidos, cobros y cambios administrativos se envían una sola vez. El dashboard muestra el estado de conexión durante la espera y un botón **Reintentar carga** si falla, sin presentar métricas en cero como si fueran datos reales.
+
+Para diagnosticar, comprobar primero `/api/health` en la API y luego `/proxy/api/health` desde cada portal. Una respuesta HTML 502 durante el arranque no significa que PostgreSQL haya perdido los datos. Si la API permanece inaccesible, revisar los registros y límites de Render.

@@ -1,5 +1,7 @@
 'use client';
 
+import { fetchDriverResponse, readDriverBody } from './apiTransport';
+
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 export type DriverUser = {
@@ -125,7 +127,7 @@ export async function driverApiRequest<T>(path: string, options: RequestInit = {
 
   try {
     response = await fetchDriver(path, options);
-    body = await readJsonResponse(response);
+    body = await readDriverBody(response);
   } catch (networkError) {
     throw new Error(translateNetworkError(networkError));
   }
@@ -144,7 +146,7 @@ export async function driverApiRequest<T>(path: string, options: RequestInit = {
 function fetchDriver(path: string, options: RequestInit) {
   const method = (options.method ?? 'GET').toUpperCase();
   const csrfToken = getCookieValue('driver_csrf');
-  return fetch(`${API_BASE}${path}`, {
+  return fetchDriverResponse(path, {
     ...options,
     credentials: 'include',
     cache: 'no-store',
@@ -154,11 +156,6 @@ function fetchDriver(path: string, options: RequestInit) {
       ...options.headers,
     },
   });
-}
-
-async function readJsonResponse(response: Response) {
-  const text = await response.text();
-  return text ? JSON.parse(text) : null;
 }
 
 function getApiErrorText(body: unknown, fallback: string) {
