@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <!-- tests 43 -->
+  <!-- suites 0 -->
+  <!-- pass 43 -->
+  <!-- fail 0 -->
+  <!-- cancelled 0 -->
+  <!-- skipped 0 -->
+  <!-- todo 0 -->
+  <!-- duration_ms 5119.335879 -->
+  <testsuite name="XRE Docs - pruebas automatizadas" tests="43" failures="0" errors="0" skipped="0" time="3.653989">
+    <testcase name="[Admin] waits through Render 502 and HTTP 200 HTML before sending a login once" time="0.055371" classname="test" />
+    <testcase name="[Admin] concurrent page requests share one health probe and later requests recheck after idle" time="0.014839" classname="test" />
+    <testcase name="[Admin] unavailable or unhealthy API ends with a readable message and never sends the administrative change" time="0.010051" classname="test" />
+    <testcase name="[Admin] a timed-out health probe recovers without repeating the requested operation" time="0.001941" classname="test" />
+    <testcase name="[Admin] preserves JSON authentication and validation errors for the existing session handler" time="0.002179" classname="test" />
+    <testcase name="[Admin] an uncertain html administrative change response is never retried and invalidates readiness" time="0.004922" classname="test" />
+    <testcase name="[Admin] an uncertain network administrative change response is never retried and invalidates readiness" time="0.002380" classname="test" />
+    <testcase name="[Admin] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON" time="0.002519" classname="test" />
+    <testcase name="[Admin] an aborted caller does not send a mutation after a shared startup wait" time="0.001979" classname="test" />
+    <testcase name="[Admin] admin requests preserve CSRF cookies and refresh an expired session after startup" time="0.096487" classname="test" />
+    <testcase name="[Admin] allows a cold startup longer than ninety seconds before sending login once" time="0.001693" classname="test" />
+    <testcase name="[Tienda] waits through Render 502 and HTTP 200 HTML before sending a login once" time="0.065764" classname="test" />
+    <testcase name="[Tienda] concurrent page requests share one health probe and later requests recheck after idle" time="0.027517" classname="test" />
+    <testcase name="[Tienda] unavailable or unhealthy API ends with a readable message and never sends the order" time="0.014418" classname="test" />
+    <testcase name="[Tienda] a timed-out health probe recovers without repeating the requested operation" time="0.001308" classname="test" />
+    <testcase name="[Tienda] preserves JSON authentication and validation errors for the existing session handler" time="0.001952" classname="test" />
+    <testcase name="[Tienda] an uncertain html order response is never retried and invalidates readiness" time="0.001597" classname="test" />
+    <testcase name="[Tienda] an uncertain network order response is never retried and invalidates readiness" time="0.001325" classname="test" />
+    <testcase name="[Tienda] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON" time="0.001953" classname="test" />
+    <testcase name="[Tienda] an aborted caller does not send a mutation after a shared startup wait" time="0.002494" classname="test" />
+    <testcase name="[Tienda] allows a cold startup longer than ninety seconds before sending login once" time="0.002477" classname="test" />
+    <testcase name="[Conductor] waits through Render 502 and HTTP 200 HTML before sending a login once" time="0.041871" classname="test" />
+    <testcase name="[Conductor] concurrent page requests share one health probe and later requests recheck after idle" time="0.007510" classname="test" />
+    <testcase name="[Conductor] unavailable or unhealthy API ends with a readable message and never sends the administrative change" time="0.008987" classname="test" />
+    <testcase name="[Conductor] a timed-out health probe recovers without repeating the requested operation" time="0.001555" classname="test" />
+    <testcase name="[Conductor] preserves JSON authentication and validation errors for the existing session handler" time="0.001458" classname="test" />
+    <testcase name="[Conductor] an uncertain html administrative change response is never retried and invalidates readiness" time="0.002946" classname="test" />
+    <testcase name="[Conductor] an uncertain network administrative change response is never retried and invalidates readiness" time="0.001417" classname="test" />
+    <testcase name="[Conductor] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON" time="0.002833" classname="test" />
+    <testcase name="[Conductor] an aborted caller does not send a mutation after a shared startup wait" time="0.002438" classname="test" />
+    <testcase name="[Conductor] allows a cold startup longer than ninety seconds before sending login once" time="0.002531" classname="test" />
+    <testcase name="[Sesion conductor] driver refresh preserves browser-session cookie duration" time="0.007202" classname="test" />
+    <testcase name="[Sesion conductor] driver refresh preserves persistent cookie duration" time="0.001013" classname="test" />
+    <testcase name="[Sesion conductor] driver refresh clears cookies when the refresh token is absent" time="0.001811" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal validates the refresh session and rotates tokens without changing the driver" time="1.235513" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects another role without issuing tokens" time="0.152777" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects another driver without issuing tokens" time="1.040152" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects revoked session without issuing tokens" time="0.219511" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects expired session without issuing tokens" time="0.141561" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects inactive driver without issuing tokens" time="0.128495" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects blocked driver without issuing tokens" time="0.125310" classname="test" />
+    <testcase name="[Sesion conductor] driver renewal rejects a tampered signature" time="0.102454" classname="test" />
+    <testcase name="[Sesion conductor] driver requests share renewal, keep remember-me, and rebuild CSRF headers on an authenticated retry" time="0.109478" classname="test" />
+  </testsuite>
+</testsuites>

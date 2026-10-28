@@ -14,9 +14,10 @@ try{
   status=command(['up','-d','--build','--wait','--wait-timeout','180']);
   if(!status){
     const unit=command(['exec','-T','api','npm','run','test:unit:ci']);
+    const reliability=command(['exec','-T','api','npm','run','test:reliability:ci']);
     const api=command(['exec','-T','api','npm','run','test:api:ci']);
     const types=command(['exec','-T','api','npm','run','typecheck','-w','@lealtad/api']);
-    status=unit||api||types;
+    status=unit||reliability||api||types;
   }
   if(status)command(['logs','--no-color','--tail','100','api']);
 }finally{

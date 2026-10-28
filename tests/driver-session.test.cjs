@@ -1,5 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+function roleTest(name, ...args) { return test('[Sesion conductor] ' + name, ...args); }
 const argon2 = require('argon2');
 const { JwtService } = require('@nestjs/jwt');
 const { DriverAuthService } = require('../apps/api/src/modules/driver/driver-auth.service.ts');
@@ -7,7 +8,7 @@ const { DriverAuthController } = require('../apps/api/src/modules/driver/driver-
 const accessSecret = 'test-access-secret', refreshSecret = 'test-refresh-secret';
 
 for (const rememberMe of [false, true]) {
-  test(`driver refresh preserves ${rememberMe ? 'persistent' : 'browser-session'} cookie duration`, async () => {
+  roleTest(`driver refresh preserves ${rememberMe ? 'persistent' : 'browser-session'} cookie duration`, async () => {
     const cookies = [];
     const reply = { setCookie(name, value, options) { cookies.push({ name, options }); return reply; } };
     const service = { refresh: async token => { assert.equal(token, 'refresh'); return { accessToken: 'access', refreshToken: 'rotated', driver: { id: 'driver' } }; } };
@@ -20,7 +21,7 @@ for (const rememberMe of [false, true]) {
   });
 }
 
-test('driver refresh clears cookies when the refresh token is absent', async () => {
+roleTest('driver refresh clears cookies when the refresh token is absent', async () => {
   const cleared = [];
   const reply = { clearCookie(name) { cleared.push(name); return reply; } };
   const controller = new DriverAuthController({ refresh: () => assert.fail('No token must not issue access') }, { get: () => undefined });
@@ -38,7 +39,7 @@ async function fixture(overrides = {}, payloadOverrides = {}) {
   return { service: new DriverAuthService(prisma, jwt, config), jwt, token, state, updates };
 }
 
-test('driver renewal validates the refresh session and rotates tokens without changing the driver', async () => {
+roleTest('driver renewal validates the refresh session and rotates tokens without changing the driver', async () => {
   const f = await fixture();
   const result = await f.service.refresh(f.token, { ip: '127.0.0.1', headers: {} });
   assert.equal(result.driver.id, 'driver');
@@ -62,20 +63,20 @@ for (const [name, state, payload] of [
   ['inactive driver', { driver: { id: 'driver', isActive: false, accessStatus: 'ACTIVO' } }, {}],
   ['blocked driver', { driver: { id: 'driver', isActive: true, accessStatus: 'BLOQUEADO' } }, {}],
 ]) {
-  test(`driver renewal rejects ${name} without issuing tokens`, async () => {
+  roleTest(`driver renewal rejects ${name} without issuing tokens`, async () => {
     const f = await fixture(state, payload);
     await assert.rejects(f.service.refresh(f.token, { headers: {} }));
     assert.equal(f.updates.length, 0);
   });
 }
 
-test('driver renewal rejects a tampered signature', async () => {
+roleTest('driver renewal rejects a tampered signature', async () => {
   const f = await fixture();
   await assert.rejects(f.service.refresh(f.token + 'tampered', { headers: {} }), /expirada/);
   assert.equal(f.updates.length, 0);
 });
 
-test('driver requests share renewal, keep remember-me, and rebuild CSRF headers on an authenticated retry', async () => {
+roleTest('driver requests share renewal, keep remember-me, and rebuild CSRF headers on an authenticated retry', async () => {
   const original = { fetch: global.fetch, window: global.window, document: global.document };
   const local = new Map([['driverUser', JSON.stringify({ id: 'driver' })]]), session = new Map();
   const storage = map => ({ getItem: key => map.get(key), setItem: (key, value) => map.set(key, value), removeItem: key => map.delete(key) });

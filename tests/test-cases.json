@@ -513,5 +513,349 @@
     "expected": "Aprobado: aserciones del caso sin errores",
     "automatedName": "operational day follows Guatemala midnight, including UTC day and year changes",
     "command": "npm run test:unit:ci"
+  },
+  {
+    "id": "R01",
+    "suite": "RELIABILITY",
+    "name": "[Admin] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R02",
+    "suite": "RELIABILITY",
+    "name": "[Admin] concurrent page requests share one health probe and later requests recheck after idle",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] concurrent page requests share one health probe and later requests recheck after idle",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R03",
+    "suite": "RELIABILITY",
+    "name": "[Admin] unavailable or unhealthy API ends with a readable message and never sends the administrative change",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] unavailable or unhealthy API ends with a readable message and never sends the administrative change",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R04",
+    "suite": "RELIABILITY",
+    "name": "[Admin] a timed-out health probe recovers without repeating the requested operation",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] a timed-out health probe recovers without repeating the requested operation",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R05",
+    "suite": "RELIABILITY",
+    "name": "[Admin] preserves JSON authentication and validation errors for the existing session handler",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] preserves JSON authentication and validation errors for the existing session handler",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R06",
+    "suite": "RELIABILITY",
+    "name": "[Admin] an uncertain html administrative change response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] an uncertain html administrative change response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R07",
+    "suite": "RELIABILITY",
+    "name": "[Admin] an uncertain network administrative change response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] an uncertain network administrative change response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R08",
+    "suite": "RELIABILITY",
+    "name": "[Admin] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R09",
+    "suite": "RELIABILITY",
+    "name": "[Admin] an aborted caller does not send a mutation after a shared startup wait",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] an aborted caller does not send a mutation after a shared startup wait",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R10",
+    "suite": "RELIABILITY",
+    "name": "[Admin] admin requests preserve CSRF cookies and refresh an expired session after startup",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] admin requests preserve CSRF cookies and refresh an expired session after startup",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R11",
+    "suite": "RELIABILITY",
+    "name": "[Admin] allows a cold startup longer than ninety seconds before sending login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Admin] allows a cold startup longer than ninety seconds before sending login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R12",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R13",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] concurrent page requests share one health probe and later requests recheck after idle",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] concurrent page requests share one health probe and later requests recheck after idle",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R14",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] unavailable or unhealthy API ends with a readable message and never sends the order",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] unavailable or unhealthy API ends with a readable message and never sends the order",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R15",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] a timed-out health probe recovers without repeating the requested operation",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] a timed-out health probe recovers without repeating the requested operation",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R16",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] preserves JSON authentication and validation errors for the existing session handler",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] preserves JSON authentication and validation errors for the existing session handler",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R17",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] an uncertain html order response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] an uncertain html order response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R18",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] an uncertain network order response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] an uncertain network order response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R19",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R20",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] an aborted caller does not send a mutation after a shared startup wait",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] an aborted caller does not send a mutation after a shared startup wait",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R21",
+    "suite": "RELIABILITY",
+    "name": "[Tienda] allows a cold startup longer than ninety seconds before sending login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Tienda] allows a cold startup longer than ninety seconds before sending login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R22",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] waits through Render 502 and HTTP 200 HTML before sending a login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R23",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] concurrent page requests share one health probe and later requests recheck after idle",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] concurrent page requests share one health probe and later requests recheck after idle",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R24",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] unavailable or unhealthy API ends with a readable message and never sends the administrative change",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] unavailable or unhealthy API ends with a readable message and never sends the administrative change",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R25",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] a timed-out health probe recovers without repeating the requested operation",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] a timed-out health probe recovers without repeating the requested operation",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R26",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] preserves JSON authentication and validation errors for the existing session handler",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] preserves JSON authentication and validation errors for the existing session handler",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R27",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] an uncertain html administrative change response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] an uncertain html administrative change response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R28",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] an uncertain network administrative change response is never retried and invalidates readiness",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] an uncertain network administrative change response is never retried and invalidates readiness",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R29",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R30",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] an aborted caller does not send a mutation after a shared startup wait",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] an aborted caller does not send a mutation after a shared startup wait",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R31",
+    "suite": "RELIABILITY",
+    "name": "[Conductor] allows a cold startup longer than ninety seconds before sending login once",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Conductor] allows a cold startup longer than ninety seconds before sending login once",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R32",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver refresh preserves browser-session cookie duration",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver refresh preserves browser-session cookie duration",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R33",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver refresh preserves persistent cookie duration",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver refresh preserves persistent cookie duration",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R34",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver refresh clears cookies when the refresh token is absent",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver refresh clears cookies when the refresh token is absent",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R35",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal validates the refresh session and rotates tokens without changing the driver",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal validates the refresh session and rotates tokens without changing the driver",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R36",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects another role without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects another role without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R37",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects another driver without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects another driver without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R38",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects revoked session without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects revoked session without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R39",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects expired session without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects expired session without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R40",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects inactive driver without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects inactive driver without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R41",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects blocked driver without issuing tokens",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects blocked driver without issuing tokens",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R42",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver renewal rejects a tampered signature",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver renewal rejects a tampered signature",
+    "command": "npm run test:reliability:ci"
+  },
+  {
+    "id": "R43",
+    "suite": "RELIABILITY",
+    "name": "[Sesion conductor] driver requests share renewal, keep remember-me, and rebuild CSRF headers on an authenticated retry",
+    "expected": "Aprobado: conexion y sesion verificadas sin errores",
+    "automatedName": "[Sesion conductor] driver requests share renewal, keep remember-me, and rebuild CSRF headers on an authenticated retry",
+    "command": "npm run test:reliability:ci"
   }
 ]

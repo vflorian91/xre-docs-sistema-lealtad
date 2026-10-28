@@ -1,5 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+function roleTest(name, ...args) { return test('[Tienda] ' + name, ...args); }
 const { createApiTransport, readApiBody } = require('../apps/client-pwa/app/lib/apiTransport.ts');
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -19,7 +20,7 @@ function setup(handler, options = {}) {
   return { request, calls, advance: (ms) => { clock += ms; } };
 }
 
-test('waits through Render 502 and HTTP 200 HTML before sending a login once', async () => {
+roleTest('waits through Render 502 and HTTP 200 HTML before sending a login once', async () => {
   const startup = [html(), html(200), json({ ok: true })];
   const { request, calls } = setup((url) => url.endsWith('/health') ? startup.shift() : json({ customer: { id: 'demo' } }));
   const init = { method: 'POST', headers: { 'content-type': 'application/json', 'x-csrf-token': 'csrf' }, body: '{"email":"demo@example.com"}' };
@@ -31,7 +32,7 @@ test('waits through Render 502 and HTTP 200 HTML before sending a login once', a
   assert.deepEqual(sent[0].init, { credentials: 'include', cache: 'no-store', ...init });
 });
 
-test('concurrent page requests share one health probe and later requests recheck after idle', async () => {
+roleTest('concurrent page requests share one health probe and later requests recheck after idle', async () => {
   let release;
   const probe = new Promise((resolve) => { release = resolve; });
   const { request, calls, advance } = setup(async (url) => {
@@ -50,14 +51,14 @@ test('concurrent page requests share one health probe and later requests recheck
   assert.equal(calls.filter(({ url }) => url.endsWith('/health')).length, 2);
 });
 
-test('unavailable or unhealthy API ends with a readable message and never sends the order', async () => {
+roleTest('unavailable or unhealthy API ends with a readable message and never sends the order', async () => {
   const { request, calls } = setup(() => json({ ok: false }, 503));
   await assert.rejects(request('/orders', { method: 'POST' }), /No se pudo conectar con la tienda/);
   assert.equal(calls.length, 10);
   assert.ok(calls.every(({ url }) => url.endsWith('/health')));
 });
 
-test('a timed-out health probe recovers without repeating the requested operation', async () => {
+roleTest('a timed-out health probe recovers without repeating the requested operation', async () => {
   let probes = 0;
   const { request, calls } = setup((url) => {
     if (url.endsWith('/health') && probes++ === 0) throw new DOMException('Timed out', 'TimeoutError');
@@ -68,7 +69,7 @@ test('a timed-out health probe recovers without repeating the requested operatio
   assert.equal(calls.filter(({ url }) => url.endsWith('/cart')).length, 1);
 });
 
-test('preserves JSON authentication and validation errors for the existing session handler', async () => {
+roleTest('preserves JSON authentication and validation errors for the existing session handler', async () => {
   const { request } = setup((url) => url.endsWith('/health') ? json({ ok: true }) : json({ message: 'Credenciales invalidas' }, 401));
   const response = await request('/auth/customer/login', { method: 'POST' });
   assert.equal(response.status, 401);
@@ -76,7 +77,7 @@ test('preserves JSON authentication and validation errors for the existing sessi
 });
 
 for (const failure of ['html', 'network']) {
-  test(`an uncertain ${failure} order response is never retried and invalidates readiness`, async () => {
+  roleTest(`an uncertain ${failure} order response is never retried and invalidates readiness`, async () => {
     const { request, calls } = setup((url) => {
       if (url.endsWith('/health')) return json({ ok: true });
       if (failure === 'network') throw new TypeError('Failed to fetch');
@@ -89,7 +90,7 @@ for (const failure of ['html', 'network']) {
   });
 }
 
-test('safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON', async () => {
+roleTest('safe parsing accepts JSON and empty 204 responses, hides HTML and malformed JSON', async () => {
   assert.equal(await readApiBody(new Response(null, { status: 204 })), null);
   assert.deepEqual(await readApiBody(json([{ id: 1 }])), [{ id: 1 }]);
   assert.deepEqual(await readApiBody(new Response('{"message":"invalid"}', { headers: { 'content-type': 'application/problem+json' } })), { message: 'invalid' });
@@ -98,7 +99,7 @@ test('safe parsing accepts JSON and empty 204 responses, hides HTML and malforme
   }
 });
 
-test('an aborted caller does not send a mutation after a shared startup wait', async () => {
+roleTest('an aborted caller does not send a mutation after a shared startup wait', async () => {
   const controller = new AbortController();
   const { request, calls } = setup(() => { controller.abort(); return json({ ok: true }); });
   await assert.rejects(request('/orders', { method: 'POST', signal: controller.signal }), { name: 'AbortError' });
@@ -108,7 +109,7 @@ test('an aborted caller does not send a mutation after a shared startup wait', a
 });
 
 
-test('allows a cold startup longer than ninety seconds before sending login once', async () => {
+roleTest('allows a cold startup longer than ninety seconds before sending login once', async () => {
   let probes = 0;
   const fixture = setup((url) => {
     if (url.endsWith('/health') && probes++ === 0) {

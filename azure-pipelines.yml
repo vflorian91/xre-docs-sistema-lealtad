@@ -9,7 +9,7 @@ pool:
     - docker
 jobs:
   - job: Validar
-    displayName: '37 API y 27 pruebas automatizadas'
+    displayName: '107 pruebas: API, reglas y recuperacion de conexiones'
     timeoutInMinutes: 30
     steps:
       - checkout: self
@@ -20,7 +20,7 @@ jobs:
           version: '22.x'
         displayName: 'Node.js 22'
       - script: node scripts/ci/run.cjs
-        displayName: 'Ejecutar las 64 verificaciones en Docker aislado'
+        displayName: 'Ejecutar las 107 verificaciones en Docker aislado'
       - powershell: '& ./scripts/ci/normalize-junit.ps1 -ReportPath ./test-results/unitarios.xml'
         condition: succeededOrFailed()
         displayName: 'Preparar JUnit de los 27 casos para Azure'
@@ -44,6 +44,22 @@ jobs:
           failTaskOnFailedTests: true
           failTaskOnMissingResultsFile: true
           failTaskOnFailureToPublishResults: true
+      - powershell: '& ./scripts/ci/normalize-junit.ps1 -ReportPath ./test-results/reliability.xml -ExpectedCount 43'
+        condition: succeededOrFailed()
+        displayName: 'Preparar JUnit de conexion y sesiones'
+      - task: PublishTestResults@2
+        displayName: 'Publicar 43 pruebas de conexion y sesiones'
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: 'test-results/reliability.xml'
+          testRunTitle: 'XRE Docs - 43 pruebas de conexion y sesiones'
+          failTaskOnFailedTests: true
+          failTaskOnMissingResultsFile: true
+          failTaskOnFailureToPublishResults: true
+      - powershell: '& ./scripts/ci/write-azure-summary.ps1'
+        condition: succeededOrFailed()
+        displayName: 'Registrar version y totales de las 107 pruebas'
       - task: PublishPipelineArtifact@1
         condition: succeededOrFailed()
         inputs:

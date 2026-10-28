@@ -1,0 +1,31 @@
+﻿{
+    "environment":  "Docker CI local",
+    "buildId":  null,
+    "buildNumber":  null,
+    "sourceVersion":  null,
+    "buildUrl":  null,
+    "recordedAt":  "2026-10-28T21:37:13.4882401Z",
+    "groups":  [
+                   {
+                       "file":  "api.xml",
+                       "total":  37,
+                       "failed":  0,
+                       "skipped":  0
+                   },
+                   {
+                       "file":  "unitarios.xml",
+                       "total":  27,
+                       "failed":  0,
+                       "skipped":  0
+                   },
+                   {
+                       "file":  "reliability.xml",
+                       "total":  43,
+                       "failed":  0,
+                       "skipped":  0
+                   }
+               ],
+    "total":  107,
+    "failed":  0,
+    "skipped":  0
+}

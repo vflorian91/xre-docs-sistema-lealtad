@@ -1,6 +1,6 @@
 # Pruebas en Azure DevOps
 
-El pipeline `azure-pipelines.yml` ejecuta 37 comprobaciones de API (T01–T37) y 27 casos de Node.js (U01–U27). Publica dos ejecuciones JUnit en la pestaña Tests y conserva los reportes como artefacto. Los cuatro casos U24–U27 verifican el Inicio del conductor y se incorporaron el 22 de octubre de 2026.
+El pipeline `azure-pipelines.yml` ejecuta 107 comprobaciones: 37 de API (T01–T37), 27 reglas automatizadas (U01–U27) y 43 de conexión y sesiones (R01–R43). Publica tres ejecuciones JUnit en la pestaña Tests y conserva los reportes y la versión validada en el artefacto `resultados-pruebas`. Las pruebas R cubren el arranque tras inactividad, respuestas HTML 502, protección contra operaciones duplicadas y renovación de sesión del conductor.
 
 **Última validación en Azure DevOps aprobada:** [ejecución 20261023.1, ID 12](https://dev.azure.com/victoreflorian/XRE%20Docs%20Lealtad/_build/results?buildId=12&view=ms.vss-test-web.build-test-results-tab), del **22 de octubre de 2026 en Guatemala**. Azure registró **64 pruebas aprobadas, 0 fallidas, 0 otras y 0 sin reportar**, en dos ejecuciones JUnit: 37 API y 27 automatizadas. El pipeline terminó con estado **Success** en el segundo intento y publicó el artefacto `resultados-pruebas`. Código validado: `7d61bf684c57ba5ee843727f1d071804111a7a8b`. Evidencia: [pipeline aprobado](evidencias-ci/09-azure-64-pipeline-aprobado.png) y [resultados de las 64 pruebas](evidencias-ci/10-azure-resultados-64-pruebas.png). El primer intento se detuvo antes de ejecutar pruebas por el entorno de módulos de PowerShell del agente; el reintento utilizó un entorno compatible, sin modificar el código validado.
 
@@ -20,7 +20,7 @@ Las comprobaciones API forman un flujo secuencial: compras, saldo, solicitudes, 
 
 ## Casos de prueba
 
-`tests/test-cases.json` conserva los 64 casos, identificadores, nombres y resultados esperados. Los archivos `tests/azure-test-cases-api.csv` y `tests/azure-test-cases-unit.csv` permiten importarlos en dos suites de Azure Test Plans. Los nombres automatizados coinciden con JUnit; los U01–U27 son identificadores de catálogo. `tests/azure-test-cases-driver-dashboard.csv` contiene únicamente U24–U27 para incorporarlos sin duplicar los 60 casos originales.
+`tests/test-cases.json` conserva los 107 casos, identificadores, nombres y resultados esperados. Los archivos `tests/azure-test-cases-api.csv` y `tests/azure-test-cases-unit.csv` permiten importarlos en dos suites de Azure Test Plans. Los nombres automatizados coinciden con JUnit; los U01–U27 son identificadores de catálogo. `tests/azure-test-cases-driver-dashboard.csv` contiene únicamente U24–U27 para incorporarlos sin duplicar los 60 casos originales.
 
 Los 64 casos están importados en el proyecto **XRE Docs Lealtad**, organización **victoreflorian**. Los cuatro casos del conductor se agregaron el 22 de octubre de 2026:
 
@@ -45,7 +45,7 @@ Esta evidencia corresponde al ejecutor local Docker. Los resultados de una ejecu
 
 1. Crear un pipeline desde el repositorio GitHub y seleccionar el archivo existente `azure-pipelines.yml` de `main`.
 2. Autorizar la conexión solamente para este repositorio y pipeline.
-3. Ejecutar el pipeline y revisar Tests: 37 casos API y 27 automatizados.
+3. Ejecutar el pipeline y revisar Tests: 37 casos API, 27 de reglas y 43 de conexión y sesiones, 107 en total.
 4. Descargar el artefacto `resultados-pruebas` para conservar evidencia.
 
 La ejecución 8 falló antes de ejecutar pruebas porque la organización no tiene capacidad Microsoft-hosted habilitada. El pipeline utiliza ahora el agente propio existente **rikeli-local**, del pool **Default**, con Docker y Node.js 22. Este agente debe permanecer conectado y Docker Desktop debe estar activo. Azure DevOps coordina la ejecución y publica los resultados; el procesamiento ocurre en el equipo del agente. No se ha contratado capacidad de pago.
@@ -59,3 +59,11 @@ La ejecución 9 completó las 60 verificaciones originales, pero Azure rechazó 
 Los documentos de `docs/entrega/` corresponden a la validación local original del 8 de octubre de 2026. Los resultados nuevos de CI se consultan en Azure DevOps. No se copian credenciales, cookies ni tokens a los reportes.
 
 Referencias: [PublishTestResults](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-test-results-v2?view=azure-pipelines), [importación de Test Plans](https://learn.microsoft.com/en-us/azure/devops/test/bulk-import-export-test-cases?view=azure-devops).
+
+## Actualización de conexión y sesiones — 28 de octubre de 2026
+
+Las correcciones publicadas en Render están en el mismo repositorio GitHub que consume Azure. El pipeline añade `test:reliability:ci`, que ejecuta 43 pruebas con nombres diferentes por portal. El normalizador valida los 27 resultados de reglas y los 43 resultados nuevos; `write-azure-summary.ps1` exige un total de 107 sin fallas ni omitidos y registra el identificador de ejecución y la versión de Git.
+
+Validación local del ejecutor Docker completada el 28 de octubre: **107/107 aprobadas**, con revisión de tipos de la API aprobada. Evidencia en `docs/evidencias-ci/local-20261028/`. Estos resultados locales no se presentan como una ejecución de Azure.
+
+Los 64 registros históricos de Test Plans conservan sus identificadores. Los 43 casos nuevos se registran como resultados automatizados en Tests; no se han creado registros de Test Plans duplicados. El agente `rikeli-local` debe estar conectado y Docker Desktop activo para procesar nuevas ejecuciones.

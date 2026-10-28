@@ -9,6 +9,9 @@ COPY apps/driver-pwa/package.json apps/driver-pwa/package.json
 COPY packages/database/package.json packages/database/package.json
 RUN npm ci
 COPY apps/api apps/api
+COPY apps/admin-web/app/lib apps/admin-web/app/lib
+COPY apps/client-pwa/app/lib apps/client-pwa/app/lib
+COPY apps/driver-pwa/app/lib apps/driver-pwa/app/lib
 COPY packages packages
 COPY scripts/ci scripts/ci
 COPY tests tests
