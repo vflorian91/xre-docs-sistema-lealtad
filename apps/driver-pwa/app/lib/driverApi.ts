@@ -121,6 +121,23 @@ export function clearDriverSession() {
   window.sessionStorage.removeItem('driverUser');
 }
 
+let refreshPromise: Promise<void> | null = null;
+
+async function refreshDriverSession() {
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = (async () => {
+    const rememberMe = typeof window !== 'undefined' && Boolean(window.localStorage.getItem('driverUser'));
+    const response = await fetchDriver('/driver/auth/refresh', { method: 'POST', body: JSON.stringify({ rememberMe }) });
+    const body = await readDriverBody(response);
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) clearDriverSession();
+      throw new Error(getApiErrorText(body, 'Tu sesion vencio. Inicia sesion nuevamente.'));
+    }
+    setDriverSession(body as DriverAuthResponse, rememberMe);
+  })().finally(() => { refreshPromise = null; });
+  return refreshPromise;
+}
+
 export async function driverApiRequest<T>(path: string, options: RequestInit = {}) {
   let response: Response;
   let body: unknown;
@@ -132,9 +149,12 @@ export async function driverApiRequest<T>(path: string, options: RequestInit = {
     throw new Error(translateNetworkError(networkError));
   }
 
-  if (response.status === 401) {
-    clearDriverSession();
+  if (response.status === 401 && getStoredDriverUser() && !['/driver/auth/login', '/driver/auth/refresh'].includes(path)) {
+    await refreshDriverSession();
+    response = await fetchDriver(path, options);
+    body = await readDriverBody(response);
   }
+  if (response.status === 401) clearDriverSession();
 
   if (!response.ok) {
     throw new Error(getApiErrorText(body, 'No se pudo completar la acción.'));

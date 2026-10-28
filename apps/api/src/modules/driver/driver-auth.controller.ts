@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CurrentDriver } from '../auth/current-driver.decorator';
 import { DriverAuthUser } from '../auth/auth.types';
-import { clearAuthCookies, parseDurationToSeconds, setAuthCookies } from '../auth/cookie.util';
+import { clearAuthCookies, getRefreshTokenFromRequest, parseDurationToSeconds, setAuthCookies } from '../auth/cookie.util';
 import { parseBody } from '../common/parse-body';
 import { changeDriverPasswordSchema, driverLoginSchema } from './driver.schemas';
 import { DriverAuthService } from './driver-auth.service';
@@ -29,6 +29,20 @@ export class DriverAuthController {
   async login(@Body() body: unknown, @Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
     const input = parseBody(driverLoginSchema, body);
     const { accessToken, refreshToken, driver } = await this.driverAuthService.login(input, request);
+    setAuthCookies(reply, 'driver', { accessToken, refreshToken }, input.rememberMe ? this.cookieMaxAges() : {});
+    return { driver };
+  }
+
+  @Post('refresh')
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  async refresh(@Body() body: unknown, @Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+    const input = parseBody(driverLoginSchema.pick({ rememberMe: true }).optional(), body) ?? { rememberMe: false };
+    const token = getRefreshTokenFromRequest(request, 'driver');
+    if (!token) {
+      clearAuthCookies(reply, 'driver');
+      throw new UnauthorizedException('Sesion de motorista expirada. Inicia sesion nuevamente.');
+    }
+    const { accessToken, refreshToken, driver } = await this.driverAuthService.refresh(token, request);
     setAuthCookies(reply, 'driver', { accessToken, refreshToken }, input.rememberMe ? this.cookieMaxAges() : {});
     return { driver };
   }

@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
 import argon2 from 'argon2';
 import { FastifyRequest } from 'fastify';
@@ -36,6 +37,31 @@ export class DriverAuthService {
     const tokens = await this.issueTokens(driver.id, request);
     const profile = await this.getProfile(driver.id, tokens.sessionId);
     return { ...tokens, driver: profile };
+  }
+
+  async refresh(refreshToken: string, request: FastifyRequest) {
+    let payload: DriverRefreshTokenPayload;
+    try {
+      payload = await this.jwtService.verifyAsync<DriverRefreshTokenPayload>(refreshToken, {
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+      });
+    } catch {
+      throw new UnauthorizedException('Sesion de motorista invalida o expirada.');
+    }
+    if (payload.type !== 'driver_refresh') throw new UnauthorizedException('Sesion de motorista invalida.');
+    const session = await this.prisma.storeDriverSession.findUnique({
+      where: { id: payload.sessionId }, include: { driver: true },
+    });
+    if (!session || session.driverId !== payload.sub || session.revokedAt || session.expiresAt <= new Date()) {
+      throw new UnauthorizedException('Sesion de motorista invalida o expirada.');
+    }
+    this.assertDriverCanLogin(session.driver);
+    if (!await argon2.verify(session.refreshTokenHash, refreshToken)) {
+      await this.prisma.storeDriverSession.update({ where: { id: session.id }, data: { revokedAt: new Date() } });
+      throw new UnauthorizedException('Sesion de motorista invalida.');
+    }
+    const tokens = await this.rotateSession(session.id, session.driverId, request);
+    return { ...tokens, driver: this.toDriverProfile(session.driver, session.id) };
   }
 
   async changePassword(driver: DriverAuthUser, input: ChangeDriverPasswordInput) {
@@ -101,6 +127,7 @@ export class DriverAuthService {
       }),
       this.jwtService.signAsync(refreshPayload, {
         secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
+        jwtid: randomUUID(),
         expiresIn: `${this.getRefreshExpiresInDays()}d` as never,
       }),
     ]);
