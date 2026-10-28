@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-28T21:54:44.8640388Z",
+  "jobResult": "Succeeded",
+  "execution": {
+    "environment": "Azure DevOps",
+    "buildId": "19",
+    "buildNumber": "20261028.3",
+    "sourceVersion": "6e90d08f57a23b2f83c468644baa923a1abd74a1",
+    "buildUrl": "https://dev.azure.com/victoreflorian/f4b88734-15fd-4930-b1f4-591ac015a6a6/_build/results?buildId=19",
+    "recordedAt": "2026-10-28T21:54:20.0213939Z",
+    "groups": [
+      {
+        "file": "api.xml",
+        "total": 37,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "unitarios.xml",
+        "total": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "file": "reliability.xml",
+        "total": 43,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "total": 107,
+    "failed": 0,
+    "skipped": 0
+  }
+}
